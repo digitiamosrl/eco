@@ -9,7 +9,11 @@ import type { Report } from "../types/report";
 export default function ReportScreen({ testId }: { testId?: string }) {
   const tests = useLoad(getTests, []);
   const personas = useLoad(getPersonas, []);
-  const selected = testId ?? tests.data?.find((t) => t.status === "done")?.id;
+  const selected =
+    testId ??
+    tests.data
+      ?.filter((t) => t.status === "done")
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))[0]?.id;
   const report = useLoad<Report | null>(
     () => (selected ? getReport(selected) : Promise.resolve(null)),
     [selected],
@@ -19,8 +23,9 @@ export default function ReportScreen({ testId }: { testId?: string }) {
   if (error) return <p role="alert">{error}</p>;
   if (!tests.data) return <p role="status">Caricamento…</p>;
   if (!selected) return <p>Nessun test completato. Avviane uno dalla schermata Test.</p>;
-  if (!report.data) return <p role="status">Caricamento del report…</p>;
+  if (!report.data || !personas.data) return <p role="status">Caricamento del report…</p>;
 
+  const personaList = personas.data;
   const items = [...report.data.items].sort((a, b) => a.rank - b.rank);
 
   return (
@@ -34,14 +39,18 @@ export default function ReportScreen({ testId }: { testId?: string }) {
             #{item.rank} · Variante {item.stimulus_id}
           </h2>
           <ScoreBars distribution={item.score_distribution} mean={item.mean_score} />
-          <h3>Obiezioni principali</h3>
-          <ul>
-            {item.objections.map((o) => (
-              <li key={o}>{o}</li>
-            ))}
-          </ul>
+          {item.objections.length > 0 && (
+            <>
+              <h3>Obiezioni principali</h3>
+              <ul>
+                {item.objections.map((o) => (
+                  <li key={o}>{o}</li>
+                ))}
+              </ul>
+            </>
+          )}
           <SayThink said={item.said_summary} thought={item.thought_summary} />
-          <ResponsesTable responses={item.responses} personas={personas.data ?? []} />
+          <ResponsesTable responses={item.responses} personas={personaList} />
         </article>
       ))}
     </section>
