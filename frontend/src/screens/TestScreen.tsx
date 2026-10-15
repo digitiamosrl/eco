@@ -28,8 +28,10 @@ export default function TestScreen({ onShowReport }: Props) {
   const update = (id: string, patch: Partial<VariantDraft>) =>
     setVariants((vs) => vs.map((v) => (v.id === id ? { ...v, ...patch } : v)));
 
-  const remove = (id: string) =>
+  const remove = (id: string) => {
+    setErrors([]);
     setVariants((vs) => vs.filter((v) => v.id !== id).map((v, i) => ({ ...v, label: nextLabel(i) })));
+  };
 
   async function start() {
     const found = validateVariants(variants);
@@ -59,18 +61,24 @@ export default function TestScreen({ onShowReport }: Props) {
             <h2>Variante {v.label}</h2>
             <label>
               Testo del post
-              <textarea value={v.text} onChange={(e) => update(v.id, { text: e.target.value })} />
+              <textarea aria-label={`Testo della variante ${v.label}`} value={v.text} onChange={(e) => update(v.id, { text: e.target.value })} />
             </label>
             <label>
               Immagine (facoltativa)
               <input
                 type="file"
+                aria-label={`Immagine della variante ${v.label}`}
                 accept="image/*"
                 onChange={(e) => update(v.id, { image: e.target.files?.[0] ?? null })}
               />
             </label>
             {variants.length > MIN_VARIANTS && (
-              <button type="button" className="secondary" onClick={() => remove(v.id)}>
+              <button
+                type="button"
+                className="secondary"
+                aria-label={`Rimuovi variante ${v.label}`}
+                onClick={() => remove(v.id)}
+              >
                 Rimuovi
               </button>
             )}

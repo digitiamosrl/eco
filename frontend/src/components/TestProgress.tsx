@@ -26,9 +26,11 @@ export default function TestProgress({ initial, onShowReport }: Props) {
 
   return (
     <section>
-      <h1>{test.status === "done" ? "Test completato" : "Test in corso"}</h1>
+      <h1>
+        {test.status === "done" ? "Test completato" : test.status === "error" ? "Test interrotto" : "Test in corso"}
+      </h1>
       <progress max={test.total_count || 1} value={test.done_count} aria-label="Avanzamento del test" />
-      <p>
+      <p aria-live="polite">
         {test.done_count} risposte su {test.total_count}
       </p>
       {test.status === "error" && <p role="alert">{test.error ?? "Il test si è interrotto."}</p>}
