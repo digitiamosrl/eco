@@ -6,7 +6,7 @@
 
 **Architecture:** Un solo modulo `src/api/` espone le funzioni che le schermate usano. Dietro c'è il client HTTP verso `/api` oppure un mock in memoria che simula un test in esecuzione, scelto con `VITE_USE_MOCKS`. La logica pura (validazione varianti, barre della distribuzione, avanzamento del mock) sta in funzioni testate con Vitest. I componenti si verificano con typecheck, lint, build e una prova manuale.
 
-**Tech Stack:** React 18, Vite 6, TypeScript strict, Vitest 3, CSS semplice con variabili. Tipi generati da `shared/schemas/` con `npm run gen:types`.
+**Tech Stack:** React 18, Vite 6, TypeScript strict, Vitest 4, CSS semplice con variabili. Tipi generati da `shared/schemas/` con `npm run gen:types`.
 
 **Branch:** `feat/frontend-post-flow`
 
@@ -71,7 +71,7 @@ frontend/
 
 - [ ] **Step 1: Installa Vitest**
 
-Run: `cd frontend && npm install -D vitest@3`
+Run: `cd frontend && npm install -D vitest@4.1.11`
 Expected: `added ... packages`, nessun errore.
 
 - [ ] **Step 2: Aggiungi lo script `test`**
