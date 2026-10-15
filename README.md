@@ -22,7 +22,7 @@ POC interna Digitiamo: un panel di personas sintetiche, costruite su dati reali,
 | Persona | Area | Cartelle |
 | --- | --- | --- |
 | Salvo | AI e backend | `backend/`, `data/`, `prompts/` |
-| Serena | Design e frontend | `frontend/`, `design/` |
+| Fabio | Design e frontend | `frontend/`, `design/` |
 
 Il contratto tra le due parti è in `shared/schemas/`: si modifica solo insieme.
 

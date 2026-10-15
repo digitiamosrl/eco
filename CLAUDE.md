@@ -9,7 +9,7 @@ POC interna Digitiamo: personas sintetiche costruite su dati reali valutano post
 ## Chi lavora dove
 
 - **Salvo, AI e backend:** `backend/`, `prompts/`, `data/`
-- **Serena, design e frontend:** `frontend/`, `design/`
+- **Fabio, design e frontend:** `frontend/`, `design/`
 - **Insieme:** `shared/schemas/`. Non modificare gli schemi senza segnalarlo: sono il contratto tra frontend e backend.
 
 ## Comandi
