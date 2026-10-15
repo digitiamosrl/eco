@@ -8,7 +8,9 @@ const useMocks = import.meta.env.VITE_USE_MOCKS !== "false";
 
 async function parse<T>(res: Response): Promise<T> {
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.detail ?? `Errore del server (${res.status}).`);
+  if (!res.ok || data === null) {
+    throw new Error(typeof data?.detail === "string" ? data.detail : `Errore del server (${res.status}).`);
+  }
   return data as T;
 }
 
