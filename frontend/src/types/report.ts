@@ -20,6 +20,30 @@ export interface Report {
       [k: string]: number;
     };
     objections: string[];
-    quotes: string[];
+    /**
+     * Sintesi di cosa dicono le personas
+     */
+    said_summary: string;
+    /**
+     * Sintesi di cosa pensano davvero, evidenziando dove diverge da said
+     */
+    thought_summary: string;
+    responses: Response[];
   }[];
+}
+export interface Response {
+  persona_id: string;
+  stimulus_id: string;
+  /**
+   * Cosa pensa davvero, a caldo, senza filtri. Generato prima di said.
+   */
+  thought: string;
+  /**
+   * Cosa direbbe o scriverebbe in pubblico (commento, frase a un collega). Può coincidere con thought.
+   */
+  said: string;
+  score: number;
+  objections: string[];
+  misunderstood?: string[];
+  would_abandon?: boolean;
 }

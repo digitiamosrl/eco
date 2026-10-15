@@ -1,4 +1,9 @@
-import { mockReport } from "../mocks";
+import { mockPersonas, mockReport } from "../mocks";
+
+const personaLabel = (id: string) => {
+  const p = mockPersonas.find((p) => p.id === id);
+  return p ? `${p.role} · ${p.sector} · ${p.company_size}` : id;
+};
 
 export default function ReportScreen() {
   return (
@@ -18,6 +23,35 @@ export default function ReportScreen() {
               .map(([score, count]) => `${score}: ${count}`)
               .join(" · ")}
           </p>
+          <p>
+            <strong>Cosa dicono:</strong> {item.said_summary}
+          </p>
+          <p>
+            <strong>Cosa pensano:</strong> {item.thought_summary}
+          </p>
+          <details>
+            <summary>Risposte delle personas ({item.responses.length})</summary>
+            <table>
+              <thead>
+                <tr>
+                  <th>Persona</th>
+                  <th>Voto</th>
+                  <th>Ha detto</th>
+                  <th>Ha pensato</th>
+                </tr>
+              </thead>
+              <tbody>
+                {item.responses.map((r) => (
+                  <tr key={r.persona_id}>
+                    <td>{personaLabel(r.persona_id)}</td>
+                    <td>{r.score}</td>
+                    <td>{r.said}</td>
+                    <td>{r.thought}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </details>
         </article>
       ))}
     </section>

@@ -4,28 +4,76 @@
   "title": "Report",
   "type": "object",
   "additionalProperties": false,
-  "required": ["test_id", "simulated", "items", "summary"],
+  "required": [
+    "test_id",
+    "simulated",
+    "items",
+    "summary"
+  ],
   "properties": {
-    "test_id": { "type": "string" },
-    "simulated": { "const": true },
-    "summary": { "type": "string" },
+    "test_id": {
+      "type": "string"
+    },
+    "simulated": {
+      "const": true
+    },
+    "summary": {
+      "type": "string"
+    },
     "items": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["stimulus_id", "rank", "mean_score", "score_distribution", "objections", "quotes"],
+        "required": [
+          "stimulus_id",
+          "rank",
+          "mean_score",
+          "score_distribution",
+          "objections",
+          "said_summary",
+          "thought_summary",
+          "responses"
+        ],
         "properties": {
-          "stimulus_id": { "type": "string" },
-          "rank": { "type": "integer", "minimum": 1 },
-          "mean_score": { "type": "number" },
+          "stimulus_id": {
+            "type": "string"
+          },
+          "rank": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "mean_score": {
+            "type": "number"
+          },
           "score_distribution": {
             "type": "object",
             "description": "Conteggio risposte per punteggio 1–5",
-            "additionalProperties": { "type": "integer", "minimum": 0 }
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0
+            }
           },
-          "objections": { "type": "array", "items": { "type": "string" } },
-          "quotes": { "type": "array", "items": { "type": "string" } }
+          "objections": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "said_summary": {
+            "type": "string",
+            "description": "Sintesi di cosa dicono le personas"
+          },
+          "thought_summary": {
+            "type": "string",
+            "description": "Sintesi di cosa pensano davvero, evidenziando dove diverge da said"
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "$ref": "response.schema.json"
+            }
+          }
         }
       }
     }

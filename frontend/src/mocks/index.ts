@@ -32,7 +32,26 @@ export const mockReport: Report = {
       mean_score: 3.8,
       score_distribution: { "1": 0, "2": 1, "3": 3, "4": 4, "5": 2 },
       objections: ["Troppo generico"],
-      quotes: ["Mi fermerei a leggerlo."],
+      said_summary: "Apprezzano il tema e lo trovano interessante.",
+      thought_summary: "In privato lo trovano vago: manca un esempio concreto e un'idea di costo.",
+      responses: [
+        {
+          persona_id: "p1",
+          stimulus_id: "variante-a",
+          thought: "Bello, ma a me cosa cambia? Non ho tempo per queste cose.",
+          said: "Spunto interessante, grazie per la condivisione.",
+          score: 2,
+          objections: ["Non dice cosa ottengo"],
+        },
+        {
+          persona_id: "p2",
+          stimulus_id: "variante-a",
+          thought: "Finalmente qualcuno che parla di numeri. Lo giro al mio socio.",
+          said: "Finalmente qualcuno che parla di numeri.",
+          score: 5,
+          objections: [],
+        },
+      ],
     },
   ],
 };

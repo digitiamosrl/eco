@@ -8,10 +8,16 @@
 export interface Response {
   persona_id: string;
   stimulus_id: string;
-  first_reaction: string;
+  /**
+   * Cosa pensa davvero, a caldo, senza filtri. Generato prima di said.
+   */
+  thought: string;
+  /**
+   * Cosa direbbe o scriverebbe in pubblico (commento, frase a un collega). Può coincidere con thought.
+   */
+  said: string;
   score: number;
   objections: string[];
   misunderstood?: string[];
   would_abandon?: boolean;
-  quote?: string;
 }
