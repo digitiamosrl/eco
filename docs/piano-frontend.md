@@ -1,6 +1,6 @@
 # Piano design e frontend
 
-Area di Serena: `frontend/`, `design/`. Consegna: mercoledì 9 dicembre 2026, 8 mercoledì da 4 ore.
+Area di Fabio: `frontend/`, `design/`. Consegna: mercoledì 9 dicembre 2026, 8 mercoledì da 4 ore.
 
 ## Da decidere con Salvo (entro il 21 ottobre)
 
@@ -16,6 +16,9 @@ Gli schemi in `shared/schemas/` sono una bozza. Prima di costruirci sopra:
    - `GET /personas` panel
    - `GET /flows` flussi del prototipo catturati
 5. **Immagini dei post.** Upload multipart o URL?
+6. **Cosa dicono / cosa pensano.** Ogni risposta ha `thought` (pensiero privato, generato per primo) e `said` (cosa direbbe in pubblico). Il report ha per ogni variante la sintesi di entrambi e tutte le risposte. Bozza in `shared/schemas/` e `prompts/persona_response.md`. Da verificare sui primi test:
+   - Il modello tende a rendere `thought` più negativo per contrasto: il prompt dice che possono coincidere.
+   - Serve un'etichetta "diverge" per filtrare le risposte, oppure basta la sintesi?
 
 ## Le tre schermate
 
@@ -47,4 +50,4 @@ Il report mostra sempre che i risultati sono simulati e la distribuzione, non so
 | 2 dic | Prova completa con post Digitiamo già pubblicati, correzioni, accessibilità di base |
 | 9 dic | Margine e demo |
 
-**Rischio principale:** se il 25 novembre gli endpoint non sono pronti, la demo resta sui mock. Per questo il contratto si chiude il 21 ottobre.
+**Rischio principale:** se il 25 novembre gli endpoint non sono pronti, la demo resta sui mock. Per questo il contratto si chiude il 21 ottobre e si chiede a Salvo di avere gli endpoint con dati finti entro il 4 novembre: vedi `docs/piano-backend-per-frontend.md`.
