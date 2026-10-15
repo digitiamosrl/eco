@@ -4,9 +4,9 @@ import type { Test } from "../types/test";
 
 const POLL_MS = 2000;
 
-type Props = { initial: Test; onShowReport: (testId: string) => void };
+type Props = { initial: Test; onShowReport: (testId: string) => void; onReset: () => void };
 
-export default function TestProgress({ initial, onShowReport }: Props) {
+export default function TestProgress({ initial, onShowReport, onReset }: Props) {
   const [test, setTest] = useState(initial);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,6 +41,11 @@ export default function TestProgress({ initial, onShowReport }: Props) {
             Riprova
           </button>
         </p>
+      )}
+      {(test.status === "done" || test.status === "error") && (
+        <button type="button" className="secondary" onClick={onReset}>
+          Nuovo test
+        </button>
       )}
       {test.status === "done" && (
         <button type="button" className="primary" onClick={() => onShowReport(test.id)}>

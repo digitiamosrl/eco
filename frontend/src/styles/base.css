@@ -20,7 +20,7 @@ button.primary:disabled { opacity: 0.6; cursor: wait; }
 button.secondary { background: none; border: 1px dashed var(--color-line); border-radius: var(--radius); padding: 10px 18px; font: inherit; color: var(--color-muted); cursor: pointer; }
 
 label { display: block; font-weight: 600; margin-top: 10px; }
-textarea, select, input[type="file"] { display: block; width: 100%; margin-top: 4px; font: inherit; font-weight: 400; }
+textarea, input[type="file"] { display: block; width: 100%; margin-top: 4px; font: inherit; font-weight: 400; }
 textarea { min-height: 120px; padding: 8px; border: 1px solid var(--color-line); border-radius: var(--radius); }
 [role="alert"] { color: var(--color-alert); }
 

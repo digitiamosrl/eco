@@ -12,7 +12,7 @@ export default function ReportScreen({ testId }: { testId?: string }) {
   const selected =
     testId ??
     tests.data
-      ?.filter((t) => t.status === "done")
+      ?.filter((t) => t.kind === "post" && t.status === "done")
       .sort((a, b) => b.created_at.localeCompare(a.created_at))[0]?.id;
   const report = useLoad<Report | null>(
     () => (selected ? getReport(selected) : Promise.resolve(null)),

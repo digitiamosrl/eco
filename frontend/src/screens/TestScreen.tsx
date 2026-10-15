@@ -41,13 +41,13 @@ export default function TestScreen({ onShowReport }: Props) {
     try {
       setTest(await startPostTest(variants));
     } catch (e) {
-      setErrors([(e as Error).message]);
+      setErrors([e instanceof Error && e.message ? e.message : "Errore imprevisto."]);
     } finally {
       setSending(false);
     }
   }
 
-  if (test) return <TestProgress initial={test} onShowReport={onShowReport} />;
+  if (test) return <TestProgress initial={test} onShowReport={onShowReport} onReset={() => setTest(null)} />;
 
   return (
     <section>

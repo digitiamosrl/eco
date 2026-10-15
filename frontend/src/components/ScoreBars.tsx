@@ -6,7 +6,7 @@ export default function ScoreBars({ distribution, mean }: Props) {
   const bars = toBars(distribution);
   return (
     <figure className="score-bars">
-      <figcaption>Distribuzione dei voti (media {mean.toFixed(1)})</figcaption>
+      <figcaption>Distribuzione dei voti (media {mean.toLocaleString("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 })})</figcaption>
       <div
         className="bars"
         role="img"
