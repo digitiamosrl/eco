@@ -7,7 +7,7 @@ export default function PanelScreen() {
   const { data: personas, error } = useLoad(getPersonas, []);
 
   if (error) return <p role="alert">{error}</p>;
-  if (!personas) return <p>Caricamento del panel…</p>;
+  if (!personas) return <p role="status">Caricamento del panel…</p>;
 
   return (
     <section>
@@ -16,12 +16,12 @@ export default function PanelScreen() {
       <div className="grid">
         {SIZES.map((size) => (
           <div key={size} className="card">
-            <h3>{size}</h3>
+            <h2>{size}</h2>
             <strong>{personas.filter((p) => p.company_size === size).length}</strong> personas
           </div>
         ))}
       </div>
-      <div className="table-scroll">
+      <div className="table-scroll" tabIndex={0} role="region" aria-label="Elenco personas">
         <table>
           <thead>
             <tr>

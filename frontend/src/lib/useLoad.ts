@@ -13,8 +13,8 @@ export function useLoad<T>(load: () => Promise<T>, deps: unknown[]) {
       (d) => {
         if (alive) setData(d);
       },
-      (e: Error) => {
-        if (alive) setError(e.message);
+      (e: unknown) => {
+        if (alive) setError(e instanceof Error && e.message ? e.message : "Errore imprevisto.");
       },
     );
     return () => {
