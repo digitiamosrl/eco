@@ -22,7 +22,7 @@ cd backend && ruff check . && ruff format .
 
 # frontend
 cd frontend && npm run dev
-cd frontend && npm run lint && npm run typecheck
+cd frontend && npm run lint && npm run typecheck && npm test
 ```
 
 ## Convenzioni
