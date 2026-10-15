@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eco · wireframe low-fi</title>
+<style>
+  :root { --ink: #222; --mid: #888; --line: #bbb; --fill: #eee; --bg: #fafafa; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.4 system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  .toc { position: sticky; top: 0; z-index: 1; display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .toc a { color: var(--ink); }
+  .frame { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+  .frame > h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--mid); margin: 0 0 8px; }
+  .screen { background: #fff; border: 2px solid var(--ink); }
+  .nav { display: flex; align-items: center; gap: 24px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
+  .nav b { margin-right: auto; }
+  .nav span { padding-bottom: 4px; color: var(--mid); }
+  .nav .on { color: var(--ink); border-bottom: 2px solid var(--ink); }
+  .body { padding: 24px 20px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--mid); margin: 0 0 20px; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .card { border: 1px solid var(--line); padding: 14px; flex: 1 1 220px; }
+  .img { background: var(--fill) linear-gradient(to top right, transparent calc(50% - 1px), var(--line), transparent calc(50% + 1px)); border: 1px solid var(--line); aspect-ratio: 1.91 / 1; display: grid; place-items: center; color: var(--mid); font-size: 12px; }
+  .field { border: 1px solid var(--line); padding: 10px; color: var(--mid); min-height: 40px; margin: 6px 0 12px; }
+  .area { min-height: 110px; }
+  .btn { display: inline-block; border: 2px solid var(--ink); padding: 8px 16px; font-weight: 600; }
+  .btn.primary { background: var(--ink); color: #fff; }
+  .btn.ghost { border-style: dashed; color: var(--mid); border-color: var(--line); }
+  .tabs { display: inline-flex; border: 1px solid var(--ink); margin-bottom: 20px; }
+  .tabs span { padding: 6px 14px; }
+  .tabs .on { background: var(--ink); color: #fff; }
+  .tag { display: inline-block; border: 1px solid var(--line); padding: 1px 8px; font-size: 12px; margin: 2px 2px 0 0; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); }
+  th { font-size: 12px; color: var(--mid); font-weight: 500; }
+  .banner { border: 2px dashed var(--ink); padding: 10px 14px; margin-bottom: 20px; }
+  .bars { display: flex; align-items: flex-end; gap: 4px; height: 70px; }
+  .bars i { flex: 1; background: var(--mid); }
+  .bars-x { display: flex; gap: 4px; font-size: 11px; color: var(--mid); }
+  .bars-x span { flex: 1; text-align: center; }
+  .rank { font-size: 28px; font-weight: 700; }
+  .progress { height: 10px; border: 1px solid var(--ink); }
+  .progress i { display: block; height: 100%; background: var(--ink); }
+  .note { font-size: 12px; color: #a33; font-style: italic; margin-top: 8px; }
+  ul.plain { margin: 6px 0 0; padding-left: 18px; }
+  .flowstrip { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+  .flowstrip .card { flex: 0 0 200px; }
+  .shot { background: var(--fill); border: 1px solid var(--line); aspect-ratio: 9 / 16; max-height: 220px; width: 100%; display: grid; place-items: center; color: var(--mid); font-size: 12px; }
+  .drop { color: #a33; font-weight: 600; }
+  .saythink { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  .saythink > div { border: 1px solid var(--line); padding: 10px 12px; }
+  .saythink .think { border-style: dashed; background: var(--bg); }
+  .saythink small, td small { color: var(--mid); }
+  details { margin-top: 14px; }
+  summary { cursor: pointer; font-weight: 600; }
+  td.think { font-style: italic; background: var(--bg); }
+  .gap { font-size: 11px; border: 1px solid var(--ink); padding: 0 6px; margin-left: 4px; font-style: normal; }
+  @media (max-width: 640px) { .saythink { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <b>eco · wireframe</b>
+  <a href="#panel">1 Panel</a>
+  <a href="#test-post">2a Test · post</a>
+  <a href="#test-proto">2b Test · prototipo</a>
+  <a href="#running">2c Test in corso</a>
+  <a href="#report-post">3a Report · post</a>
+  <a href="#report-proto">3b Report · prototipo</a>
+</nav>
+
+<!-- 1 PANEL -->
+<section class="frame" id="panel">
+  <h2>1 · Panel</h2>
+  <div class="screen">
+    <div class="nav"><b>eco</b><span class="on">Panel</span><span>Test</span><span>Report</span></div>
+    <div class="body">
+      <h1>Panel</h1>
+      <p class="sub">Decision maker di PMI italiane · 30 personas sintetiche costruite su dati ISTAT e CRM anonimizzato</p>
+      <div class="row" style="margin-bottom:20px">
+        <div class="card"><small>Dimensione</small><br>micro 40% · piccola 40% · media 20%</div>
+        <div class="card"><small>Area</small><br>Nord 55% · Centro 25% · Sud e isole 20%</div>
+        <div class="card"><small>Settore</small><br>manifattura · servizi B2B · commercio · …</div>
+      </div>
+      <table>
+        <tr><th>Ruolo</th><th>Settore</th><th>Dimensione</th><th>Regione</th><th>Profilo</th></tr>
+        <tr><td>Titolare</td><td>Manifattura</td><td>piccola</td><td>Lombardia</td><td>Azienda di famiglia, poco tempo per LinkedIn…</td></tr>
+        <tr><td>Direttrice commerciale</td><td>Servizi B2B</td><td>media</td><td>Emilia-Romagna</td><td>Diffidente verso promesse generiche…</td></tr>
+        <tr><td>Amministratore</td><td>Commercio</td><td>micro</td><td>Puglia</td><td>Decide da solo, attento ai costi…</td></tr>
+        <tr><td colspan="5" style="color:var(--mid)">… altre 27</td></tr>
+      </table>
+      <p class="note">Da decidere con Salvo: il panel è fisso o se ne sceglie la dimensione? Se fisso, la schermata è sola lettura.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2a TEST POST -->
+<section class="frame" id="test-post">
+  <h2>2a · Test · post LinkedIn</h2>
+  <div class="screen">
+    <div class="nav"><b>eco</b><span>Panel</span><span class="on">Test</span><span>Report</span></div>
+    <div class="body">
+      <h1>Nuovo test</h1>
+      <p class="sub">Confronta da 2 a 5 varianti dello stesso post</p>
+      <div class="tabs"><span class="on">Post LinkedIn</span><span>Prototipo</span></div>
+      <div class="row">
+        <div class="card">
+          <b>Variante A</b>
+          <div class="field area">Testo del post…</div>
+          <div class="img">trascina immagine</div>
+        </div>
+        <div class="card">
+          <b>Variante B</b>
+          <div class="field area">Testo del post…</div>
+          <div class="img">trascina immagine</div>
+        </div>
+        <div class="card" style="display:grid;place-items:center">
+          <span class="btn ghost">+ Aggiungi variante</span>
+        </div>
+      </div>
+      <p style="margin-top:24px"><span class="btn primary">Avvia test con 30 personas</span> &nbsp; <small style="color:var(--mid)">circa 3 minuti</small></p>
+      <p class="note">Validazione: min 2, max 5 varianti; testo obbligatorio, immagine facoltativa? Formato immagine da concordare (upload o URL).</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2b TEST PROTOTIPO -->
+<section class="frame" id="test-proto">
+  <h2>2b · Test · prototipo</h2>
+  <div class="screen">
+    <div class="nav"><b>eco</b><span>Panel</span><span class="on">Test</span><span>Report</span></div>
+    <div class="body">
+      <h1>Nuovo test</h1>
+      <p class="sub">Le personas valutano i flussi già catturati, schermata per schermata</p>
+      <div class="tabs"><span>Post LinkedIn</span><span class="on">Prototipo</span></div>
+      <div class="row">
+        <label class="card">☑ <b>Onboarding</b><br><small>6 schermate · catturato il 12/11</small></label>
+        <label class="card">☑ <b>Richiesta preventivo</b><br><small>4 schermate · catturato il 12/11</small></label>
+        <label class="card">☐ <b>Area clienti</b><br><small>5 schermate · catturato il 12/11</small></label>
+      </div>
+      <p style="margin-top:24px"><span class="btn primary">Avvia test con 30 personas</span></p>
+      <p class="note">I flussi sono definiti nel backend (capture/flows), qui si scelgono soltanto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2c RUNNING -->
+<section class="frame" id="running">
+  <h2>2c · Test in corso</h2>
+  <div class="screen">
+    <div class="nav"><b>eco</b><span>Panel</span><span class="on">Test</span><span>Report</span></div>
+    <div class="body">
+      <h1>Test in corso</h1>
+      <p class="sub">3 varianti · 30 personas</p>
+      <div class="progress"><i style="width:62%"></i></div>
+      <p>56 risposte su 90 · puoi chiudere la pagina, il test continua</p>
+      <p style="color:var(--mid)">⚠ 2 risposte non valide, ritentate</p>
+      <p class="note">Stati: in corso / completato → vai al report / errore → messaggio esplicito + riprova.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3a REPORT POST -->
+<section class="frame" id="report-post">
+  <h2>3a · Report · post</h2>
+  <div class="screen">
+    <div class="nav"><b>eco</b><span>Panel</span><span>Test</span><span class="on">Report</span></div>
+    <div class="body">
+      <div class="banner"><b>Risultati simulati.</b> Reazioni di personas sintetiche, non di persone reali. Usali per confrontare varianti, non come previsione.</div>
+      <h1>Report · 3 varianti</h1>
+      <p class="sub">Sintesi: la variante B convince per concretezza; A è percepita come troppo generica…</p>
+
+      <div class="card" style="margin-bottom:16px">
+        <div class="row" style="align-items:flex-start">
+          <div style="flex:0 0 60px" class="rank">#1</div>
+          <div style="flex:1 1 200px"><b>Variante B</b><div class="img" style="max-width:220px;margin-top:6px">immagine</div></div>
+          <div style="flex:1 1 200px">
+            <small>Distribuzione (media 3,8)</small>
+            <div class="bars"><i style="height:5%"></i><i style="height:15%"></i><i style="height:35%"></i><i style="height:100%"></i><i style="height:50%"></i></div>
+            <div class="bars-x"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          </div>
+          <div style="flex:1 1 240px">
+            <small>Obiezioni principali</small>
+            <ul class="plain"><li>Non dice quanto costa (9)</li><li>Linguaggio tecnico (4)</li></ul>
+          </div>
+        </div>
+        <div class="saythink">
+          <div><small>Cosa dicono</small><br>Lo trovano utile e concreto, molti lo commenterebbero o lo girerebbero a un socio.</div>
+          <div class="think"><small>Cosa pensano</small><br>Si fidano, ma un terzo pensa “bello, ma quanto mi costa?” senza dirlo.</div>
+        </div>
+        <details open>
+          <summary>Risposte delle 30 personas</summary>
+          <table>
+            <tr><th>Persona</th><th>Voto</th><th>Ha detto</th><th>Ha pensato</th></tr>
+            <tr><td>Titolare<br><small>Manifattura · piccola</small></td><td>4</td><td>«Esempio chiaro, complimenti.»</td><td class="think">«Mi piace, ma se costa come l'ultimo consulente lascio stare.» <span class="gap">diverge</span></td></tr>
+            <tr><td>Direttrice commerciale<br><small>Servizi B2B · media</small></td><td>5</td><td>«Lo giro al team.»</td><td class="think">«Finalmente numeri veri. Lo giro al team.»</td></tr>
+            <tr><td>Amministratore<br><small>Commercio · micro</small></td><td>2</td><td>—<br><small>non commenterebbe</small></td><td class="think">«Roba per aziende più grandi della mia.»</td></tr>
+            <tr><td colspan="4" style="color:var(--mid)">… altre 27 · filtro: tutte / solo dove dire e pensare divergono / per voto</td></tr>
+          </table>
+        </details>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <div class="row" style="align-items:flex-start">
+          <div style="flex:0 0 60px" class="rank">#2</div>
+          <div style="flex:1 1 200px"><b>Variante A</b><div class="img" style="max-width:220px;margin-top:6px">immagine</div></div>
+          <div style="flex:1 1 200px">
+            <small>Distribuzione (media 3,1)</small>
+            <div class="bars"><i style="height:10%"></i><i style="height:45%"></i><i style="height:100%"></i><i style="height:40%"></i><i style="height:15%"></i></div>
+            <div class="bars-x"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          </div>
+          <div style="flex:1 1 240px">
+            <small>Obiezioni principali</small>
+            <ul class="plain"><li>Troppo generico (12)</li></ul>
+          </div>
+        </div>
+      </div>
+      <p style="color:var(--mid)">#3 Variante C · …</p>
+      <p class="note">Due medie vicine possono avere distribuzioni molto diverse: per questo le barre stanno accanto alla media. L'etichetta “diverge” richiede un campo in più nella risposta, oppure la si calcola nel report: da decidere con Salvo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3b REPORT PROTOTIPO -->
+<section class="frame" id="report-proto">
+  <h2>3b · Report · prototipo</h2>
+  <div class="screen">
+    <div class="nav"><b>eco</b><span>Panel</span><span>Test</span><span class="on">Report</span></div>
+    <div class="body">
+      <div class="banner"><b>Risultati simulati.</b> Reazioni di personas sintetiche, non di persone reali.</div>
+      <h1>Report · Onboarding</h1>
+      <p class="sub">Flusso di 6 schermate · il punto critico è la schermata 3</p>
+      <div class="flowstrip">
+        <div class="card"><div class="shot">screenshot 1</div><b>1 Benvenuto</b><br><small>abbandono 3%</small></div>
+        <div class="card"><div class="shot">screenshot 2</div><b>2 Dati azienda</b><br><small>abbandono 10%</small></div>
+        <div class="card" style="border:2px solid var(--ink)"><div class="shot">screenshot 3</div><b>3 Partita IVA</b><br><small class="drop">abbandono 37%</small></div>
+        <div class="card"><div class="shot">screenshot 4</div><b>4 Piano</b><br><small>abbandono 8%</small></div>
+        <div class="card"><div class="shot">screenshot 5</div><b>5 Pagamento</b><br><small>…</small></div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <b>Schermata 3 · Partita IVA</b>
+        <ul class="plain">
+          <li>Non è chiaro perché serva subito la partita IVA (14) <span class="tag">frainteso</span></li>
+          <li>Il pulsante “Continua” sembra disattivato (6)</li>
+        </ul>
+        <div class="saythink">
+          <div><small>Cosa dicono</small><br>«Mi chiede la partita IVA già qui?»</div>
+          <div class="think"><small>Cosa pensano</small><br>«Prima voglio vedere cosa ottengo, poi vi do i dati. Chiudo e ci penso.»</div>
+        </div>
+        <details>
+          <summary>Risposte delle personas su questa schermata</summary>
+          <p style="color:var(--mid)">Stessa tabella del report post: persona · ha detto · ha pensato · abbandona sì/no</p>
+        </details>
+      </div>
+      <p class="note">Richiede di estendere report.schema.json con criticità e abbandono per schermata (i campi said/thought ci sono già nella risposta).</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
