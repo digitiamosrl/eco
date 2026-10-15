@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "report.schema.json",
+  "title": "Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["test_id", "simulated", "items", "summary"],
+  "properties": {
+    "test_id": { "type": "string" },
+    "simulated": { "const": true },
+    "summary": { "type": "string" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stimulus_id", "rank", "mean_score", "score_distribution", "objections", "quotes"],
+        "properties": {
+          "stimulus_id": { "type": "string" },
+          "rank": { "type": "integer", "minimum": 1 },
+          "mean_score": { "type": "number" },
+          "score_distribution": {
+            "type": "object",
+            "description": "Conteggio risposte per punteggio 1–5",
+            "additionalProperties": { "type": "integer", "minimum": 0 }
+          },
+          "objections": { "type": "array", "items": { "type": "string" } },
+          "quotes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

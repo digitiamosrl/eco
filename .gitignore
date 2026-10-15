@@ -1,0 +1,30 @@
+# Data: raw sources never enter the repository
+data/raw/*
+!data/raw/.gitkeep
+
+# Env
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.sqlite
+*.db
+
+# Node
+node_modules/
+dist/
+
+# Capture output
+backend/captures/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.tsbuildinfo

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stimulus.schema.json",
+  "title": "Stimulus",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind"],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "type": "string", "enum": ["post", "prototype_screen"] },
+    "variant_label": { "type": "string" },
+    "text": { "type": "string" },
+    "image_url": { "type": "string" },
+    "flow_id": { "type": "string" },
+    "screen_index": { "type": "integer", "minimum": 0 },
+    "page_structure": { "type": "string" }
+  }
+}

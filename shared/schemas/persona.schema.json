@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "persona.schema.json",
+  "title": "Persona",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "role", "sector", "company_size", "region", "profile"],
+  "properties": {
+    "id": { "type": "string" },
+    "role": { "type": "string", "description": "Ruolo del decision maker" },
+    "sector": { "type": "string" },
+    "company_size": { "type": "string", "enum": ["micro", "piccola", "media"] },
+    "region": { "type": "string" },
+    "profile": { "type": "string", "description": "Descrizione sintetica, senza dati identificabili" }
+  }
+}
