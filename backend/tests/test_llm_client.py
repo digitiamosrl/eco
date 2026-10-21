@@ -54,7 +54,7 @@ async def test_sends_well_formed_request() -> None:
         "type": "json_schema",
         "json_schema": {"name": "esito", "strict": True, "schema": SCHEMA},
     }
-    assert body["provider"] == {"require_parameters": True}
+    assert "provider" not in body
 
 
 async def test_strips_json_code_block() -> None:

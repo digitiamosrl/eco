@@ -8,7 +8,7 @@ Non si può usare l'API Anthropic (solo abbonamento). Si usa **OpenRouter** (chi
 
 ## Cosa dicono i docs di OpenRouter (verificato)
 
-- `response_format: {"type": "json_schema", "json_schema": {"name", "strict", "schema"}}`. Il supporto è **per endpoint**, non per modello. Con `provider: {"require_parameters": true}` OpenRouter scarta gli endpoint che non lo supportano. L'applicazione dello schema varia per provider: va sempre rivalidato lato nostro.
+- `response_format: {"type": "json_schema", "json_schema": {"name", "strict", "schema"}}`. Il supporto è **per endpoint**, non per modello. Con `provider: {"require_parameters": true}` OpenRouter scarta gli endpoint che non lo supportano; i modelli gratuiti non lo supportano, quindi il parametro è stato tolto (vedi deviazione 10). L'applicazione dello schema varia per provider: va sempre rivalidato lato nostro.
 - Prompt caching di Claude via OpenRouter: `cache_control` sui blocchi; minimo 4096 token per Haiku 4.5, 512 per i modelli più nuovi. **Per la POC non serve:** ogni coppia persona × stimolo si chiama una volta e i post sono brevi (sotto il minimo). Non implementare il caching ora: `shortcut: nessun prompt caching, post brevi e una chiamata per coppia; riconsiderare con più domande per persona`.
 
 ## Fuori scope
@@ -78,6 +78,7 @@ Crea `backend/scripts/smoke_llm.py`: carica `.env`, prende 3 personas dalle fixt
 7. Dipendenza `anthropic` rimossa da `requirements.txt`. Il venv locale la ha ancora installata: non è stata disinstallata.
 8. `backend/.env.example`: `PERSONA_MODEL` e `REPORT_MODEL` ora vuoti (prima c'erano id Anthropic, non validi per OpenRouter).
 9. Lo script `smoke_llm.py` non è stato eseguito (come richiesto). È stata verificata solo la funzione di report su dati sintetici.
+10. `chat_json` non invia più `provider: {"require_parameters": true}`. Con quel parametro i modelli gratuiti rispondono 404 ("No endpoints found"). Lo schema resta inviato in `response_format` e validato lato nostro. Smoke test con `minimax/minimax-m3.1-flash:free` per le personas: 12 su 12 valide al primo tentativo. Il report con `google/gemma-4-31b-it:free` non è ancora verificato.
 
 ## Verifica con la chiave reale (Q4)
 

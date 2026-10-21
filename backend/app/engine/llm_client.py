@@ -95,8 +95,6 @@ async def chat_json(
             "type": "json_schema",
             "json_schema": {"name": schema_name, "strict": True, "schema": schema},
         },
-        # Scarta gli endpoint che non rispettano lo schema, invece di rispondere senza.
-        "provider": {"require_parameters": True},
     }
     response = await _post(client, payload)
     return _parse_content(_message_content(response))
