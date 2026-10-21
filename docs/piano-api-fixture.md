@@ -68,3 +68,51 @@ Test: 404, 409, 501, report valido contro `report.schema.json`, formato del 422.
 ## Verifica finale
 
 Avvia `uvicorn`, crea un test post con 2 varianti via `curl`, interroga `GET /tests/{id}` finché `done`, poi `GET /tests/{id}/report`. Riporta l'output reale.
+
+## Stato finale
+
+**Funziona**
+
+- `GET /health`, `GET /personas` (6 personas), `GET /flows` (`onboarding`, `preventivo`).
+- `POST /tests` per post (2–5 varianti) e prototipo (flussi noti), `GET /tests`, `GET /tests/{id}`.
+- `GET /tests/{id}/report` per i post, con report valido contro `report.schema.json`.
+- Errori: 404 `Test non trovato`, 409 `Un test è già in corso` e `Il test non è ancora completato`, 501 per il report del prototipo, 422 `Richiesta non valida: <campo>`.
+- Test: 24 in `backend/tests` (pytest), copertura di `app/` al 100%. `ruff check` e `ruff format --check` puliti.
+
+**Stub**
+
+- Store in memoria: i test spariscono al riavvio di `uvicorn`.
+- Esecuzione simulata: il task in background avanza `done_count` in `FIXTURE_DELAY_SECONDS` (default 3 s). Nessuna persona reale, nessuna chiamata a modelli.
+- Il report dei post è sempre lo stesso item di `report_post.json`, clonato per ogni stimolo.
+- Non ancora: report del prototipo, upload multipart, `GET /files`, SQLite, runner reale, Playwright.
+
+**Scelte dove il piano era ambiguo**
+
+1. Flusso sconosciuto in `flow_ids`: 422 con `Flusso non trovato: <id>`.
+2. Ordine dei controlli sul report: 404, poi 409, poi 501.
+3. Oltre al piano: rifiutate varianti con etichetta duplicata (senza distinzione di maiuscole) e `flow_ids` duplicati, perché produrrebbero id di stimolo duplicati.
+4. Id degli stimoli prototipo: `<flow_id>-<indice>` con indice da 0, per esempio `onboarding-0`.
+5. Body malformato o senza `kind`: 422 `Richiesta non valida: corpo`.
+6. `validate` in `backend/tests/conftest.py` è una fixture pytest, non una funzione importabile.
+7. Il formato `date-time` non viene verificato da jsonschema senza `rfc3339-validator`, che non è in `requirements.txt`. I test controllano solo che il valore sia una stringa.
+8. Le fixture stanno in `backend/app/fixtures/`, come da piano. `backend/tests/fixtures/` resta vuota.
+9. La rotta del report è in `backend/app/api/reports.py`, separata da `tests.py`.
+
+**Come avviare**
+
+```bash
+cd backend
+source .venv/bin/activate
+uvicorn app.main:app --reload
+```
+
+Esempi (con il server su `http://127.0.0.1:8000`):
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/tests \
+  -H 'Content-Type: application/json' \
+  -d '{"kind":"post","variants":[{"label":"A","text":"Testo A"},{"label":"B","text":"Testo B"}]}'
+
+curl -s http://127.0.0.1:8000/tests/<id>            # status queued -> running -> done
+curl -s http://127.0.0.1:8000/tests/<id>/report     # solo a test done
+```
