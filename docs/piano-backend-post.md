@@ -68,4 +68,41 @@ Avvia `uvicorn`; con `curl -F` crea un test con 2 varianti, una con immagine; po
 
 ## Stato finale
 
-_(da compilare a fine lavoro)_
+**Funziona** (verificato con `uvicorn` e `curl`, output reale in fondo)
+
+- Persistenza SQLite (`DATABASE_PATH`, default `eco.sqlite`), tabelle `tests` e `responses`, creazione tabelle nel lifespan. Il vincolo "un test alla volta" è una transazione `BEGIN IMMEDIATE`. I test usano un database temporaneo.
+- `POST /tests` JSON (post e prototipo) e multipart per i post, con immagini PNG/JPEG/WebP riconosciute dai magic bytes, massimo 5 MB, nome file generato dal server (`data/uploads/`, gitignored). Un 409 cancella le immagini appena scritte.
+- `GET /files/{name}`: solo file diretti di `UPLOAD_DIR`; nome con `/`, `..` o inesistente risponde 404.
+- Runner dei post (`app/engine/runner.py`): concorrenza da `PANEL_CONCURRENCY`, risposta validata contro `response.schema.json` con un solo retry, `done_count` aggiornato per ogni risposta, `done` a fine corsa. Al primo errore le chiamate rimaste non partono e il test passa a `error` con un messaggio italiano senza dettagli interni (il dettaglio va nel log del server).
+- Report dei post costruito dalle risposte salvate: `aggregate.py` (puro) per media, distribuzione, rank, obiezioni, `summarize.py` (FakeSummarizer), `builder.py`. `simulated: true` sempre.
+- Validazione all'avvio: `RESPONDER=llm` senza `PERSONA_MODEL` e `SUMMARIZER=llm` senza `REPORT_MODEL` falliscono con un messaggio chiaro.
+- Test: 72 passati, copertura di `app/` al 99%. `ruff check` e `ruff format` puliti.
+
+**Stub**
+
+- `LlmResponder` e `LlmSummarizer` sollevano `NotImplementedError("Provider AI non ancora configurato")`. Il runner lo trasforma in `error` con il messaggio generico.
+- `FakeResponder` è deterministico (seed da persona + stimolo): nessuna persona reale.
+- `GET /personas` resta sulle fixture (commento `shortcut`).
+- Prototipo: task finto con `FIXTURE_DELAY_SECONDS` invariato, report ancora `501`.
+- Non ancora: report del prototipo, Playwright, provider AI, prompt in `prompts/`.
+
+**Deviazioni dal piano e scelte dove era ambiguo**
+
+1. Al riavvio passano a `error` anche i test in `queued`, non solo quelli in `running`. Un `queued` orfano bloccherebbe ogni nuovo test con 409 per sempre.
+2. `GET /files/..%2Fconfig.py` risponde 404 con il corpo di default di FastAPI (`{"detail":"Not Found"}`), non con `File non trovato`: la richiesta non arriva alla rotta.
+3. `FakeSummarizer` e `LlmSummarizer` sono `async` come il `Responder`, così il provider AI non cambia il protocollo.
+4. Il database di sviluppo è `backend/eco.sqlite` (ignorato da git). I test usano un file temporaneo per ogni test.
+5. `report_post.json` non è più usato dalle rotte, ma `tests/test_schemas.py` lo valida: il file resta.
+6. `python-multipart` è fissato a `0.0.32` in `requirements.txt`.
+7. I test asincroni usano il plugin `anyio` che arriva con starlette, senza `pytest-asyncio`.
+8. Le immagini vengono scritte dopo la validazione e prima dell'inserimento del test. Se il 409 scatta, vengono cancellate.
+9. Il formato `date-time` non è verificato (come nel piano precedente).
+
+**Verifica finale** (uvicorn su porta 8765, `curl` reali, database di sviluppo)
+
+- `POST /tests` multipart con 2 varianti, B con PNG: `HTTP 201`, `status: queued`, `total_count: 12`, `image_url: /files/<uuid>.png`.
+- Polling di `GET /tests/{id}`: `done 12 12`.
+- `GET /tests/{id}/report`: `simulated: true`, ranking e distribuzione coerenti con le risposte salvate.
+- `GET` dell'`image_url`: `HTTP 200 image/png`, 74 byte, come il file caricato.
+- File non immagine con estensione `.png`: `HTTP 422 {"detail":"Formato immagine non valido: usa PNG, JPEG o WebP"}`.
+- `GET /files/..%2Fconfig.py`: `HTTP 404`.

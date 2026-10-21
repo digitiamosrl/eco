@@ -116,3 +116,23 @@ curl -s -X POST http://127.0.0.1:8000/tests \
 curl -s http://127.0.0.1:8000/tests/<id>            # status queued -> running -> done
 curl -s http://127.0.0.1:8000/tests/<id>/report     # solo a test done
 ```
+
+## Aggiornamento: flusso post (branch `feat/post-pipeline`)
+
+Per i post il backend ora è vero, con un risponditore finto al posto del modello. Dettagli in `docs/piano-backend-post.md`, sezione "Stato finale".
+
+- Store in SQLite (`DATABASE_PATH`), non più in memoria: i test sopravvivono al riavvio, quelli rimasti attivi passano a `error`.
+- `POST /tests` per i post accetta multipart con immagini (`variants[i][image]`), e `GET /files/{name}` le serve.
+- Il report dei post viene calcolato dalle risposte salvate, non più clonato dalla fixture.
+- Il prototipo resta com'era: task finto con `FIXTURE_DELAY_SECONDS` e report `501`.
+
+Avvio e prova rapida:
+
+```bash
+cd backend
+.venv/bin/uvicorn app.main:app --reload
+curl -s -F kind=post -F 'variants[0][label]=A' -F 'variants[0][text]=Testo A' \
+  -F 'variants[1][label]=B' -F 'variants[1][text]=Testo B' http://127.0.0.1:8000/tests
+curl -s http://127.0.0.1:8000/tests/<id>            # done quando done_count = total_count
+curl -s http://127.0.0.1:8000/tests/<id>/report
+```
