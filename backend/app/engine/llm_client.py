@@ -5,7 +5,7 @@ from typing import Any
 
 import httpx
 
-from app.config import settings
+from app.config import REPO_ROOT, settings
 
 # Module-level perché i test lo azzerano; un solo retry, quindi l'attesa è breve.
 RETRY_DELAY_SECONDS = 1.0
@@ -22,6 +22,12 @@ _client: httpx.AsyncClient | None = None
 
 class LlmError(Exception):
     """Messaggio in italiano senza dettagli interni: può arrivare all'utente."""
+
+
+def load_prompt(name: str) -> str:
+    """Il prompt senza il commento di bozza in testa: il modello non lo deve leggere."""
+    text = (REPO_ROOT / "prompts" / name).read_text(encoding="utf-8")
+    return re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL).strip()
 
 
 def shared_client() -> httpx.AsyncClient:

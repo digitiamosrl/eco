@@ -38,11 +38,6 @@ async def test_fake_responder_has_some_objections_and_some_without() -> None:
     assert any(not r.objections for r in responses)
 
 
-async def test_llm_responder_is_a_stub() -> None:
-    with pytest.raises(NotImplementedError, match="Provider AI non ancora configurato"):
-        await LlmResponder().respond(PERSONAS[0], STIMULI[0])
-
-
 def test_build_responder_defaults_to_fake(monkeypatch) -> None:
     monkeypatch.setattr(settings, "responder", "fake")
     assert isinstance(build_responder(), FakeResponder)
