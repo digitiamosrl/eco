@@ -1,0 +1,76 @@
+<title>eco · tre direzioni</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap">
+<style>
+  /* Three equal columns, one per direction: label, notes, screenshot. Stacks below 900px. */
+  :root {
+    --bg: #F4F5FA; --surface: #FFFFFF; --ink: #070011; --muted: #4A4560; --line: #EBEEFC; --accent: #3E00EA;
+    --font: Montserrat, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #070011; --surface: #1C073A; --ink: #F4F5FA; --muted: #C9C6E0; --line: #2E1A55; --accent: #A8B0FF; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --bg: #070011; --surface: #1C073A; --ink: #F4F5FA; --muted: #C9C6E0; --line: #2E1A55; --accent: #A8B0FF; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink); font: 500 15px/1.5 var(--font);
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px;
+  }
+  .wrap { max-width: 1600px; margin: 0 auto; display: grid; gap: 24px; }
+  h1 { font-size: 28px; margin: 0 0 4px; text-wrap: balance; }
+  header p { margin: 0; color: var(--muted); max-width: 65ch; }
+  main { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  article { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  h2 { font-size: 18px; margin: 0; }
+  .logic { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); font-weight: 700; }
+  dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+  dt { font-weight: 700; } dd { margin: 0; color: var(--muted); }
+  a { color: var(--accent); font-weight: 700; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .shot { display: block; border: 1px solid var(--line); border-radius: 4px; max-height: 70vh; overflow-y: auto; }
+  .shot img { width: 100%; display: block; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>eco · tre direzioni grafiche</h1>
+    <p>Stessi contenuti e dati di prova, cambia solo la grafica. Le schermate sono Test post e Report post. Apri una tavola per vederla a dimensione reale.</p>
+  </header>
+  <main>
+    <article>
+      <span class="logic">A · Estrazione casuale</span>
+      <h2>Candy</h2>
+      <dl>
+        <dt>Detto/pensato</dt><dd>Fumetto viola per il detto, nuvoletta per il pensato, arancio quando divergono.</dd>
+        <dt>Per chi</dt><dd>Chi vuole uno strumento amichevole e riconoscibile.</dd>
+        <dt>Rischio</dt><dd>Troppo giocoso per un report da mostrare fuori.</dd>
+      </dl>
+      <div class="shot"><img src="a-roulette-candy-1440.png" alt="Direzione A, Candy: Test post e Report post"></div>
+      <a href="a-roulette-candy.html">Apri la tavola A</a>
+    </article>
+    <article>
+      <span class="logic">B · Riferimento reale</span>
+      <h2>Dovetail</h2>
+      <dl>
+        <dt>Detto/pensato</dt><dd>Il pensato è evidenziato come in un transcript, solo dove diverge.</dd>
+        <dt>Per chi</dt><dd>Chi lavora con i dati: menu laterale, contesto sempre a destra.</dd>
+        <dt>Rischio</dt><dd>Il più già visto, da SaaS generico.</dd>
+      </dl>
+      <div class="shot"><img src="b-riferimento-1440.png" alt="Direzione B, Dovetail: Test post e Report post"></div>
+      <a href="b-riferimento.html">Apri la tavola B</a>
+    </article>
+    <article>
+      <span class="logic">C · Miglior designer</span>
+      <h2>Vignelli / Unimark</h2>
+      <dl>
+        <dt>Detto/pensato</dt><dd>Una riga fa da superficie: sopra il detto, sotto il pensato in corsivo. Tratteggio se la persona tace.</dd>
+        <dt>Per chi</dt><dd>Chi legge il report come un documento e vuole autorevolezza.</dd>
+        <dt>Rischio</dt><dd>Austero, e aggiunge un terzo font (Bodoni).</dd>
+      </dl>
+      <div class="shot"><img src="c-designer-1440.png" alt="Direzione C, Vignelli: Test post e Report post"></div>
+      <a href="c-designer.html">Apri la tavola C</a>
+    </article>
+  </main>
+</div>
