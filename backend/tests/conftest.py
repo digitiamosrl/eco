@@ -46,3 +46,11 @@ def _reset_store():
     from app import store
 
     store.reset()
+
+
+@pytest.fixture
+def no_background(monkeypatch):
+    """Il test resta in queued: il task in background non parte."""
+    from app.api import tests as tests_api
+
+    monkeypatch.setattr(tests_api, "run_test", lambda test_id: None)

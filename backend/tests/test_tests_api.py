@@ -1,7 +1,5 @@
-import pytest
 from fastapi.testclient import TestClient
 
-from app.api import tests as tests_api
 from app.api.tests import run_test
 from app.main import app
 
@@ -16,12 +14,6 @@ POST_BODY = {
 }
 PROTOTYPE_BODY = {"kind": "prototype", "flow_ids": ["onboarding"]}
 PERSONAS_COUNT = 6
-
-
-@pytest.fixture
-def no_background(monkeypatch):
-    """Il test resta in queued: il task in background non parte."""
-    monkeypatch.setattr(tests_api, "run_test", lambda test_id: None)
 
 
 def test_create_post_test_is_queued_then_done(validate) -> None:
