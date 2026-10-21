@@ -7,13 +7,14 @@ from jsonschema import Draft202012Validator
 
 from app import store
 from app.config import REPO_ROOT, settings
+from app.engine.llm_client import LlmError
 from app.engine.responder import Responder
 from app.models import Persona, Response, Stimulus
 
 logger = logging.getLogger(__name__)
 
 PANEL_ERROR = "Il test non è stato completato: il servizio di analisi non è riuscito a rispondere."
-_ATTEMPTS = 2  # un tentativo più un solo retry se la risposta non è valida
+_ATTEMPTS = 2  # un tentativo più un solo retry se la risposta non è valida o leggibile
 _RESPONSE_VALIDATOR = Draft202012Validator(
     json.loads((REPO_ROOT / "shared" / "schemas" / "response.schema.json").read_text("utf-8"))
 )
@@ -41,6 +42,8 @@ async def _ask(
                 return None
             try:
                 response = await responder.respond(persona, stimulus)
+            except LlmError:
+                continue  # risposta del modello illeggibile o servizio in errore: un solo retry
             except Exception:
                 stop.set()
                 raise

@@ -5,6 +5,7 @@ import pytest
 from app import models, store
 from app.api.personas import PERSONAS
 from app.config import settings
+from app.engine.llm_client import LlmError
 from app.engine.responder import FakeResponder
 from app.engine.runner import PANEL_ERROR, run_post_test
 from app.models import Response, Stimulus
@@ -88,6 +89,29 @@ class AlwaysInvalidResponder:
         )
 
 
+class UnreadableOnceResponder:
+    """Prima risposta del modello illeggibile (LlmError), poi valida: serve un solo retry."""
+
+    def __init__(self) -> None:
+        self.seen: set[tuple[str, str]] = set()
+
+    async def respond(self, persona, stimulus) -> Response:
+        key = (persona.id, stimulus.id)
+        if key not in self.seen:
+            self.seen.add(key)
+            raise LlmError("Il servizio di analisi ha restituito una risposta non leggibile.")
+        return _valid(persona.id, stimulus.id)
+
+
+class AlwaysUnreadableResponder:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def respond(self, persona, stimulus) -> Response:
+        self.calls += 1
+        raise LlmError("Il servizio di analisi ha restituito una risposta non leggibile.")
+
+
 class FailingResponder:
     def __init__(self) -> None:
         self.calls = 0
@@ -141,3 +165,21 @@ async def test_responder_exception_fails_without_leaking_details() -> None:
     assert test.error == PANEL_ERROR
     assert "sk-123" not in (test.error or "")
     assert responder.calls < TOTAL
+
+
+async def test_unreadable_model_output_is_retried_once() -> None:
+    _queue_test()
+    await run_post_test("t1", UnreadableOnceResponder(), PERSONAS)
+    test = store.get("t1")
+    assert test.status == "done"
+    assert store.count_responses("t1") == TOTAL
+
+
+async def test_unreadable_output_after_retry_fails_the_test() -> None:
+    _queue_test()
+    responder = AlwaysUnreadableResponder()
+    await run_post_test("t1", responder, PERSONAS)
+    test = store.get("t1")
+    assert test.status == "error"
+    assert test.error == PANEL_ERROR
+    assert responder.calls < TOTAL * 2
