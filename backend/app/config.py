@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     # fake: risponditore deterministico senza rete. llm: modelli via OpenRouter.
     responder: Literal["fake", "llm"] = "fake"
     summarizer: Literal["fake", "llm"] = "fake"
+    # Pool di personas generato (percorso dalla radice del repo). Vuoto: le fixture.
+    personas_path: str = ""
 
 
 settings = Settings()

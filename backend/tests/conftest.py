@@ -9,6 +9,8 @@ from referencing.jsonschema import DRAFT202012
 
 # Il runner di fixture non deve dormire nei test; va impostato prima di importare app.
 os.environ.setdefault("FIXTURE_DELAY_SECONDS", "0")
+# Il .env locale può puntare al pool generato: i test usano sempre le fixture.
+os.environ.setdefault("PERSONAS_PATH", "")
 
 SCHEMAS_DIR = Path(__file__).resolve().parents[2] / "shared" / "schemas"
 

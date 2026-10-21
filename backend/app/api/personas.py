@@ -1,12 +1,13 @@
 from fastapi import APIRouter
 
-from app.loaders import load_list
+from app.config import settings
+from app.loaders import load_personas
 from app.models import Persona
 
 router = APIRouter()
 
-# shortcut: fixture, sostituire con il panel generato (A2)
-PERSONAS = load_list("personas.json", Persona)
+# Fixture di default; PERSONAS_PATH punta al pool generato da scripts.generate_personas.
+PERSONAS = load_personas(settings.personas_path)
 
 
 @router.get("/personas", response_model=list[Persona])
