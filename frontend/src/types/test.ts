@@ -10,16 +10,18 @@ export interface Test {
   kind: "post" | "prototype";
   status: "queued" | "running" | "done" | "error";
   created_at: string;
-  /**
-   * Risposte ricevute
-   */
   done_count: number;
-  /**
-   * Personas × stimoli
-   */
   total_count: number;
-  /**
-   * Solo se status = error, in italiano
-   */
+  stimuli: Stimulus[];
   error?: string;
+}
+export interface Stimulus {
+  id: string;
+  kind: "post" | "prototype_screen";
+  variant_label?: string;
+  text?: string;
+  image_url?: string;
+  flow_id?: string;
+  screen_index?: number;
+  page_structure?: string;
 }

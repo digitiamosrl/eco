@@ -17,6 +17,7 @@ const started = new Map<string, { test: Test; startedAt: number }>([
         created_at: "2026-10-15T10:00:00Z",
         done_count: 6,
         total_count: 6,
+        stimuli: [],
       },
       startedAt: 0,
     },
@@ -45,6 +46,7 @@ export async function startPostTest(variantCount: number): Promise<Test> {
     created_at: new Date().toISOString(),
     done_count: 0,
     total_count: variantCount * mockPersonas.length,
+    stimuli: [],
   };
   started.set(id, { test, startedAt: Date.now() });
   return test;

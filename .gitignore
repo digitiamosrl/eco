@@ -28,3 +28,6 @@ backend/captures/
 .vscode/
 .idea/
 *.tsbuildinfo
+
+# Uploaded images (server-generated names)
+data/uploads/

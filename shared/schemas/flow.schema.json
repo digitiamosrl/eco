@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flow.schema.json",
+  "title": "Flow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "screen_count", "captured_at"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "screen_count": { "type": "integer", "minimum": 1 },
+    "captured_at": { "type": "string", "format": "date-time" }
+  }
+}

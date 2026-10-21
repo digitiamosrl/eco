@@ -1,0 +1,14 @@
+[
+  {
+    "id": "onboarding",
+    "name": "Onboarding",
+    "screen_count": 4,
+    "captured_at": "2026-10-01T09:00:00+00:00"
+  },
+  {
+    "id": "preventivo",
+    "name": "Richiesta preventivo",
+    "screen_count": 5,
+    "captured_at": "2026-10-01T09:30:00+00:00"
+  }
+]

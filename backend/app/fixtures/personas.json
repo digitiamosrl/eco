@@ -1,0 +1,50 @@
+[
+  {
+    "id": "p1",
+    "role": "Titolare",
+    "sector": "Manifattura",
+    "company_size": "piccola",
+    "region": "Lombardia",
+    "profile": "Guida l'azienda di famiglia, poco tempo per LinkedIn."
+  },
+  {
+    "id": "p2",
+    "role": "Direttrice commerciale",
+    "sector": "Servizi B2B",
+    "company_size": "media",
+    "region": "Emilia-Romagna",
+    "profile": "Valuta fornitori digitali, diffidente verso le promesse generiche."
+  },
+  {
+    "id": "p3",
+    "role": "Amministratore delegato",
+    "sector": "Consulenza IT",
+    "company_size": "media",
+    "region": "Piemonte",
+    "profile": "Legge LinkedIn la sera e diffida dei post autopromozionali."
+  },
+  {
+    "id": "p4",
+    "role": "Titolare",
+    "sector": "Edilizia",
+    "company_size": "micro",
+    "region": "Veneto",
+    "profile": "Lavora in cantiere, pubblica raramente e solo per farsi trovare dai clienti."
+  },
+  {
+    "id": "p5",
+    "role": "Responsabile acquisti",
+    "sector": "Commercio all'ingrosso",
+    "company_size": "media",
+    "region": "Lazio",
+    "profile": "Confronta i fornitori su prezzo, tempi e referenze verificabili."
+  },
+  {
+    "id": "p6",
+    "role": "Socia fondatrice",
+    "sector": "Studio professionale",
+    "company_size": "piccola",
+    "region": "Toscana",
+    "profile": "Cerca strumenti pratici e ne parla con il socio prima di decidere."
+  }
+]

@@ -9,6 +9,7 @@ const test: Test = {
   created_at: "2026-10-15T10:00:00Z",
   done_count: 0,
   total_count: 6,
+  stimuli: [],
 };
 
 describe("progress", () => {

@@ -29,7 +29,7 @@ Il contratto tra le due parti è in `shared/schemas/`: si modifica solo insieme.
 ## Stack
 
 - **Backend:** Python 3.12, FastAPI, SQLite
-- **AI:** Claude API (modello leggero per le personas, modello più capace per il report), output in JSON strutturato, prompt caching
+- **AI:** modelli via OpenRouter (modello leggero per le personas, modello più capace per il report, ids da `PERSONA_MODEL` e `REPORT_MODEL`), output in JSON validato contro lo schema
 - **Cattura prototipo:** Playwright, 2–3 sessioni da script
 - **Frontend:** React + Vite + TypeScript
 
@@ -64,7 +64,7 @@ cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 playwright install chromium
-cp .env.example .env        # inserire ANTHROPIC_API_KEY
+cp .env.example .env        # inserire OPENROUTER_API_KEY, PERSONA_MODEL e REPORT_MODEL
 uvicorn app.main:app --reload
 
 # frontend
