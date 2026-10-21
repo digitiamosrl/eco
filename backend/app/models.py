@@ -1,6 +1,6 @@
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class Persona(BaseModel):
@@ -82,3 +82,42 @@ class Report(BaseModel):
     simulated: Literal[True]
     summary: str
     items: list[ReportItem]
+
+
+class Variant(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    label: str = Field(min_length=1)
+    text: str = Field(min_length=1)
+
+
+class PostTestRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    kind: Literal["post"]
+    variants: list[Variant] = Field(min_length=2, max_length=5)
+
+    @field_validator("variants")
+    @classmethod
+    def labels_are_unique(cls, variants: list[Variant]) -> list[Variant]:
+        labels = [v.label.lower() for v in variants]
+        if len(set(labels)) != len(labels):
+            raise ValueError("etichette duplicate")
+        return variants
+
+
+class PrototypeTestRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    kind: Literal["prototype"]
+    flow_ids: list[str] = Field(min_length=1)
+
+    @field_validator("flow_ids")
+    @classmethod
+    def flow_ids_are_unique(cls, flow_ids: list[str]) -> list[str]:
+        if len(set(flow_ids)) != len(flow_ids):
+            raise ValueError("flussi duplicati")
+        return flow_ids
+
+
+CreateTestRequest = Annotated[PostTestRequest | PrototypeTestRequest, Field(discriminator="kind")]

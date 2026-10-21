@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     report_model: str = ""
     panel_concurrency: int = 5
     database_path: str = "eco.sqlite"
+    # Durata simulata di un test completo (fixture, nessuna chiamata reale).
+    fixture_delay_seconds: float = 3.0
 
 
 settings = Settings()

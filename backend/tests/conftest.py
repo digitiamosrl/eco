@@ -1,10 +1,14 @@
 import json
+import os
 from pathlib import Path
 
 import pytest
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 from referencing.jsonschema import DRAFT202012
+
+# Il runner di fixture non deve dormire nei test; va impostato prima di importare app.
+os.environ.setdefault("FIXTURE_DELAY_SECONDS", "0")
 
 SCHEMAS_DIR = Path(__file__).resolve().parents[2] / "shared" / "schemas"
 
@@ -35,3 +39,10 @@ def _validate(name: str, data: object) -> None:
 @pytest.fixture
 def validate():
     return _validate
+
+
+@pytest.fixture(autouse=True)
+def _reset_store():
+    from app import store
+
+    store.reset()
