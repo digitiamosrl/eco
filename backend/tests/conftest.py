@@ -48,6 +48,7 @@ def _temp_database(tmp_path, monkeypatch):
     from app.config import settings
 
     monkeypatch.setattr(settings, "database_path", str(tmp_path / "test.sqlite"))
+    monkeypatch.setattr(settings, "upload_dir", tmp_path / "uploads")
     store.init_db()
 
 

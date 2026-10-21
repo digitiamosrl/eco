@@ -1,4 +1,10 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Il server genera il nome dei file; questo è solo il limite per immagine caricata.
+MAX_IMAGE_BYTES = 5 * 1024 * 1024
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 class Settings(BaseSettings):
@@ -11,6 +17,7 @@ class Settings(BaseSettings):
     database_path: str = "eco.sqlite"
     # Durata simulata di un test completo (fixture, nessuna chiamata reale).
     fixture_delay_seconds: float = 3.0
+    upload_dir: Path = REPO_ROOT / "data" / "uploads"
 
 
 settings = Settings()

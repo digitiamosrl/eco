@@ -2,9 +2,10 @@ import time
 from datetime import UTC, datetime
 from uuid import uuid4
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 
 from app import store
+from app.api.create_request import read_create_request
 from app.api.personas import PERSONAS
 from app.config import settings
 from app.loaders import load_list
@@ -16,21 +17,23 @@ from app.models import (
     Stimulus,
     Test,
 )
+from app.uploads import Upload, delete_uploads, save_uploads, upload_url
 
 router = APIRouter()
 
 FLOWS_BY_ID = {flow.id: flow for flow in load_list("flows.json", Flow)}
 
 
-def _post_stimuli(body: PostTestRequest) -> list[Stimulus]:
+def _post_stimuli(body: PostTestRequest, uploads: tuple[Upload | None, ...]) -> list[Stimulus]:
     return [
         Stimulus(
             id=f"variante-{variant.label.lower()}",
             kind="post",
             variant_label=variant.label,
             text=variant.text,
+            image_url=upload_url(uploads[index]) if uploads else None,
         )
-        for variant in body.variants
+        for index, variant in enumerate(body.variants)
     ]
 
 
@@ -50,9 +53,9 @@ def _prototype_stimuli(body: PrototypeTestRequest) -> list[Stimulus]:
     ]
 
 
-def _build_test(body: CreateTestRequest) -> Test:
+def _build_test(body: CreateTestRequest, uploads: tuple[Upload | None, ...]) -> Test:
     if isinstance(body, PostTestRequest):
-        stimuli = _post_stimuli(body)
+        stimuli = _post_stimuli(body, uploads)
     else:
         stimuli = _prototype_stimuli(body)
     return Test(
@@ -81,9 +84,12 @@ def run_test(test_id: str) -> None:
     response_model=Test,
     response_model_exclude_none=True,
 )
-def create_test(body: CreateTestRequest, background_tasks: BackgroundTasks) -> Test:
-    test = _build_test(body)
+async def create_test(request: Request, background_tasks: BackgroundTasks) -> Test:
+    body, uploads = await read_create_request(request)
+    test = _build_test(body, uploads)
+    save_uploads(uploads)
     if not store.add_if_idle(test):
+        delete_uploads(uploads)
         raise HTTPException(status_code=409, detail="Un test è già in corso")
     background_tasks.add_task(run_test, test.id)
     return test
