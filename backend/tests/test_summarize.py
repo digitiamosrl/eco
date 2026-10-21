@@ -105,3 +105,34 @@ async def test_invalid_variant_output_raises_llm_error() -> None:
 async def test_invalid_overview_output_raises_llm_error() -> None:
     with pytest.raises(LlmError):
         await _llm({"summary": 3}, []).summary([_stats("A", [4], ())])
+
+
+async def test_report_summaries_run_in_parallel() -> None:
+    import asyncio
+
+    from app.models import Response, Stimulus
+    from app.report.builder import build_post_report
+
+    stimuli = [Stimulus(id=f"v{i}", kind="post", text="t") for i in range(2)]
+    responses = [
+        Response(persona_id="p1", stimulus_id=s.id, thought="a", said="b", score=3, objections=[])
+        for s in stimuli
+    ]
+    # Due varianti e il riepilogo: partono insieme solo se le chiamate sono concorrenti.
+    barrier = asyncio.Barrier(3)
+
+    class BarrierSummarizer:
+        async def said_summary(self, stats) -> str:
+            await asyncio.wait_for(barrier.wait(), timeout=2)
+            return "detto"
+
+        async def thought_summary(self, stats) -> str:
+            return "pensato"
+
+        async def summary(self, ranking) -> str:
+            await asyncio.wait_for(barrier.wait(), timeout=2)
+            return "riepilogo"
+
+    report = await build_post_report("t1", stimuli, responses, BarrierSummarizer())
+    assert report.summary == "riepilogo"
+    assert len(report.items) == 2

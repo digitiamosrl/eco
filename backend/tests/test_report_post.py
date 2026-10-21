@@ -82,8 +82,60 @@ def test_report_returns_503_when_summarizer_fails(monkeypatch) -> None:
         async def said_summary(self, stats):
             raise LlmError("Il servizio di analisi non è disponibile in questo momento.")
 
+        async def thought_summary(self, stats):
+            raise LlmError("Il servizio di analisi non è disponibile in questo momento.")
+
+        async def summary(self, ranking):
+            raise LlmError("Il servizio di analisi non è disponibile in questo momento.")
+
     created = _done_post()
     monkeypatch.setattr(reports_api, "build_summarizer", lambda: FailingSummarizer())
     response = client.get(f"/tests/{created['id']}/report")
     assert response.status_code == 503
     assert "non è disponibile" in response.json()["detail"]
+
+
+class CountingSummarizer:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def said_summary(self, stats) -> str:
+        self.calls += 1
+        return "detto"
+
+    async def thought_summary(self, stats) -> str:
+        return "pensato"
+
+    async def summary(self, ranking) -> str:
+        return "riepilogo"
+
+
+def test_report_is_built_once_per_test(monkeypatch) -> None:
+    from app.api import reports as reports_api
+
+    summarizer = CountingSummarizer()
+    monkeypatch.setattr(reports_api, "build_summarizer", lambda: summarizer)
+    created = _done_post()
+    first = client.get(f"/tests/{created['id']}/report")
+    second = client.get(f"/tests/{created['id']}/report")
+    assert first.status_code == second.status_code == 200
+    assert first.json() == second.json()
+    assert summarizer.calls == 3
+
+
+def test_report_is_retried_after_a_failure(monkeypatch) -> None:
+    from app.api import reports as reports_api
+    from app.engine.llm_client import LlmError
+
+    class FlakySummarizer(CountingSummarizer):
+        async def said_summary(self, stats) -> str:
+            self.calls += 1
+            if self.calls <= 3:
+                raise LlmError("Il servizio di analisi non è disponibile in questo momento.")
+            return "detto"
+
+    summarizer = FlakySummarizer()
+    monkeypatch.setattr(reports_api, "build_summarizer", lambda: summarizer)
+    created = _done_post()
+    assert client.get(f"/tests/{created['id']}/report").status_code == 503
+    assert client.get(f"/tests/{created['id']}/report").status_code == 200

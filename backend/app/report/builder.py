@@ -1,8 +1,14 @@
+import asyncio
 from collections.abc import Sequence
 
 from app.models import Report, ReportItem, Response, Stimulus
-from app.report.aggregate import aggregate
+from app.report.aggregate import StimulusStats, aggregate
 from app.report.summarize import Summarizer
+
+
+async def _summarize_variant(stats: StimulusStats, summarizer: Summarizer) -> tuple[str, str]:
+    # said prima di thought: il summarizer riusa la stessa chiamata al modello.
+    return await summarizer.said_summary(stats), await summarizer.thought_summary(stats)
 
 
 async def build_post_report(
@@ -12,6 +18,10 @@ async def build_post_report(
     summarizer: Summarizer,
 ) -> Report:
     ranking = aggregate(stimuli, responses)
+    variant_texts, summary = await asyncio.gather(
+        asyncio.gather(*(_summarize_variant(stats, summarizer) for stats in ranking)),
+        summarizer.summary(ranking),
+    )
     items = [
         ReportItem(
             stimulus_id=stats.stimulus.id,
@@ -19,15 +29,10 @@ async def build_post_report(
             mean_score=stats.mean_score,
             score_distribution=stats.score_distribution,
             objections=list(stats.objections),
-            said_summary=await summarizer.said_summary(stats),
-            thought_summary=await summarizer.thought_summary(stats),
+            said_summary=said,
+            thought_summary=thought,
             responses=list(stats.responses),
         )
-        for stats in ranking
+        for stats, (said, thought) in zip(ranking, variant_texts, strict=True)
     ]
-    return Report(
-        test_id=test_id,
-        simulated=True,
-        summary=await summarizer.summary(ranking),
-        items=items,
-    )
+    return Report(test_id=test_id, simulated=True, summary=summary, items=items)
