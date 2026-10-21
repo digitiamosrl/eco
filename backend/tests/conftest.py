@@ -49,6 +49,9 @@ def _temp_database(tmp_path, monkeypatch):
 
     monkeypatch.setattr(settings, "database_path", str(tmp_path / "test.sqlite"))
     monkeypatch.setattr(settings, "upload_dir", tmp_path / "uploads")
+    # Il .env locale può impostare provider reali: i test non devono chiamare la rete.
+    monkeypatch.setattr(settings, "responder", "fake")
+    monkeypatch.setattr(settings, "summarizer", "fake")
     store.init_db()
 
 
