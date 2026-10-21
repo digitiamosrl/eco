@@ -57,7 +57,27 @@ Crea `backend/scripts/smoke_llm.py`: carica `.env`, prende 3 personas dalle fixt
 
 ## Stato finale
 
-_(da compilare a fine lavoro)_
+**Funziona (con test, tutti con `MockTransport`):**
+- Configurazione: `OPENROUTER_API_KEY`, `OPENROUTER_BASE_URL`, `LLM_TIMEOUT_SECONDS`. All'avvio, `RESPONDER=llm` o `SUMMARIZER=llm` senza chiave o senza modello si fermano con errore chiaro.
+- `chat_json` in `backend/app/engine/llm_client.py`: `response_format` json_schema strict, `require_parameters`, estrazione da blocco ```json, un retry su 429 e 5xx, errori come `LlmError` in italiano senza chiave né corpo di risposta.
+- `LlmResponder`: prompt da `prompts/persona_response.md` con ids riempiti dal codice, immagine `/files/<nome>` come data URL, nome file validato da `find_upload`, risposta passata alla validazione del runner.
+- `LlmSummarizer`: `prompts/report_summary.md` per variante, `prompts/report_overview.md` per il riepilogo complessivo (dichiara che i risultati sono simulati). Output validato con schema piccolo nel codice.
+- Errore del summarizer nel report: HTTP 503 con messaggio in italiano.
+
+**Stub:** nessuno in responder e summarizer. Restano `FakeResponder` e `FakeSummarizer`, il default (`RESPONDER=fake`, `SUMMARIZER=fake`).
+
+**Non verificato con la rete:** lo schema con `strict: true` e i campi opzionali (`misunderstood`, `would_abandon`), e `require_parameters` su modelli reali. Va chiarito con `scripts/smoke_llm.py` e la chiave reale, da eseguire dall'utente.
+
+**Deviazioni dal piano:**
+1. Responder: un output che passa lo schema ma non costruisce `Response` (es. `score` fuori range) diventa `LlmError` subito, senza il retry del runner. Il retry del runner copre solo le risposte restituite e non valide.
+2. Summarizer: `said_summary` e `thought_summary` di una variante vengono dalla stessa chiamata, memorizzata nell'istanza (un'istanza per report). Il piano parlava di una chiamata per variante: così è una sola. Il riepilogo complessivo non chiama il modello se il ranking è vuoto.
+3. `reports.py`: aggiunto il mapping `LlmError` → 503 (non previsto dal piano), per non restituire un 500 non gestito.
+4. `chat_json`: errori di rete e timeout diventano `LlmError` senza retry (il piano prevedeva il retry solo su 429 e 5xx). 401 e 403 danno un messaggio dedicato alla chiave.
+5. Client HTTP: singleton lazy a livello di modulo (`shared_client()`), non chiuso esplicitamente. Shortcut documentato nel codice.
+6. Smoke script: "12 chiamate" sono 3 personas × 4 ripetizioni dello stesso post breve. Il "valido" usa `_is_valid` del runner. Il `usage` viene letto con un event hook del client, perché `chat_json` restituisce solo il JSON.
+7. Dipendenza `anthropic` rimossa da `requirements.txt`. Il venv locale la ha ancora installata: non è stata disinstallata.
+8. `backend/.env.example`: `PERSONA_MODEL` e `REPORT_MODEL` ora vuoti (prima c'erano id Anthropic, non validi per OpenRouter).
+9. Lo script `smoke_llm.py` non è stato eseguito (come richiesto). È stata verificata solo la funzione di report su dati sintetici.
 
 ## Verifica con la chiave reale (Q4)
 

@@ -37,7 +37,8 @@ cd frontend && npm run lint && npm run typecheck
 - I prompt stanno in `prompts/`, un file per prompt, mai inline nel codice.
 - Modelli e parametri da variabili d'ambiente (`PERSONA_MODEL`, `REPORT_MODEL`), mai hardcoded.
 - Le personas rispondono sempre in JSON validato contro `shared/schemas/response.schema.json`. Se la validazione fallisce, un solo retry, poi errore esplicito.
-- Usa il prompt caching su profilo della persona e stimolo, che si ripetono per tutte le domande.
+- Modelli via OpenRouter (`OPENROUTER_API_KEY`, chiamate `httpx` a `/chat/completions`). Gli id dei modelli sono quelli di OpenRouter, da `PERSONA_MODEL` e `REPORT_MODEL`.
+- Niente prompt caching per ora: post brevi e una chiamata per coppia. Vedi `docs/piano-provider-openrouter.md`.
 - Non introdurre cache semantica: renderebbe le personas omogenee.
 - Le personas non devono conoscere l'obiettivo del test. Le prime reazioni si chiedono a freddo.
 - Le chiamate alle personas di un panel sono indipendenti e in parallelo, con un limite di concorrenza configurabile.
