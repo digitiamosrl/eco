@@ -1,5 +1,10 @@
+import json
+
+import httpx
 import pytest
 
+from app.config import settings
+from app.engine.llm_client import LlmError
 from app.models import Response, Stimulus
 from app.report.aggregate import StimulusStats
 from app.report.summarize import FakeSummarizer, LlmSummarizer
@@ -49,6 +54,54 @@ async def test_fake_summarizer_overall_names_the_top_variant() -> None:
     assert await FakeSummarizer().summary([]) == "Nessuna risposta registrata."
 
 
-async def test_llm_summarizer_is_a_stub() -> None:
-    with pytest.raises(NotImplementedError, match="Provider AI non ancora configurato"):
-        await LlmSummarizer().summary([])
+def _llm(handler_output: dict | None, sent: list[dict]) -> LlmSummarizer:
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(json.loads(request.content))
+        content = json.dumps(handler_output)
+        return httpx.Response(200, json={"choices": [{"message": {"content": content}}]})
+
+    return LlmSummarizer(httpx.AsyncClient(transport=httpx.MockTransport(handler)))
+
+
+async def test_llm_summarizer_empty_ranking_makes_no_call(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "openrouter_api_key", "sk-or-test-key")
+    sent: list[dict] = []
+    assert await _llm({}, sent).summary([]) == "Nessuna risposta registrata."
+    assert sent == []
+
+
+async def test_said_and_thought_come_from_one_call(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "report_model", "modello/report")
+    sent: list[dict] = []
+    output = {"said_summary": "Dicono no.", "thought_summary": "Pensano sì."}
+    summarizer = _llm(output, sent)
+    stats = _stats("A", [5, 2], ("Prezzo alto",))
+
+    assert await summarizer.said_summary(stats) == "Dicono no."
+    assert await summarizer.thought_summary(stats) == "Pensano sì."
+    assert len(sent) == 1
+    assert sent[0]["model"] == "modello/report"
+    prompt = sent[0]["messages"][0]["content"][0]["text"]
+    assert "Variante: A" in prompt
+    assert '"score": 5' in prompt
+
+
+async def test_overview_names_top_variant_and_says_simulated(monkeypatch) -> None:
+    sent: list[dict] = []
+    summarizer = _llm({"summary": "In testa la variante B. Risultati simulati."}, sent)
+    text = await summarizer.summary([_stats("B", [5], ())])
+
+    assert "variante B" in text
+    prompt = sent[0]["messages"][0]["content"][0]["text"]
+    assert "variante B" in prompt
+
+
+async def test_invalid_variant_output_raises_llm_error() -> None:
+    summarizer = _llm({"said_summary": "", "thought_summary": "ok"}, [])
+    with pytest.raises(LlmError):
+        await summarizer.said_summary(_stats("A", [4], ()))
+
+
+async def test_invalid_overview_output_raises_llm_error() -> None:
+    with pytest.raises(LlmError):
+        await _llm({"summary": 3}, []).summary([_stats("A", [4], ())])

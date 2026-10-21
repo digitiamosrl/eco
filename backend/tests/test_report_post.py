@@ -72,3 +72,18 @@ def test_post_flow_end_to_end_with_multipart_and_image(validate) -> None:
     validate("report.schema.json", report)
     image_url = created["stimuli"][0]["image_url"]
     assert client.get(image_url).content == png
+
+
+def test_report_returns_503_when_summarizer_fails(monkeypatch) -> None:
+    from app.api import reports as reports_api
+    from app.engine.llm_client import LlmError
+
+    class FailingSummarizer:
+        async def said_summary(self, stats):
+            raise LlmError("Il servizio di analisi non è disponibile in questo momento.")
+
+    created = _done_post()
+    monkeypatch.setattr(reports_api, "build_summarizer", lambda: FailingSummarizer())
+    response = client.get(f"/tests/{created['id']}/report")
+    assert response.status_code == 503
+    assert "non è disponibile" in response.json()["detail"]
