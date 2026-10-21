@@ -12,10 +12,12 @@ from app.api.health import router as health_router
 from app.api.personas import router as personas_router
 from app.api.reports import router as reports_router
 from app.api.tests import router as tests_router
+from app.config import validate_startup
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    validate_startup()
     store.init_db()
     store.mark_interrupted()
     yield

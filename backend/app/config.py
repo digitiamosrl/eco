@@ -25,3 +25,11 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def validate_startup() -> None:
+    """Errore chiaro all'avvio, solo per le configurazioni che richiedono un modello."""
+    if settings.responder == "llm" and not settings.persona_model:
+        raise RuntimeError("RESPONDER=llm richiede PERSONA_MODEL nel file .env")
+    if settings.summarizer == "llm" and not settings.report_model:
+        raise RuntimeError("SUMMARIZER=llm richiede REPORT_MODEL nel file .env")

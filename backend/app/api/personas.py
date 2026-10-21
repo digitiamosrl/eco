@@ -5,6 +5,7 @@ from app.models import Persona
 
 router = APIRouter()
 
+# shortcut: fixture, sostituire con il panel generato (A2)
 PERSONAS = load_list("personas.json", Persona)
 
 
