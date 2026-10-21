@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "test.schema.json",
+  "title": "Test",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "status", "created_at", "done_count", "total_count", "stimuli"],
+  "properties": {
+    "id": { "type": "string" },
+    "kind": { "type": "string", "enum": ["post", "prototype"] },
+    "status": { "type": "string", "enum": ["queued", "running", "done", "error"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "done_count": { "type": "integer", "minimum": 0 },
+    "total_count": { "type": "integer", "minimum": 0 },
+    "stimuli": {
+      "type": "array",
+      "items": { "$ref": "stimulus.schema.json" }
+    },
+    "error": { "type": "string" }
+  }
+}
