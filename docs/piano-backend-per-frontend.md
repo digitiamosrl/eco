@@ -96,6 +96,9 @@ Da decidere: un solo schema Report con due tipi di item distinti da `kind`, oppu
 1. Panel fisso o con dimensione scelta dall'utente? Se fisso, `GET /personas` basta.
 2. Etichetta "diverge" sulle risposte in cui pensiero e parole non coincidono: un campo in `Response` oppure calcolata nel report?
 3. Più test contemporaneamente o uno alla volta? Uno alla volta è più semplice e per la POC basta.
+4. **Etichetta della variante nel report.** Gli item del report hanno solo `stimulus_id`; il frontend lo mostra come "Variante {stimulus_id}". Per i post: usare la lettera (A, B, …) come id dello stimolo, oppure aggiungere `variant_label` agli item del report.
+5. **Formato multipart.** FastAPI non trasforma da solo `variants[0][label]` in una lista: serve leggere `request.form()` a mano. Alternativa più semplice: campi ripetuti `labels`, `texts`, `images`. Il frontend si adatta a quello che sceglie Salvo.
+6. **Schema Test rigido.** `test.schema.json` ha `additionalProperties: false`: il backend non può aggiungere campi senza aggiornare lo schema.
 
 ## Calendario
 
