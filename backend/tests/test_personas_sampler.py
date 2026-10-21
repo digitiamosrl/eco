@@ -72,7 +72,15 @@ def test_every_italian_location_in_the_export_has_a_region() -> None:
 
 def test_pool_weights_cover_the_whole_audience() -> None:
     weights = pool_weights(AUDIENCE)
-    assert set(weights) == {"seniority", "company_size", "job_function", "industry", "region"}
+    assert set(weights) == {
+        "seniority",
+        "company_size",
+        "job_function",
+        "industry",
+        "region",
+        "ai_attitude",
+        "linkedin_use",
+    }
     for distribution in weights.values():
         assert sum(distribution.values()) == pytest.approx(1.0)
     assert set(weights["company_size"]) == {"micro", "piccola", "media", "grande"}
@@ -112,6 +120,8 @@ def test_owner_of_a_large_company_is_not_coherent() -> None:
         "job_function": {"Sales": 1.0},
         "industry": {"Retail": 1.0},
         "region": {"Lombardia": 1.0},
+        "ai_attitude": {"scettica": 1.0},
+        "linkedin_use": {"passiva": 1.0},
     }
     with pytest.raises(ValueError, match="coerent"):
         sample_attributes(weights, 3, seed=1)
@@ -145,3 +155,16 @@ def test_a_missing_personas_file_is_an_explicit_error() -> None:
 
     with pytest.raises(FileNotFoundError):
         load_personas("data/processed/non-esiste.json")
+
+
+def test_attitudes_are_declared_hypotheses_and_sampled_by_quota() -> None:
+    from app.personas.audience import HYPOTHESES
+
+    assert set(HYPOTHESES) == {"ai_attitude", "linkedin_use"}
+    for distribution in HYPOTHESES.values():
+        assert sum(distribution.values()) == pytest.approx(1.0)
+    weights = pool_weights(AUDIENCE)
+    assert weights["ai_attitude"] == HYPOTHESES["ai_attitude"]
+    people = sample_attributes(weights, 40, seed=3)
+    assert {p.ai_attitude for p in people} <= set(HYPOTHESES["ai_attitude"])
+    assert len({p.ai_attitude for p in people}) > 1

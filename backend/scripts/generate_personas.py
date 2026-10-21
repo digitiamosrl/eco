@@ -41,7 +41,12 @@ async def _persona(
 ) -> Persona:
     role, sector = role_of(attrs.seniority, attrs.job_function), sector_of(attrs.industry)
     prompt = load_prompt("persona_profile.md").format(
-        role=role, sector=sector, company_size=SIZE_TEXT[attrs.company_size], region=attrs.region
+        role=role,
+        sector=sector,
+        company_size=SIZE_TEXT[attrs.company_size],
+        region=attrs.region,
+        ai_attitude=attrs.ai_attitude,
+        linkedin_use=attrs.linkedin_use,
     )
     async with semaphore:
         data = await chat_json(

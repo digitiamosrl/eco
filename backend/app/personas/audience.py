@@ -22,6 +22,26 @@ _SIZE_BUCKETS = {
     "10001+": "grande",
 }
 
+# IPOTESI, non dati: l'export di LinkedIn non dice nulla su atteggiamento verso l'AI e uso del
+# social. Le distribuzioni sono dichiarate a mano per non far uscire personas tutte uguali
+# (solo un'indicazione: commenti mediani a 0 sui post, quindi prevalgono i lettori passivi).
+# Da sostituire con dati reali (sondaggio, CRM) appena ci sono. Vedi docs/ipotesi-personas.md.
+HYPOTHESES: dict[str, dict[str, float]] = {
+    "ai_attitude": {
+        "entusiasta: la usa spesso e ne parla con i colleghi": 0.15,
+        "curiosa: la prova, ma senza troppa convinzione": 0.30,
+        "pragmatica: la usa solo se risolve un problema preciso": 0.30,
+        "scettica: ha visto troppe promesse e diffida": 0.20,
+        "indifferente: per ora non la considera parte del suo lavoro": 0.05,
+    },
+    "linkedin_use": {
+        "legge in silenzio e non interagisce quasi mai": 0.55,
+        "ci passa ogni tanto, per lavoro o per tenersi aggiornata": 0.25,
+        "partecipa: commenta e scrive post": 0.15,
+        "lo apre solo per contatti o offerte di lavoro": 0.05,
+    },
+}
+
 _REGION_OF_CITY = {
     **dict.fromkeys(
         [
@@ -133,4 +153,5 @@ def pool_weights(
         "job_function": blend(*(s["job_function"] for s in sources)),
         "industry": blend(*(s["industry"] for s in sources)),
         "region": blend(*(_regrouped(s["location"], region_of) for s in sources)),
+        **HYPOTHESES,
     }

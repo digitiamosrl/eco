@@ -1,242 +1,242 @@
 [
  {
   "id": "p1",
-  "role": "Professionista senior, Risorse umane",
-  "sector": "Pubblicità",
+  "role": "Professionista junior, Finanza",
+  "sector": "Software su misura",
   "company_size": "grande",
-  "region": "Lombardia",
-  "profile": "Lavora soprattutto su selezione e sviluppo dei talenti per campagne e team creativi, alternando colloqui, onboarding e feedback tra i capi progetto; nelle giornate intense coordina attività su più sedi lombarde. Su LinkedIn legge articoli e profili del settore, commenta raramente e soltanto su temi di organizzazione o cultura aziendale, dedicando alla piattaforma pochi minuti al giorno. È interessata all’AI per accelerare la ricerca dei CV, ma diffida dagli algoritmi che valutano le persone in modo automatico: preferisce strumenti digitali che risparmiano tempo preservando la qualità dei colloqui."
+  "region": "Sicilia",
+  "profile": "Lavora in un’azienda che sviluppa software su misura per clienti aziendali, occupandosi di report mensili, fogli di calcolo e controllo dei dati di vendita, spesso in coordinamento con i reparti commerciali. Ha provato uno strumento di intelligenza artificiale per velocizzare some attività ripetitive, ma gli attribuisce un ruolo marginale e continua a verificare manualmente i risultati. Su LinkedIn entra soprattutto per consultare offerte di lavoro o contattare recruiter, dedicando scarsa attenzione ai post e alle notifiche della piattaforma."
  },
  {
   "id": "p2",
-  "role": "Professionista senior, Ricerca",
-  "sector": "Servizi di ricerca",
+  "role": "Professionista senior, Operations",
+  "sector": "Consulenza strategica",
   "company_size": "grande",
-  "region": "Lombardia",
-  "profile": "La sua giornata alterna briefing con il team, analisi di dati di panel e fonti secondarie e preparazione di presentazioni concise per i clienti; coordina la ricerca sul campo e verifica che ogni evidenza sia tracciabile. Su LinkedIn legge soprattutto studi e aggiornamenti professionali, commenta raramente e quasi sempre per lavoro, dedicando attenzione ai contenuti che propongono metodi o dati utili, non ai post motivazionali. Usa l’intensità artificiale per sintetizzare testi e accelerare attività ripetitive, ma rimane scettica quando i risultati non indicano le fonti, per il rischio di bias e per la riservatezza dei dati dei clienti."
+  "region": "Emilia-Romagna",
+  "profile": "È un professionista senior che coordina progetti di consulenza, analizza i processi dei clienti, individua colli di bottone e prepara raccomandazioni operative tra riunioni, fogli di calcolo e presentazioni. Su LinkedIn commenta e scrive post, ma guarda i contenuti in modo selettivo, dedicando tempo soprattutto a temi operativi e di settore. Usa l’intelligenza artificiale solo per problemi precisi, come sintetizzare documenti lunghi o creare prime bozze, senza affidarle strategia o scrittura creativa e verificando personalmente i risultati."
  },
  {
   "id": "p3",
-  "role": "Professionista senior, Marketing",
-  "sector": "Servizi informativi",
-  "company_size": "piccola",
-  "region": "Campania",
-  "profile": "La sua giornata si divide tra campagne e newsletter, analisi del comportamento dei lettori e coordinamento con i piccoli team di redazione, con particolare attenzione alla qualità dei messaggi. Su LinkedIn legge aggiornamenti di settore e alcuni post, commenta raramente e solo per motivi professionali, senza dedicare troppa attenzione al feed. Usa l’intelligenza artificiale per abbozzare testi e organizzare dati, ma verifica ogni risultato: è interessata alle automazioni che fanno risparmiare tempo, mentre diffida dei contenuti generici e dell’uso poco trasparente dei dati."
+  "role": "Professionista junior, Design e creatività",
+  "sector": "Sviluppo software",
+  "company_size": "media",
+  "region": "Piemonte",
+  "profile": "Passa la giornata in un team di prodotto: realizza wireframe e schermate in Figma, aggiorna i componenti del design system e affianca gli sviluppatori nei dettagli dei flussi, dedicandosi più all’esecuzione che alle presentazioni. Su LinkedIn commenta i post e ne pubblica di propri, ma scorre rapidamente i contenuti: si sofferma su lavori concreti e discussioni tecniche, ignorando gran parte delle pubblicazioni promozionali. Con l’intelligenza artificiale è apertamente scettica: dopo tante promesse sull’automazione, diffida dei risultati annunciati e preferisce giudicarla sul prodotto reale, non sugli slogan."
  },
  {
   "id": "p4",
-  "role": "Professionista senior, Formazione",
-  "sector": "Telecomunicazioni",
+  "role": "Responsabile, Vendite",
+  "sector": "Servizi finanziari",
   "company_size": "piccola",
-  "region": "Veneto",
-  "profile": "È responsabile della formazione e coordina percorsi tecnici per operatori e addetti commerciali di un’azienda di telecomunicazioni veneta: la giornata alterna riunioni, aggiornamento delle procedure, risposte ai reparti e revisione dei materiali didattici. Su LinkedIn legge soprattutto novità su reti e servizi, commenta raramente e consulta la piattaforma quasi solo per lavoro, ignorando gran parte dei contenuti non pertinenti. Dell’intelligenza artificiale apprezza l’automazione delle attività ripetitive, ma è scettica verso le promesse generiche: si fida solo di strumenti digitali verificabili e utili nel lavoro quotidiano."
+  "region": "Lombardia",
+  "profile": "Gestisce quotidianamente le relazioni con i clienti, dalla qualificazione delle richieste alla preparazione delle proposte, coordinando il follow-up e confrontandosi con l’area amministrativa sulle pratiche. Su LinkedIn sfoglia i contenuti durante le pause, dedicandovi pochi minuti, senza commentare né condividere quasi mai, salvo quando un argomento è davvero utile. Dell’intelligenza artificiale si fida poco: dopo tante promesse, la considera uno strumento da valutare con cautela, perché l’accuratezza dei risultati e la conformità delle procedure restano problemi concreti."
  },
  {
   "id": "p5",
-  "role": "Responsabile, Ingegneria",
+  "role": "Professionista senior, Sviluppo commerciale",
   "sector": "Servizi e consulenza IT",
-  "company_size": "piccola",
-  "region": "Emilia-Romagna",
-  "profile": "In una consulenza IT di piccole dimensioni, il responsabile dell’ingegneria coordina un team ridotto, raccoglie requisiti, supervisiona architetture e sviluppi e gestisce integrazioni e rilasci presso i clienti. LinkedIn lo usa quasi solo per lavoro, leggendo soprattutto contenuti tecnici e opportunità professionali, commenta di rado e ignora i post motivazionali. L’intelligenza artificiale lo interessa per l’automazione e il supporto agli sviluppatori, ma rimane scettico davanti ai risultati promessi senza costi, limiti e supervisione umana chiari."
+  "company_size": "media",
+  "region": "Veneto",
+  "profile": "Nella sua giornata gestisce trattative e sviluppo commerciale di soluzioni IT: conduce call e demo, coordina il team tecnico nelle proposte, aggiorna il CRM e segue rinnovi e assistenza post-vendita. Su LinkedIn sfoglia i contenuti quasi per abitudine, ma lascia raramente like o commenti e presta attenzione soprattutto a casi pratici, ignorando le pubblicazioni lunghe e propagandistiche. Sull’intelligenza artificiale è apertamente scettica: dopo troppe promesse, si fida solo di risultati misurabili e non costruisce proposte commerciali attorno a strumenti non dimostrati."
  },
  {
   "id": "p6",
-  "role": "Professionista junior, Project management",
-  "sector": "Sviluppo software",
-  "company_size": "grande",
+  "role": "Direttore, Ingegneria",
+  "sector": "Selezione del personale",
+  "company_size": "micro",
   "region": "Lombardia",
-  "profile": "La sua giornata è scandita da riunioni di allineamento con sviluppatori e stakeholder, aggiornamento di ticket e cruscotti, preparazione di report e supporto ai rilasci, con priorità al recupero dei ritardi più che alla scrittura di codice. Su LinkedIn legge soprattutto aggiornamenti di project management e tecnologia, commenta occasionalmente e controlla le notifiche in fretta, dedicando quasi tutto il tempo al lavoro. Adopera l’intelligenza artificiale per sintetizzare verbali e preparare bozze, ma verifica ognioutput: manifesta un interesse concreto per l’automazione, evitando di delegare decisioni importanti."
+  "profile": "La sua giornata ruota attorno a definire profili tecnici con le aziende clienti, cercare candidati, condurre colloqui e seguire ogni assunzione fino all’inserimento. Su LinkedIn passa ogni tanto per lavoro e aggiornamento: controlla profili e post sul recruiting, ma sfoglia i feed con attenzione discontinua e si ferma raramente a leggere. Prova l’intelligenza artificiale per riassumere curriculum e preparare bozze di annunci, verificando il risultato a mano, ma resta poco convinta e non la usa per automatizzare il lavoro."
  },
  {
   "id": "p7",
-  "role": "Vice presidente, IT",
-  "sector": "Servizi finanziari",
+  "role": "C-level, Comunicazione",
+  "sector": "Servizi di marketing",
   "company_size": "grande",
-  "region": "Lombardia",
-  "profile": "Il vice presidente IT coordina infrastrutture, sicurezza informatica e conformità, dedicandosi soprattutto a priorità, budget, fornitori e ripristino dei servizi quando un guasto impatta transazioni o pratiche dei clienti; nelle riunioni con business e risk management trasforma le esigenze operative in requisiti tecnici misurabili. Su LinkedIn legge per brevi periodi, commenta solo quando un tema riguarda sicurezza o digitalizzazione nel settore finanziario e ignora i post che non aggiungono informazioni, attribuendogli quindi un’attenzione selettiva. Rispetto all’intelligenza artificiale è pragmatico: la interessa per automazione interna, ricerca documentale e antifrode, ma diffida delle promesse generiche e chiede prove di risparmio, qualità del dato e controlli prima di estendere qualsiasi piloto."
+  "region": "Emilia-Romagna",
+  "profile": "È una C-suite della comunicazione che alterna riunioni con clienti e direzione, revisione di campagne, coordinamento del team e gestione di temi delicati sui media e sui social. Su LinkedIn commenta e pubblica post, dedicando attenzione soprattutto a contenuti pratici che le danno spunti concreti, senza trasformare la piattaforma in un一动 continua. Prova alcuni strumenti di intelligenza artificiale per idee, testi e riassunti, ma lo fa con scarsa convinzione e senza affidargli decisioni o attività centrali del lavoro."
  },
  {
   "id": "p8",
-  "role": "Titolare, Finanza",
+  "role": "Professionista junior, IT",
   "sector": "Servizi e consulenza IT",
-  "company_size": "micro",
+  "company_size": "media",
   "region": "Lombardia",
-  "profile": "Come titolare di una microazienda IT lombarda, alterna fatture, incassi e adempimenti fiscali a preventivi, riunioni con i clienti e coordinamento delle attività tecniche, intervenendo personalmente quando serve. Su LinkedIn legge aggiornamenti pratici su contabilità e gestione, commenta raramente e ignora quasi tutto ciò che non riguarda il lavoro. Usa l’automazione per documenti e preventivi, ma diffida dell’intelligenza artificiale quando i risultati dipendono da dati sensibili o non si traducono in un risparmio concreto."
+  "profile": "Il professionista divide la giornata tra triage dei ticket, configurazione di postazioni e account, assistenza agli utenti e piccoli script per automatizzare attività ripetitive, oltre a riunioni con i clienti e aggiornamento della documentazione. Su LinkedIn sfoglia soprattutto contenuti tecnici e occasioni di formazione, ma gli dedica un’attenzione discontinua: legge, raramente mette like e quasi mai commenta, salvo quando un post è direttamente utile al suo lavoro. Prova con curiosità strumenti di IA per riassumere ticket, redigere email o suggerire soluzioni, ma non si fida abbastanza da adottarli stabilmente e continua a verificarne manualmente risultati e documentazione."
  },
  {
   "id": "p9",
-  "role": "Professionista junior, Vendite",
-  "sector": "Consulenza strategica",
-  "company_size": "media",
-  "region": "Lombardia",
-  "profile": "La giornata alterna recupero dei lead, preparazione di briefing e schede account, call con i clienti e aggiornamento del CRM. Su LinkedIn legge soprattutto post di strategia e strumenti AI, commenta solo quando può aggiungere qualcosa di concreto e ignora il resto, con un’attenzione quasi sempre rivolta al lavoro. È incuriosita dall’AI per sintetizzare documenti e preparare più velocemente le call, ma diffida delle risposte generiche e verifica sempre dati e fonti prima di utilizzarle."
+  "role": "Professionista junior, IT",
+  "sector": "Telecomunicazioni",
+  "company_size": "piccola",
+  "region": "Toscana",
+  "profile": "Lavora come professionista junior IT in una piccola azienda di telecomunicazioni in Toscana: configura reti e dispositivi, verifica la connettività e gestisce ticket e piccoli guasti, alternando attività operative a brevi riunioni di coordinamento. Ogni tanto apre LinkedIn per trovare aggiornamenti utili al lavoro, dedicandogli poco tempo e selezionando solo i post pertinenti. Usa l’intelligenza artificiale esclusivamente per risolvere un problema concreto, come velocizzare la stesura di una procedura tecnica, e la ignora quando non offre un vantaggio immediato."
  },
  {
   "id": "p10",
-  "role": "Professionista junior, Ingegneria",
-  "sector": "Software su misura",
+  "role": "Professionista senior, Marketing",
+  "sector": "Servizi e consulenza IT",
   "company_size": "media",
   "region": "Lombardia",
-  "profile": "Lavora ogni giorno in un team che realizza software su misura: legge i requisiti, corregge bug, verifica le funzionalità prima del rilascio e segue con i colleghi le modifiche richieste dai clienti. Su LinkedIn guarda soprattutto il profilo dell’azienda e alcuni contenuti tecnici, commenta di rado e non si ferma a lungo sui post di tendenza. Rispetto l’intelligenza artificiale per l’automazione, ma resta scettico: la usa come supporto, non come sostituto del controllo tecnico, soprattutto quando i risultati non sono spiegabili."
+  "profile": "Lavora in Lombardia come marketing senior in una società di consulenza IT di medie dimensioni: prepara campagne e contenuti per posizionare soluzioni tecnologiche, supporta account e commerciali e monitora i risultati. Su LinkedIn sfoglia i post quasi sempre in silenzio, senza commentare o condividere, e dedica solo qualche minuto a ciò che trova nel feed. L’intelligenza artificiale non fa parte del suo lavoro né delle sue priorità: al momento non la usa e non intende integrare strumenti basati sull’IA."
  },
  {
   "id": "p11",
-  "role": "C-level, Operations",
-  "sector": "Istruzione superiore",
-  "company_size": "micro",
-  "region": "Lombardia",
-  "profile": "È responsabile delle operazioni in un piccolo istituto di istruzione superiore: coordina il personale, organizza aule e corsi, segue iscrizioni e adempimenti amministrativi, badando anche al budget quando i titoli non bastano. Su LinkedIn legge soprattutto novità operative e formative, commenta di rado e concede poca attenzione ai contenuti: usa la piattaforma più per mantenere i contatti professionali che per trovare opportunità. Con il digitale è pragmatica; l’intelligenza artificiale la interessa per semplificare testi e organizzazione, ma resta scettica davanti a decisioni automatiche su studenti, docenti o dati amministrativi."
+  "role": "Professionista junior, Ingegneria",
+  "sector": "Sviluppo software",
+  "company_size": "grande",
+  "region": "Campania",
+  "profile": "La sua giornata si muove tra riunioni di allineamento, ticket del backlog, sviluppo di API REST, correzione di test e revisioni di pull request. Ogni tanto apre LinkedIn per controllare novità di settore o passaggi di colleghi, ma legge i post rapidamente e si ferma soprattutto sui contenuti operativi utili al lavoro. L’intelligenza artificiale è uno strumento squisitamente pragmatico: la usa solo per risolvere un problema preciso, come generare una query SQL o interpretare uno stack trace, mai per fare brainstorming o ampliare il progetto."
  },
  {
   "id": "p12",
-  "role": "Responsabile, Sviluppo commerciale",
-  "sector": "Servizi e consulenza IT",
+  "role": "Professionista junior, Consulenza",
+  "sector": "Banche",
   "company_size": "media",
   "region": "Lombardia",
-  "profile": "La sua giornata alterna qualifica dei lead, chiamate commerciali, demo e preparazione di proposte, coordinandosi con pre-vendita e consulenti per trasformare le esigenze dei clienti in soluzioni IT sostenibili. Su LinkedIn legge soprattutto segnali di mercato e contenuti tecnici, commenta raramente e pubblica quasi mai, dedicando attenzione alle opportunità lavorative più che al rumore social. Usa l’intelligenza artificiale per sintetizzare documenti e velocizzare le bozze, ma ne controlla sempre le risposte: è interessata al digitale quando semplifica il lavoro, mentre diffida delle promesse generiche e dei rischi legati a privacy e affidabilità."
+  "profile": "Lavora in un team di consulenza che analizza i conti della clientela, segmenta i profili e prepara report per le filiali, alternando controlli sui dati, fogli di calcolo e presentazioni per i responsabili di area. Su LinkedIn sfoglia i feed in pausa e osserva con attenzione i contenuti su bancatura e innovazione, ma commenta o mette like molto raramente. L’intelligenza artificiale gli piace davvero: la usa ogni giorno per velocizzare ricerche, sintetizzare documenti e preparare prime bozze, e ne parla volentieri con i colleghi come strumento di lavoro."
  },
  {
   "id": "p13",
-  "role": "Professionista junior, Comunicazione",
-  "sector": "Servizi e consulenza IT",
-  "company_size": "grande",
+  "role": "Professionista junior, Marketing",
+  "sector": "Sviluppo software",
+  "company_size": "media",
   "region": "Lombardia",
-  "profile": "Lavora in una grande azienda di consulenza IT, dedicandosi soprattutto alla preparazione di comunicazioni per clienti, aggiornamenti di progetti e contenuti digitali, tra slide, e-mail e post LinkedIn. La giornata si divide tra riunioni, raccolta di materiali dai team tecnici e revisione delle bozze; usa LinkedIn soprattutto per leggere aggiornamenti professionali, commenta raramente e cerca occasioni di contatto, senza trasformarlo in un canale personale. Rispetto all’intelligenza artificiale e alle soluzioni digitali con un atteggiamento pratico: le considera utili per velocizzare attività ripetitive e migliorare la presentazione dei contenuti, ma diffida delle promesse eccessive e verifica sempre risultati, qualità e rischi prima di utilizzarle."
+  "profile": "Ogni mattina prepara campagne, landing page, post e newsletter, poi controlla i risultati e coordina le iniziative con vendite e customer care. Su LinkedIn sfoglia in silenzio contenuti su marketing e tecnologia, dedicando attenzione soprattutto ai post di colleghi e alle novità di settore, ma raramente commenta o condivide. Prova strumenti di intelligenza artificiale per generare varianti e riassumere feedback, però lo fa più per curiosità che per convinzione: non si fida delle risposte banali e continua a rivederle manualmente."
  },
  {
   "id": "p14",
-  "role": "Professionista senior, Ingegneria",
-  "sector": "Industria farmaceutica",
+  "role": "Professionista senior, Risorse umane",
+  "sector": "Istruzione superiore",
   "company_size": "micro",
-  "region": "Lombardia",
-  "profile": "La sua giornata alterna stabilimento e ufficio: segue l’avanzamento dei lotti, risolve problemi impiantistici, rivede documentazione e supporta produzione e controlli su deviazioni e CAPA. Su LinkedIn legge soprattutto aggiornamenti tecnici e normativi, commenta raramente e per lavoro, dedicando scarsa attenzione agli altri contenuti. Mostra interesse per l’intelligenza artificiale nella ricerca documentale e nell’analisi dei dati, ma resta scettico sulla affidabilità e tracciabilità, preferendo strumenti digitali verificati e validati."
+  "region": "Piemonte",
+  "profile": "La sua giornata si divide tra selezione dei candidati, colloqui, contratti, onboarding e organizzazione dei corsi, con frequenti richieste di supporto ai colleghi e aggiornamento delle pratiche HR. Su LinkedIn guarda i post quasi sempre in silenzio, senza commentare né interagire, e dedica loro solo pochi minuti. All’intelligenza artificiale ricorre esclusivamente per problemi precisi, come trasformare una descrizione di ruolo in domande per i colloqui; non la usa per valutare persone o prendere decisioni strategiche."
  },
  {
   "id": "p15",
-  "role": "Professionista senior, Marketing",
-  "sector": "Servizi e consulenza IT",
+  "role": "Titolare, Ingegneria",
+  "sector": "Servizi di ricerca",
   "company_size": "micro",
   "region": "Lombardia",
-  "profile": "È una professionista senior che coordina attività di marketing per una microazienda di servizi e consulenza IT, alternando riunioni, preparazione di contenuti, aggiornamento del sito e analisi dei risultati dei canali digitali. Su LinkedIn legge quasi solo articoli e post legati al settore, commenta raramente e dedica al feed solo una parte della giornata. Usa l’intelligenza artificiale per accelerare ricerche e bozze, ma rimane scettica sull’automatizzazione e privilegia il controllo umano di messaggi e dati."
+  "profile": "Lavora in un piccolo laboratorio lombardo di ricerca e ingegneria: riceve richieste, imposta protocolli di prova, controlla campioni, registra misurazioni e prepara una sintesi tecnica per i clienti, alternando attività al banco e al computer. Su LinkedIn guarda i post in silenzio per pochi minuti, senza commentare, condividere o frequentare la rete; si ferma solo su aggiornamenti tecnici, normativi o di settore utili al suo lavoro. L’intelligenza artificiale è per lui uno strumento mirato, usato solo per compiti precisi e ripetitivi come ordinare dati di prova o estrarre informazioni da documenti, mai per generare idee o prendere decisioni."
  },
  {
   "id": "p16",
-  "role": "Professionista junior, Vendite",
-  "sector": "Consulenza e servizi alle imprese",
+  "role": "Vice presidente, Vendite",
+  "sector": "Tecnologia e internet",
   "company_size": "grande",
-  "region": "Sicilia",
-  "profile": "La giornata si snoda tra ricerca di prospect, chiamate a imprese siciliane, aggiornamento del CRM e supporto ai commerciali senior nella preparazione di proposte e preventivi. LinkedIn lo consulta per una decina di minuti al giorno: commenta articoli di settore, ma usa la piattaforma quasi solo per contatti professionali, soffermandosi poco sui post.È interessato all’automazione, che gli fa risparmiare tempo su liste e documenti, ma resta scettico sull’IA generativa quando produce email standardizzate: preferisce strumenti che semplifichino il lavoro, senza far sembrare uguali clienti e prospect."
+  "region": "Lazio",
+  "profile": "È vice president delle Vendite in una grande azienda tecnologica del Lazio: coordina il team, chiude trattative, controlla il forecast e trascorre la giornata tra riunioni, call e aggiornamenti commerciali. Su LinkedIn entra ogni tanto per motivi di lavoro e per aggiornarsi, ma legge i post in fretta, fermandosi soprattutto su novità di settore, contatti utili e occasioni commerciali, senza dedicare grande attenzione ai contenuti più Intrattenimento. Ha provato l’intelligenza artificiale per preparare email e analizzare dati, ma gli dà una fiducia limitata: se i risultati richiedono troppo controllo o sembrano poco affidabili, preferisce fare il lavoro a mano."
  },
  {
   "id": "p17",
-  "role": "Socio, Ingegneria",
+  "role": "Professionista junior, Vendite",
   "sector": "Servizi e consulenza IT",
-  "company_size": "media",
-  "region": "Toscana",
-  "profile": "È un socio ingegnere che divide la giornata tra riunioni con i clienti, definizione di soluzioni e gestione operativa del team: la mattina smista criticità e margini, il pomeriggio segue progetti, preventivi e delivery. Su LinkedIn legge quasi solo aggiornamenti tecnici, commenta raramente e usa la piattaforma soprattutto per contatti professionali, dedicandole pochi minuti. Dell’intelligenza artificiale apprezza l’aiuto nella documentazione, nei riepiloghi e nel codice, ma è scettico per riservatezza, GDPR e risposte inventate: il digitale gli serve come strumento pratico, non come trasformazione automatica."
+  "company_size": "grande",
+  "region": "Lombardia",
+  "profile": "Nel suo lavoro junior nel reparto vendite di una grande azienda IT, prepara proposte e preventivi, aggiorna il CRM e segue i clienti dopo le riunioni, usando l’intelligenza artificiale per accelerare ricerche e personalizzare le presentazioni. Su LinkedIn sfoglia i post in silenzio, quasi senza commentare o condividere, dedicando attenzione soprattutto alle novità sull’AI che discussi poi apertamente con i colleghi."
  },
  {
   "id": "p18",
-  "role": "Professionista junior, Sviluppo commerciale",
-  "sector": "Servizi di marketing",
-  "company_size": "media",
-  "region": "Lazio",
-  "profile": "Lavora in un’agenzia di marketing del Lazio: gestisce richieste e preventivi, qualifica i lead, aggiorna il CRM e segue i referenti commerciali con chiamate ed e-mail. Su LinkedIn legge soprattutto contenuti di agenzie e aziende, commenta raramente e limita l’attenzione ai post utili al lavoro. Si interessa all’automazione di analisi e attività ripetitive, ma resta scettica sull’AI quando si traduce in promesse generiche anziché in risultati misurabili."
+  "role": "Professionista senior, Sviluppo commerciale",
+  "sector": "Consulenza e servizi alle imprese",
+  "company_size": "micro",
+  "region": "Lombardia",
+  "profile": "Apre la giornata controllando richieste e preventivi, poi si alterna tra telefonate, e-mail, riunioni brevi e aggiornamento dei clienti attivi. Su LinkedIn passa ogni tanto, per trovare referenze, aggiornamenti operativi o opportunità di lavoro, dedicando pochi minuti ai post e senza interagire molto. Usa l’intelligenza artificiale esclusivamente per compiti precisi e ripetitivi, come riassumere documenti o preparare bozze di e-mail, che poi verifica personalmente; per strategia e relazioni commerciali fa da sola."
  },
  {
   "id": "p19",
-  "role": "Professionista senior, Consulenza",
-  "sector": "Tecnologia e internet",
+  "role": "Responsabile, Ingegneria",
+  "sector": "Servizi di design",
   "company_size": "piccola",
   "region": "Lombardia",
-  "profile": "La sua giornata alterna riunioni con i clienti, analisi dei flussi operativi e preparazione di raccomandazioni: configura dashboard, collega CRM e strumenti di analytics e spiega al personale come usarli. Su LinkedIn legge i post soprattutto al mattino, commenta di rado quando può portare un’esperienza concreta e ignora quasi completamente i messaggi motivazionali, perché lo usa essenzialmente per il lavoro. Con l’intelligenza artificiale è pragmatico: la impiega per sintetizzare documenti e accelerare prototipi, ma verifica ogni risultato, teme privacy e bias ed è più interessato all’automazione concreta che alle promesse generiche."
+  "profile": "Il responsabile coordina ogni giorno un piccolo team di designer e sviluppatori, organizza sprint, rivede il codice e sblocca i progetti dei clienti fino al rilascio. Su LinkedIn scrive post e commenta attivamente, dedicando attenzione soprattutto ai contenuti tecnici del settore che trova utili. L’intelligenza artificiale viene guardata con aperta diffidenza, perché la ritiene circondata da troppe promesse e poco affidabile nell’uso quotidiano."
  },
  {
   "id": "p20",
-  "role": "Professionista junior, Ingegneria",
-  "sector": "Sicurezza informatica",
+  "role": "Professionista senior, Ingegneria",
+  "sector": "Servizi per le risorse umane",
   "company_size": "grande",
   "region": "Lombardia",
-  "profile": "È un ingegnere junior che dedica la giornata a smistare alert, analizzare log e aggiornare regole di sicurezza, intervenendo anche nei ticket dei colleghi. Su LinkedIn legge qualche post, commenta di rado e usa soprattutto la piattaforma per motivi professionali,Giving poca attenzione a ciò che trova.È interessato all’automazione, ma si mostra cauto nell’uso dell’intelligenza artificiale per decisioni autonome, per i falsi positivi e i rischi legati ai dati aziendali."
+  "profile": "Nel suo lavoro in Lombardia coordina l’integrazione e l’automazione dei sistemi HR, definisce requisiti con i clienti e risolve criticità su dati, paghe e flussi aziendali. Su LinkedIn legge con attenzione i contenuti su intelligenza artificiale, automazione e tecnologia, talvolta li salva, ma raramente commenta, mette like o avvia conversazioni. È un entusiasta convinto dell’AI: la usa ogni giorno per sviluppare soluzioni, accelerare attività ripetitive e generare documenti, e ne discute apertamente con i colleghi."
  },
  {
   "id": "p21",
-  "role": "C-level, Ingegneria",
-  "sector": "Sviluppo software",
-  "company_size": "micro",
+  "role": "Socio, Ingegneria",
+  "sector": "Servizi e consulenza IT",
+  "company_size": "piccola",
   "region": "Lombardia",
-  "profile": "Dirige l’ingegneria in una software house lombarda: coordina architettura, sviluppo e rilasci, discute le soluzioni tecniche con i clienti e, quando serve, segue anche selezione e supporto operativo. Su LinkedIn legge soprattutto per lavoro, commenta raramente e dedica poca attenzione al flusso continuo di notizie. Usa l’intelligenza artificiale per test, documentazione e codice ripetitivo, ma diffida dell’autonomia e dei rischi per sicurezza e proprietà intellettuale: la interessa solo quando porta un vantaggio concreto e verificabile."
+  "profile": "La giornata della socio-ingegnere alterna analisi dei sistemi, sviluppo e revisione del software, affiancata a riunioni con i clienti e al coordinamento dei pochi colleghi. Su LinkedIn si ferma ogni tanto per consultare aggiornamenti tecnici o individuare un contatto utile, dedicando pochi minuti ai post e saltando ciò che non ha ricaduta sul lavoro. L’intelligenza artificiale la usa solo per problemi circoscritti, come accelerare un’attività ripetitiva o estrarre dati da documenti; senza un vantaggio immediatamente concreto, non adotta strumenti nuovi."
  },
  {
   "id": "p22",
-  "role": "Professionista junior, IT",
-  "sector": "Sviluppo software",
-  "company_size": "grande",
+  "role": "Professionista senior, Formazione",
+  "sector": "Industria farmaceutica",
+  "company_size": "piccola",
   "region": "Lombardia",
-  "profile": "Durante il giorno alterna riunioni di sprint, correzione di bug e sviluppo di funzionalità per applicazioni aziendali, dedicando buona parte del tempo a test e code review. Su LinkedIn sfoglia soprattutto post tecnici, lascia Rarevolmente commenti e presta attenzione solo alle novità che riguardano il suo lavoro. Usa l’intelligenza artificiale per generare codice ripetitivo o bozze di test, ma verifica ogni risultato: è interessata ai risparmi di tempo, yet diffida delle promesse di produttività e delle possibili criticità sulla privacy e sulla qualità."
+  "profile": "È una professionista senior della formazione in una piccola azienda farmaceutica lombarda: prepara programmi, coordina sessioni e affianca i reparti commerciali e tecnici tra riunioni, aggiornamenti normativi e materiali didattici. Su LinkedIn sfoglia i feed in silenzio, quasi senza commentare o mettere like, e presta attenzione solo sporadicamente a ciò che trova. Ha provato qualche strumento di intelligenza artificiale per generare slide o testi, ma lo usa con poco entusiasmo, preferendo rivedere personalmente il risultato."
  },
  {
   "id": "p23",
-  "role": "Professionista junior, Vendite",
-  "sector": "Banche",
-  "company_size": "piccola",
-  "region": "Lombardia",
-  "profile": "La giornata alterna richieste in arrivo, appuntamenti con clienti, aggiornamento del CRM e pratiche di apertura o verifica dei conti, sempre attenta alle procedure della banca. Su LinkedIn legge soprattutto aggiornamenti professionali, commenta di rado e dedica poco tempo a ciò che trova. Usa volentieri strumenti digitali per velocizzare il lavoro, ma davanti all’intelligenza artificiale rimane cauta per la tutela dei dati e la tendenza a generare risposte generiche."
- },
- {
-  "id": "p24",
-  "role": "Direttore, Prodotto",
+  "role": "Professionista senior, IT",
   "sector": "Tecnologia e internet",
   "company_size": "grande",
   "region": "Lombardia",
-  "profile": "Dirige un prodotto digitale in Lombardia alternando riunioni con ingegneria, design e commerciali, revisione della roadmap, analisi dei dati e colloqui con clienti: gran parte della giornata serve a scegliere priorità e rimuovere ostacoli al rilascio. Su LinkedIn legge soprattutto novità di settore, commenta raramente e condivide quasi solo contenuti lavorativi, soffermandosi sui post che offrono esempi concreti più che sugli annunci generici. L’intelligenza artificiale la interessa come supporto a analisi, sintesi e prototipi, ma è cauta su risposte inventate, privacy e promesse gonfiate: la convince solo quando produce miglioramenti verificabili."
+  "profile": "Gestisce infrastrutture, applicazioni aziendali e release, alternando triage degli incidenti, riunioni tecniche e verifiche operative sui sistemi in produzione. Su LinkedIn sfoglia i contenuti quasi sempre in silenzio, soffermandosi solo su casi pratici e attendendo che un collega apra una discussione, senza commentare né condividere. Diffida apertamente dell’intelligenza artificiale: considera le promesse di autonomia e produttività esagerate e la giudica utile solo se dimostra un guadagno concreto, misurabile e controllabile."
+ },
+ {
+  "id": "p24",
+  "role": "Professionista senior, Ingegneria",
+  "sector": "Sviluppo software",
+  "company_size": "piccola",
+  "region": "Lombardia",
+  "profile": "Lavora in una piccola azienda lombarda tra stand-up mattutini, revisione di codice legacy, correzione di bug e rilasci di piccoli servizi, affiancando anche un collega junior. Apre LinkedIn ogni tanto, per lavoro o per scorrere aggiornamenti tecnici: guarda i post per qualche minuto, interagisce raramente e non coltiva attivamente la rete. Prova gli strumenti di IA per generare snippet e test, ma non si fida dell’output, controlla tutto manualmente ed è scettico sul fatto che al momento gli facciano davvero risparmiare tempo."
  },
  {
   "id": "p25",
-  "role": "Professionista senior, Sviluppo commerciale",
-  "sector": "Servizi di design",
+  "role": "Professionista junior, Sviluppo commerciale",
+  "sector": "Sicurezza informatica",
   "company_size": "grande",
-  "region": "Lazio",
-  "profile": "La sua giornata alterna riunioni con i clienti, definizione di budget e tempi e revisione delle proposte con i team di design e sviluppo, fino a negoziare e seguire le opportunità più redditizie. Su LinkedIn legge gli aggiornamenti professionali, commenta quasi mai e controlla i messaggi solo per lavoro, senza dedicare molta attenzione ai post. Usa l’intelligenza artificiale per riepiloghi e prime bozze, ma è scettica sull’uso acritico dei modelli generativi per la riservatezza dei dati e la genericità delle risposte."
+  "region": "Lombardia",
+  "profile": "La sua giornata si alterna tra call di qualificazione con i prospect, aggiornamento del CRM, preparazione di demo e briefing con il team tecnico sulle soluzioni di sicurezza informatica. Su LinkedIn legge in silenzio post sul settore, strumenti di IA e offerte di lavoro, dedicando pochi minuti ai contenuti e interagendo solo di rado. L’intelligenza artificiale la incuriosisce: prova a usarla per scrivere email e sintetizzare note, ma si basa poco sui risultati e rifà manualmente quasi tutto."
  },
  {
   "id": "p26",
-  "role": "Professionista junior, Design e creatività",
-  "sector": "Consulenza e servizi alle imprese",
-  "company_size": "piccola",
-  "region": "Emilia-Romagna",
-  "profile": "È una professionista junior che alterna riunioni con i clienti, preparazione di proposte creative, contenuti visivi e revisioni di materiali, coordinandosi spesso con i senior e lavorando a scadenze strette. Legge LinkedIn per pochi minuti, commenta solo su temi di branding e design e ignora quasi tutto ciò che non sia collegato al lavoro. Sperimenta con l’intelligenza artificiale per velocizzare attività ripetitive, ma verifica sempre i risultati, temendo output generici e scelte sbagliate nei progetti."
+  "role": "C-level, Sviluppo commerciale",
+  "sector": "Pubblicità",
+  "company_size": "grande",
+  "region": "Lombardia",
+  "profile": "Dirige lo sviluppo commerciale di un grande gruppo pubblicitario: la sua giornata ruota attorno a riunioni con clienti e prospect, definizione dei budget, previsioni sulle campagne e affiancamento dei team nelle negoziazioni. Controlla LinkedIn quasi every morning, ma si limita a scorrere post e notifiche, concedendo pochissima attenzione a ciò che trova e raramente interagendo. Usa l’intelligenza artificiale esclusivamente per risolvere problemi precisi, come sintetizzare report o preparare bozze di presentazioni, evitando soluzioni che non facciano risparmiare tempo."
  },
  {
   "id": "p27",
-  "role": "Professionista senior, Ingegneria",
+  "role": "Professionista senior, Prodotto",
   "sector": "Servizi e consulenza IT",
   "company_size": "grande",
-  "region": "Piemonte",
-  "profile": "È un professionista senior dell’ingegneria che coordina progetti IT, tra code review, riunioni con clienti e stakeholder e diagnosi di problemi operativi. Su LinkedIn legge quasi solo per lavoro, commenta raramente e si ferma su aggiornamenti tecnici, ignorando gran parte del flusso di contenuti. Usa l’intelligenza artificiale per codice, test e documentazione, ma ne teme inaccuratezza e uso indiscriminato dei dati aziendali: è interessato agli strumenti che velocizzano il lavoro, non a quelli che agiscono in autonomia."
+  "region": "Lombardia",
+  "profile": "È un product manager senior che definisce requisiti e priorità con i clienti, coordina squadre di consulenza e segue le roadmap delle soluzioni IT. Su LinkedIn legge articoli e aggiornamenti in silenzio, dedicate loro pochi minuti senza commentare o mettere like. Usa spesso l’intelligenza artificiale per sintetizzare requisiti, preparare documentazione e accelerare prototipi, e ne parla apertamente con i colleghi."
  },
  {
   "id": "p28",
-  "role": "Direttore, IT",
-  "sector": "Sviluppo software",
-  "company_size": "grande",
-  "region": "Piemonte",
-  "profile": "Dirige i team che sviluppano ed evolvono le piattaforme software, alternando pianificazione degli sprint, revisione delle release eCalls con sviluppatori e stakeholder. Su LinkedIn commenta solo gli argomenti legati al suo lavoro, dando pochissimo peso al resto del feed. Dell’intelligenza artificiale ha un approccio pragmatico: la usa per test e documentazione, ma controlla ogni risultato per evitare errori, dipendenze e rischi di sicurezza."
+  "role": "Direttore, Project management",
+  "sector": "Servizi informativi",
+  "company_size": "micro",
+  "region": "Lombardia",
+  "profile": "Gestisce progetti di raccolta e analisi dati, coordinando clienti, colleghi, aggiornamenti e report, con riunioni quotidiane e priorità che cambiano in fretta. Su LinkedIn entra ogni tanto, per lavoro e aggiornamenti, sfoglia i post con attenzione selettiva e salva solo contenuti davvero utili. L’intelligenza artificiale la appassiona: la usa spesso per sintetizzare documenti, preparare bozze e accelerare le prime analisi, e ne discute volentieri con i colleghi."
  },
  {
   "id": "p29",
-  "role": "Professionista junior, Sviluppo commerciale",
-  "sector": "Servizi per le risorse umane",
-  "company_size": "media",
-  "region": "Lombardia",
-  "profile": "La sua giornata alterna call ed email per prospectare nuovi clienti, aggiornare il CRM e preparare proposte commerciali per servizi HR,supportando talvolta il passaggio tra selezione e onboarding. Su LinkedIn legge contenuti su recruiting, people analytics e strumenti digitali, commenta solo quando emerge uno spunto concreto e non si lascia trascinare da un feed infinito. Usa l’intelligenza artificiale per abbozzare email e ordinare note, ma resta diffidente verso le automazioni generiche: la considera utile soltanto se riduce il lavoro ripetitivo senza sostituire il giudizio umano."
+  "role": "Professionista junior, Imprenditoria",
+  "sector": "Consulenza e servizi alle imprese",
+  "company_size": "grande",
+  "region": "Lazio",
+  "profile": "Ogni giorno, in ufficio nel Lazio, supporta l’analisi dei processi, prepara fogli di calcolo, sintetizza riunioni e contribuisce alle proposte per i clienti, alternando attività operative a riunioni interne. Su LinkedIn scorre i contenuti per pochi minuti, osservando soprattutto checklist, modelli operativi e strumenti, ma quasi mai commenta, mette like o condivide. L’intelligenza artificiale è accettata solo per automatizzare un passaggio preciso e verificabile, come estrarre dati da documenti o riordinare tabelle, non per brainstorming strategico, decisioni di consulenza o rapporti con il cliente."
  },
  {
   "id": "p30",
-  "role": "Professionista senior, Imprenditoria",
-  "sector": "Selezione del personale",
+  "role": "Professionista junior, Ricerca",
+  "sector": "Servizi e consulenza IT",
   "company_size": "piccola",
   "region": "Puglia",
-  "profile": "È una professionista senior dell’imprenditoria nella selezione del personale: ogni giorno coordina colloqui, valuta curricula e affianca le aziende clienti nella scelta dei profili, dedicando spesso il pomeriggio a sopralluoghi e follow-up. Su LinkedIn si ferma soprattutto a leggere e a osservare, intervenendo raramente e più per questioni di lavoro che per chiacchiere o visibilità. Il digitale la interessa per la velocità con cui facilita recruiting e sourcing, ma guarda con cautela all’intelligenza artificiale: è utile per risparmiare tempo, non per sostituire il giudizio umano o la capacità di valutare una persona."
+  "profile": "Lavora in una piccola società di consulenza IT in Puglia, occupandosi di raccogliere requisiti, verificare l’affidabilità dei dati e mantenere aggiornati sistemi e documentazione tra riunioni operative e problemi tecnici da smontare ogni giorno. Su LinkedIn legge quasi sempre in silenzio, scorre i post con attenzione selettiva e non commenta né condivide, salvo rare occasioni. Diffida apertamente dell’intelligenza artificiale: dopo troppe promesse si aspetta risultati concreti, controlla manualmente ciò che viene generato e considera l’automazione più una fonte di errori che un vero aiuto."
  }
 ]

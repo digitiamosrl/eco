@@ -15,6 +15,8 @@ class Attributes:
     job_function: str
     industry: str
     region: str
+    ai_attitude: str
+    linkedin_use: str
 
 
 def _coherent(seniority: str, company_size: str) -> bool:
