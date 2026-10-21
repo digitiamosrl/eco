@@ -8,6 +8,8 @@ from app import store
 from app.api.create_request import read_create_request
 from app.api.personas import PERSONAS
 from app.config import settings
+from app.engine.responder import build_responder
+from app.engine.runner import run_post_test
 from app.loaders import load_list
 from app.models import (
     CreateTestRequest,
@@ -91,7 +93,10 @@ async def create_test(request: Request, background_tasks: BackgroundTasks) -> Te
     if not store.add_if_idle(test):
         delete_uploads(uploads)
         raise HTTPException(status_code=409, detail="Un test è già in corso")
-    background_tasks.add_task(run_test, test.id)
+    if test.kind == "post":
+        background_tasks.add_task(run_post_test, test.id, build_responder(), PERSONAS)
+    else:
+        background_tasks.add_task(run_test, test.id)
     return test
 
 

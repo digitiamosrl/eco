@@ -57,4 +57,13 @@ def no_background(monkeypatch):
     """Il test resta in queued: il task in background non parte."""
     from app.api import tests as tests_api
 
+    async def _noop(*args) -> None:
+        return None
+
     monkeypatch.setattr(tests_api, "run_test", lambda test_id: None)
+    monkeypatch.setattr(tests_api, "run_post_test", _noop)
+
+
+@pytest.fixture
+def anyio_backend():
+    return "asyncio"

@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -18,6 +19,8 @@ class Settings(BaseSettings):
     # Durata simulata di un test completo (fixture, nessuna chiamata reale).
     fixture_delay_seconds: float = 3.0
     upload_dir: Path = REPO_ROOT / "data" / "uploads"
+    # fake: risponditore deterministico senza rete. llm: provider AI (non ancora configurato).
+    responder: Literal["fake", "llm"] = "fake"
 
 
 settings = Settings()

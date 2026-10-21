@@ -4,7 +4,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 
 from app.config import settings
-from app.models import Stimulus, Test
+from app.models import Response, Stimulus, Test
 
 INTERRUPTED_MESSAGE = "Il server è stato riavviato durante il test"
 _ACTIVE_STATUSES = ("queued", "running")
@@ -116,3 +116,29 @@ def mark_interrupted() -> None:
             "UPDATE tests SET status = 'error', error = ? WHERE status IN (?, ?)",
             (INTERRUPTED_MESSAGE, *_ACTIVE_STATUSES),
         )
+
+
+def add_response(test_id: str, response: Response) -> None:
+    with _connect() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO responses (test_id, persona_id, stimulus_id, response)"
+            " VALUES (?, ?, ?, ?)",
+            (
+                test_id,
+                response.persona_id,
+                response.stimulus_id,
+                response.model_dump_json(exclude_none=True),
+            ),
+        )
+
+
+def list_responses(test_id: str) -> list[Response]:
+    with _connect() as conn:
+        rows = conn.execute("SELECT response FROM responses WHERE test_id = ?", (test_id,))
+        return [Response.model_validate_json(row["response"]) for row in rows.fetchall()]
+
+
+def count_responses(test_id: str) -> int:
+    with _connect() as conn:
+        row = conn.execute("SELECT COUNT(*) AS n FROM responses WHERE test_id = ?", (test_id,))
+        return int(row.fetchone()["n"])
