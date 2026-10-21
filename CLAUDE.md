@@ -6,6 +6,13 @@ Istruzioni per Claude Code su questo repository. Leggi anche `README.md`.
 
 POC interna Digitiamo: personas sintetiche costruite su dati reali valutano post LinkedIn (testo + immagine) e flussi di un prototipo. Scadenza fissa: 9 dicembre 2026, con circa 4 ore a settimana per persona. **Ogni scelta privilegia la cosa più semplice che funziona.** Se una richiesta allarga lo scope (vedi README), fallo notare prima di implementare.
 
+## Principi non negoziabili
+
+Sono il fattore differenziante del progetto: non sostituirli con scorciatoie.
+
+1. **Le personas si campionano, non si inventano.** Gli attributi strutturali (settore, dimensione d'impresa, area, ruolo) si estraggono dalle distribuzioni in `data/processed/istat/` con un campionamento riproducibile (seed fisso). Non chiedere mai all'LLM di "inventare" un panel da una descrizione testuale. L'LLM genera solo la biografia, vincolata agli attributi campionati e ancorata a citazioni reali da `data/processed/`.
+2. **La calibrazione fa parte del flusso.** Il modulo `backend/app/report/calibration.py` confronta il ranking del panel con gli esiti reali (engagement LinkedIn) e calcola il fidelity score. Ogni report espone il fidelity score disponibile, o dichiara esplicitamente che manca.
+
 ## Chi lavora dove
 
 - **Salvo, AI e backend:** `backend/`, `prompts/`, `data/`
