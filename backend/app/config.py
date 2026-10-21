@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     upload_dir: Path = REPO_ROOT / "data" / "uploads"
     # fake: risponditore deterministico senza rete. llm: provider AI (non ancora configurato).
     responder: Literal["fake", "llm"] = "fake"
+    summarizer: Literal["fake", "llm"] = "fake"
 
 
 settings = Settings()

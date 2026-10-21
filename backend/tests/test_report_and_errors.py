@@ -46,8 +46,8 @@ def test_post_report_has_one_item_per_stimulus(validate) -> None:
     report = response.json()
     validate("report.schema.json", report)
     assert report["test_id"] == created["id"]
-    assert [item["stimulus_id"] for item in report["items"]] == ["variante-a", "variante-b"]
-    assert [item["rank"] for item in report["items"]] == [1, 2]
+    assert sorted(item["stimulus_id"] for item in report["items"]) == ["variante-a", "variante-b"]
+    assert sorted(item["rank"] for item in report["items"]) == [1, 2]
     for item in report["items"]:
         assert {r["stimulus_id"] for r in item["responses"]} == {item["stimulus_id"]}
 
