@@ -1,14 +1,26 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from app import store
 from app.api.flows import router as flows_router
 from app.api.health import router as health_router
 from app.api.personas import router as personas_router
 from app.api.reports import router as reports_router
 from app.api.tests import router as tests_router
 
-app = FastAPI(title="eco")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    store.init_db()
+    store.mark_interrupted()
+    yield
+
+
+app = FastAPI(title="eco", lifespan=lifespan)
 app.include_router(health_router)
 app.include_router(personas_router)
 app.include_router(flows_router)

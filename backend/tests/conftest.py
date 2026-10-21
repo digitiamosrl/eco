@@ -42,10 +42,13 @@ def validate():
 
 
 @pytest.fixture(autouse=True)
-def _reset_store():
+def _temp_database(tmp_path, monkeypatch):
+    """Ogni test usa un database SQLite temporaneo, mai quello di sviluppo."""
     from app import store
+    from app.config import settings
 
-    store.reset()
+    monkeypatch.setattr(settings, "database_path", str(tmp_path / "test.sqlite"))
+    store.init_db()
 
 
 @pytest.fixture

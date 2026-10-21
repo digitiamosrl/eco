@@ -83,9 +83,8 @@ def run_test(test_id: str) -> None:
 )
 def create_test(body: CreateTestRequest, background_tasks: BackgroundTasks) -> Test:
     test = _build_test(body)
-    if store.has_active():
+    if not store.add_if_idle(test):
         raise HTTPException(status_code=409, detail="Un test è già in corso")
-    store.add(test)
     background_tasks.add_task(run_test, test.id)
     return test
 
