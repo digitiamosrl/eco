@@ -4,6 +4,7 @@ import SayThink from "../components/SayThink";
 import ScoreBars from "../components/ScoreBars";
 import SimulatedBanner from "../components/SimulatedBanner";
 import { useLoad } from "../lib/useLoad";
+import { variantName } from "../lib/variants";
 import type { Report } from "../types/report";
 
 export default function ReportScreen({ testId }: { testId?: string }) {
@@ -25,6 +26,7 @@ export default function ReportScreen({ testId }: { testId?: string }) {
   if (!selected) return <p>Nessun test completato. Avviane uno dalla schermata Test.</p>;
   if (!report.data || !personas.data) return <p role="status">Caricamento del report…</p>;
 
+  const stimuli = tests.data.find((t) => t.id === selected)?.stimuli;
   const personaList = personas.data;
   const items = [...report.data.items].sort((a, b) => a.rank - b.rank);
 
@@ -36,7 +38,7 @@ export default function ReportScreen({ testId }: { testId?: string }) {
       {items.map((item) => (
         <article key={item.stimulus_id} className="card">
           <h2>
-            #{item.rank} · Variante {item.stimulus_id}
+            #{item.rank} · Variante {variantName(stimuli, item.stimulus_id)}
           </h2>
           <ScoreBars distribution={item.score_distribution} mean={item.mean_score} />
           {item.objections.length > 0 && (

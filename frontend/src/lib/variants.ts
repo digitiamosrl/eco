@@ -1,3 +1,5 @@
+import type { Stimulus } from "../types/stimulus";
+
 export type VariantDraft = { id: string; label: string; text: string; image: File | null };
 
 export const MIN_VARIANTS = 2;
@@ -14,3 +16,6 @@ export function validateVariants(variants: VariantDraft[]): string[] {
   }
   return errors;
 }
+
+export const variantName = (stimuli: Stimulus[] | undefined, stimulusId: string) =>
+  stimuli?.find((s) => s.id === stimulusId)?.variant_label ?? stimulusId;

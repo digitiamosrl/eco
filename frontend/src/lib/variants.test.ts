@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { nextLabel, validateVariants, type VariantDraft } from "./variants";
+import type { Stimulus } from "../types/stimulus";
+import { nextLabel, validateVariants, variantName, type VariantDraft } from "./variants";
 
 const variant = (label: string, text: string): VariantDraft => ({ id: label, label, text, image: null });
 
@@ -27,5 +28,18 @@ describe("validateVariants", () => {
 describe("nextLabel", () => {
   it("labels variants with letters", () => {
     expect([0, 1, 4].map(nextLabel)).toEqual(["A", "B", "E"]);
+  });
+});
+
+describe("variantName", () => {
+  const stimuli: Stimulus[] = [{ id: "variante-a", kind: "post", variant_label: "A" }];
+
+  it("uses the variant label of the stimulus", () => {
+    expect(variantName(stimuli, "variante-a")).toBe("A");
+  });
+
+  it("falls back to the stimulus id when the stimulus is unknown", () => {
+    expect(variantName(stimuli, "variante-z")).toBe("variante-z");
+    expect(variantName(undefined, "variante-a")).toBe("variante-a");
   });
 });
