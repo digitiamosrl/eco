@@ -91,7 +91,7 @@ def test_persona_rejects_unknown_company_size() -> None:
             id="p9",
             role="Titolare",
             sector="Edilizia",
-            company_size="grande",
+            company_size="enorme",
             region="Veneto",
             profile="Profilo.",
         )

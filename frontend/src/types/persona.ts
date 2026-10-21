@@ -8,11 +8,11 @@
 export interface Persona {
   id: string;
   /**
-   * Ruolo del decision maker
+   * Ruolo della persona
    */
   role: string;
   sector: string;
-  company_size: "micro" | "piccola" | "media";
+  company_size: "micro" | "piccola" | "media" | "grande";
   region: string;
   /**
    * Descrizione sintetica, senza dati identificabili

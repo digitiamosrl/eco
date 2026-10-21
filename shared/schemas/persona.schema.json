@@ -7,9 +7,9 @@
   "required": ["id", "role", "sector", "company_size", "region", "profile"],
   "properties": {
     "id": { "type": "string" },
-    "role": { "type": "string", "description": "Ruolo del decision maker" },
+    "role": { "type": "string", "description": "Ruolo della persona" },
     "sector": { "type": "string" },
-    "company_size": { "type": "string", "enum": ["micro", "piccola", "media"] },
+    "company_size": { "type": "string", "enum": ["micro", "piccola", "media", "grande"] },
     "region": { "type": "string" },
     "profile": { "type": "string", "description": "Descrizione sintetica, senza dati identificabili" }
   }

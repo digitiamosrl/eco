@@ -1,7 +1,7 @@
 import { getPersonas } from "../api";
 import { useLoad } from "../lib/useLoad";
 
-const SIZES = ["micro", "piccola", "media"] as const;
+const SIZES = ["micro", "piccola", "media", "grande"] as const;
 
 export default function PanelScreen() {
   const { data: personas, error } = useLoad(getPersonas, []);
@@ -12,7 +12,7 @@ export default function PanelScreen() {
   return (
     <section>
       <h1>Panel</h1>
-      <p className="sub">Decision maker di PMI italiane · {personas.length} personas sintetiche</p>
+      <p className="sub">Pubblico della pagina LinkedIn Digitiamo · {personas.length} personas sintetiche</p>
       <div className="grid">
         {SIZES.map((size) => (
           <div key={size} className="card">

@@ -9,7 +9,7 @@ class Persona(BaseModel):
     id: str
     role: str
     sector: str
-    company_size: Literal["micro", "piccola", "media"]
+    company_size: Literal["micro", "piccola", "media", "grande"]
     region: str
     profile: str
 
