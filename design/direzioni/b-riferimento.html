@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eco · Direzione B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* Direzione B · riferimento: Dovetail (insight di ricerca). Shell a tre zone: rail di navigazione,
+   colonna-documento, rail di contesto. Le citazioni sono "highlight" su testo, come nei transcript. */
+:root{
+  --c30:#070011; --c50:#1C073A; --c70:#3E00EA; --c80:#717FFE; --c90:#EBEEFC; --c95:#F4F5FA;
+  --ink:var(--c30); --ink-2:#4A4560; --ink-3:#5E5975; /* 7.6:1 e 6.3:1 su bianco */
+  --brand:var(--c70); --deep:var(--c50); --tint:var(--c90); --paper:var(--c95);
+  --line:#DCDDEA; --line-strong:#B9BBD3; --white:#fff;
+  --said-bg:var(--white); --thought-bg:var(--c90); --thought-mark:#D6DAFB;
+  --font-h:"Montserrat",system-ui,sans-serif; --font-t:"Poppins",system-ui,sans-serif;
+  --r:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E7E8F1;color:var(--ink);font:400 15px/1.55 var(--font-t);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-h);font-weight:700;margin:0;letter-spacing:-.01em}
+p{margin:0}
+.frame{max-width:1440px;margin:40px auto;padding:0 24px}
+.frame-label{font:600 12px/1 var(--font-t);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin:0 0 10px}
+.app{background:var(--white);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:232px minmax(0,1fr);min-height:860px;box-shadow:0 1px 0 var(--line-strong),0 20px 50px -30px rgba(28,7,58,.35)}
+
+/* rail di navigazione */
+.nav{background:var(--paper);border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px 22px;color:var(--brand)}
+.logo{width:104px;height:auto;display:block;flex:none}
+.brand .eco{font:700 18px/1 var(--font-h);color:var(--ink);padding-left:10px;border-left:1px solid var(--line-strong)}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--ink-2);text-decoration:none;font-weight:500;font-size:15px}
+.nav a svg{width:18px;height:18px;flex:none}
+.nav a.on{background:var(--white);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.nav a.on svg{color:var(--brand)}
+.nav .foot{margin-top:auto;font-size:13px;color:var(--ink-3);padding:12px 10px 0;border-top:1px solid var(--line)}
+
+/* area principale: documento + rail di contesto */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px}
+.doc{padding:28px 48px 56px;min-width:0}
+.ctx{border-left:1px solid var(--line);background:var(--white);padding:28px 24px;display:flex;flex-direction:column;gap:22px}
+.crumbs{font-size:13px;color:var(--ink-3);margin-bottom:22px;display:flex;gap:8px;flex-wrap:wrap}
+.crumbs b{color:var(--ink);font-weight:500}
+.eyebrow{font:600 12px/1.2 var(--font-t);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.h1{font-size:34px;line-height:1.15;margin:6px 0 8px}
+.lede{font-size:17px;color:var(--ink-2);max-width:62ch}
+
+.ctx h3{font-size:14px;margin-bottom:10px}
+.ctx .block{display:flex;flex-direction:column;gap:6px}
+.ctx dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.ctx dt{color:var(--ink-3)} .ctx dd{margin:0}
+.notice{background:var(--paper);border-radius:var(--r);padding:14px 16px;font-size:14px}
+.notice b{display:block;font-family:var(--font-h);font-size:14px;margin-bottom:4px}
+.state{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.state .dot{width:14px;height:14px;border-radius:50%;border:2px dashed var(--ink-3);flex:none;margin-top:3px}
+.state small{display:block;color:var(--ink-3);font-size:13px}
+
+/* chip e bottoni */
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--font-t);padding:5px 9px;border-radius:999px;background:var(--tint);color:var(--deep);white-space:nowrap}
+.chip.solid{background:var(--deep);color:var(--white)}
+.seg{display:inline-flex;background:var(--paper);border-radius:10px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg span{padding:7px 14px;border-radius:7px;font-size:14px;color:var(--ink-2);font-weight:500}
+.seg .on{background:var(--white);color:var(--ink);box-shadow:0 1px 2px rgba(7,0,17,.12)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 var(--font-t);padding:14px 20px;border-radius:10px;border:0;background:var(--brand);color:var(--white);width:100%}
+.btn-ghost{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--line-strong);border-radius:var(--r);color:var(--ink-2);font-weight:500;padding:16px;font-size:15px}
+
+/* ---------- SCHERMATA TEST ---------- */
+.mode{margin:26px 0 22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.variants{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.var{border:1px solid var(--line);border-radius:var(--r);background:var(--white);display:flex;flex-direction:column}
+.var-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.var-head h3{font-size:15px;display:flex;align-items:center;gap:10px}
+.tag-l{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--deep);color:var(--white);font:700 13px/1 var(--font-h)}
+.var-head .count{font-size:12px;color:var(--ink-3)}
+.var textarea{all:unset;display:block;padding:16px;min-height:150px;font:400 15px/1.6 var(--font-t);color:var(--ink);white-space:pre-wrap}
+.drop{margin:0 16px 16px;border:1.5px dashed var(--line-strong);border-radius:8px;aspect-ratio:1.91/1;display:grid;place-items:center;text-align:center;background:var(--paper);color:var(--ink-2);font-size:14px;padding:12px}
+.drop svg{width:22px;height:22px;color:var(--ink-3);display:block;margin:0 auto 6px}
+.addrow{display:flex;align-items:center;gap:16px;margin-top:20px}
+.addrow .btn-ghost{flex:1}
+.counter{font-size:14px;color:var(--ink-2);white-space:nowrap}
+.counter b{font-family:var(--font-h);color:var(--ink)}
+.run small{display:block;text-align:center;margin-top:8px;font-size:13px;color:var(--ink-3)}
+
+/* ---------- SCHERMATA REPORT ---------- */
+.summary{margin-top:22px;padding:18px 20px;background:var(--paper);border-radius:var(--r);display:flex;gap:14px;align-items:flex-start}
+.summary svg{width:20px;height:20px;color:var(--brand);flex:none;margin-top:3px}
+.summary p{font-size:17px;line-height:1.5;font-weight:500}
+.sec-title{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:36px 0 14px;flex-wrap:wrap}
+.sec-title h2{font-size:20px}
+.sec-title span{font-size:13px;color:var(--ink-3)}
+
+/* classifica: due insight affiancati */
+.ranking{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ins{padding:20px 22px 22px;display:flex;flex-direction:column;gap:16px}
+.ins + .ins{border-left:1px solid var(--line)}
+.ins.win{background:var(--white)}
+.ins.lose{background:#FBFBFD}
+.ins-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rank{font:700 13px/1 var(--font-h);padding:6px 9px;border-radius:7px;background:var(--tint);color:var(--deep)}
+.win .rank{background:var(--brand);color:var(--white)}
+.ins-head h3{font-size:18px}
+.score{display:grid;grid-template-columns:auto minmax(0,1fr);gap:22px;align-items:end}
+.mean{font:700 44px/1 var(--font-h);letter-spacing:-.02em}
+.mean small{display:block;font:400 13px/1.3 var(--font-t);color:var(--ink-3);margin-top:6px;letter-spacing:0}
+.dist{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;align-items:end;height:92px}
+.dist div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.dist i{display:block;width:100%;border-radius:4px 4px 0 0;background:var(--brand);min-height:2px}
+.lose .dist i{background:var(--c80)}
+.dist i.z{background:var(--line-strong)}
+.dist .n{font:600 13px/1 var(--font-t)}
+.dist .n.z{color:var(--ink-3);font-weight:400}
+.axis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;border-top:1px solid var(--line-strong);padding-top:5px;font-size:12px;color:var(--ink-3);text-align:center}
+.objection{display:flex;gap:10px;align-items:baseline;font-size:15px}
+.objection .eyebrow{flex:none}
+
+/* IL DETTAGLIO: detto / pensato come transcript + highlight */
+.voice{display:grid;gap:0;border-top:1px solid var(--line);padding-top:14px}
+.said,.thought{display:grid;grid-template-columns:70px minmax(0,1fr);gap:12px;align-items:baseline;font-size:15px}
+.who{font:600 12px/1.2 var(--font-t);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.thought{margin-top:8px}
+.thought .who{color:var(--brand)}
+/* pensato: corsivo sommesso se coincide; evidenziatore (highlight alla Dovetail) se diverge */
+mark.hl{background:none;color:var(--ink-2);font-style:italic}
+mark.hl.div{background:var(--thought-mark);color:var(--ink);padding:2px 5px;border-radius:3px;box-shadow:inset 0 -2px 0 var(--brand);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+/* detto vuoto: una nuvoletta vuota, cioe' un dato */
+.silent{display:inline-block;color:var(--ink-3);font-size:13px;border:1.5px dashed var(--line-strong);border-radius:12px 12px 12px 3px;padding:3px 10px;white-space:nowrap;justify-self:start;align-self:start}
+
+/* evidenze: tabella risposte */
+.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.ev{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ev-group{padding:10px 18px;background:var(--paper);border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;font-size:14px;font-weight:500}
+.ev-group + .ev-row{border-top:0}
+.ev-head,.ev-row{display:grid;grid-template-columns:190px 52px minmax(0,1fr) minmax(0,1.2fr);gap:20px;padding:12px 18px;align-items:start}
+.ev-head{font:600 12px/1.2 var(--font-t);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line)}
+.ev-row{border-bottom:1px solid var(--line);font-size:15px}
+.ev > .ev-row:last-child{border-bottom:0}
+.persona b{display:block;font-weight:500}
+.persona small{display:block;font-size:13px;color:var(--ink-3);line-height:1.4}
+.vote{font:700 18px/1.2 var(--font-h)}
+.vote small{font:400 12px/1 var(--font-t);color:var(--ink-3)}
+.lbl{display:none}
+.saidq{line-height:1.5}
+.thq{line-height:1.7}
+.thq .chip{margin-left:6px;vertical-align:1px}
+
+/* responsive */
+@media (max-width:1180px){
+  .main{grid-template-columns:minmax(0,1fr)}
+  .ctx{border-left:0;border-top:1px solid var(--line)}
+  .ctx.lead{order:-1;border-top:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:860px){
+  .frame{padding:0 12px;margin:28px auto}
+  .app{grid-template-columns:minmax(0,1fr);min-height:0}
+  .nav{flex-direction:row;align-items:center;flex-wrap:wrap;padding:12px 14px;border-right:0;border-bottom:1px solid var(--line);gap:2px}
+  .brand{padding:0 8px 0 0;margin-right:auto}
+  .logo{width:84px}
+  .nav a{padding:8px 9px;font-size:14px}
+  .nav a svg,.nav .foot{display:none}
+  .doc{padding:22px 16px 36px}
+  .ctx{padding:22px 16px}
+  .h1{font-size:26px}
+  .variants,.ranking{grid-template-columns:minmax(0,1fr)}
+  .ins + .ins{border-left:0;border-top:1px solid var(--line)}
+  .ev-head{display:none}
+  .ev-row{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:14px 16px}
+  .ev-row .saidq,.ev-row .thq{grid-column:1 / -1;display:grid;grid-template-columns:70px minmax(0,1fr);gap:12px}
+  .lbl{display:block}
+  .vote{text-align:right}
+}
+@media (max-width:420px){
+  .addrow{flex-direction:column;align-items:stretch}
+  .counter{text-align:center}
+  .score{gap:16px}
+  .mean{font-size:38px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== 1 · TEST ===================== -->
+<section class="frame" aria-labelledby="t1">
+  <p class="frame-label">Test · post</p>
+  <div class="app">
+    <nav class="nav" aria-label="Navigazione eco">
+      <div class="brand"><svg class="logo" role="img" aria-label="Digitiamo" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="44 48 532 160"><path d="M92.14,198.36c-1.85-.17-3.72-.29-5.57-.54a42.71,42.71,0,0,1-14.21-4.53A51.81,51.81,0,0,1,66.94,190a43.86,43.86,0,0,1-10.5-10.34,44.64,44.64,0,0,1-7.15-14.82,41.57,41.57,0,0,1-1.6-11.68q0-50.46,0-100.92V51c.73,0,1.4,0,2.06,0a52.75,52.75,0,0,1,17.5,4.7,86,86,0,0,1,9.34,4.84c1,.59,1.94,1.2,2.93,1.78a.94.94,0,0,1,.53,1c0,.27,0,.53,0,.8q0,40.81,0,81.64a29.16,29.16,0,0,0,1.41,9.38A29.53,29.53,0,0,0,86.13,164a52.13,52.13,0,0,0,5.05,5.35c.89.86,1.76,1.75,2.64,2.63,1.22,1.24,2.42,2.48,3.65,3.7a1.22,1.22,0,0,1,.4,1.23,6.59,6.59,0,0,0,5.39,7.59A6.41,6.41,0,0,0,110,181.3a6.55,6.55,0,0,0-4.32-9.63,10,10,0,0,0-2.45-.07,1,1,0,0,1-.9-.3q-2.55-2.6-5.12-5.16c-1.31-1.31-2.64-2.59-3.92-3.92a24.9,24.9,0,0,1-4-5.37,22.92,22.92,0,0,1-2.68-11.17V67.27c.22.16.42.33.54.43,2.69,2.2,5.41,4.37,8.06,6.63a116,116,0,0,1,9.59,9.24q2.25,2.42,4.44,4.87c2.57,2.9,5,5.91,7.31,9.06.63.87,1.26,1.74,1.91,2.6a2,2,0,0,1,.41,1.3c0,1.94,0,3.89,0,5.84,0,7.43,0,14.86,0,22.29a30.2,30.2,0,0,0,2.35,11.77,28.76,28.76,0,0,0,6.29,9.34l8.27,8.26c.43.43.81.92,1.27,1.3a1.35,1.35,0,0,1,.44,1.56c-.56,2.1-1,4.24-1.71,6.28s-1.59,3.77-2.42,5.65a5.19,5.19,0,0,1-.37.66c-.19-.16-.37-.31-.51-.45l-8.29-8.36-6.86-6.86c-1.75-1.76-3.56-3.46-5.26-5.27a22.69,22.69,0,0,1-3.76-5.53,23.48,23.48,0,0,1-2.29-10.5q0-13.31,0-26.62a1.51,1.51,0,0,1,.65-1.39,6.53,6.53,0,1,0-9.17-1.31,5.15,5.15,0,0,0,1.29,1.26,1.5,1.5,0,0,1,.67,1.47q0,7.42,0,14.86c0,4.39,0,8.79,0,13.18a28.43,28.43,0,0,0,3.08,12.29,26.73,26.73,0,0,0,4.53,6.59c1.68,1.79,3.46,3.48,5.19,5.22.86.85,1.72,1.7,2.57,2.57,2.08,2.09,4.14,4.19,6.22,6.28q3.54,3.57,7.09,7.11c.36.37.74.72,1.19,1.14a7.78,7.78,0,0,1-.61.87c-1.34,1.51-2.63,3.08-4.07,4.5a44.75,44.75,0,0,1-13.61,9.16,47.39,47.39,0,0,1-9.49,2.94.8.8,0,0,1-.83-.27c-.94-.94-1.9-1.85-2.84-2.79-2-2.05-4.06-4.11-6.1-6.16l-9.71-9.76L75.56,172c-1-1-2-2.11-3.08-3.17a3.17,3.17,0,0,1-.34-.39,24.09,24.09,0,0,1-4.06-7.8,24.54,24.54,0,0,1-1-7.13V86.26c0-.24,0-.55,0-.71a1,1,0,0,1,.63-1,9.55,9.55,0,0,0,4.46-3.93,9.29,9.29,0,0,0,.61-8.94,9.77,9.77,0,0,0-15.61-3.3,9.84,9.84,0,0,0-1.9,12,9.27,9.27,0,0,0,4.44,4.09,1.18,1.18,0,0,1,.79,1.33q0,13.83,0,27.68,0,20.18,0,40.33a30.39,30.39,0,0,0,2,10.87,27.88,27.88,0,0,0,6.14,9.66c2.1,2.15,4.23,4.26,6.35,6.38.82.82,1.64,1.63,2.45,2.46l6.15,6.22q3.6,3.62,7.21,7.24c.48.48,1.17,1.11,1.66,1.59C92.42,198.34,92.37,198.36,92.14,198.36Z"/><path d="M125.58,111.18c.43.69.79,1.21,1.07,1.76,1.33,2.63,2.68,5.26,3.94,7.92.85,1.79,1.63,3.63,2.33,5.49.84,2.21,1.57,4.47,2.34,6.72a68,68,0,0,1,2.54,11.33,54.15,54.15,0,0,1,.62,6.85c0,.22,0,.45,0,.87-.38-.33-.64-.53-.88-.77-2.16-2.2-4.31-4.42-6.47-6.63a8.4,8.4,0,0,1-.73-.85,24.22,24.22,0,0,1-3.84-7.52,21.53,21.53,0,0,1-1-6.17q0-9.2,0-18.39C125.54,111.66,125.56,111.52,125.58,111.18Z"/><path d="M67,75.56a3.11,3.11,0,0,1-3.12,3.25,3.21,3.21,0,1,1-.07-6.42A3.14,3.14,0,0,1,67,75.56Z"/><circle cx="156.25" cy="94.54" r="11.42"/><rect x="146.51" y="113.26" width="19.48" height="56.18"/><circle cx="254.87" cy="94.54" r="11.42"/><rect x="245.13" y="113.26" width="19.48" height="56.18"/><circle cx="328.93" cy="94.54" r="11.42"/><rect x="319.19" y="113.26" width="19.48" height="56.18"/><polygon points="312.08 112.17 301.64 112.17 301.64 93.2 282.16 93.2 282.16 112.17 271.72 112.17 271.72 127.15 282.16 127.15 282.16 169.44 301.64 169.44 301.64 127.15 312.08 127.15 312.08 112.17"/><path d="M543.81,113.26a28.09,28.09,0,1,0,28.09,28.09A28.09,28.09,0,0,0,543.81,113.26Zm0,39.51a11.42,11.42,0,1,1,11.42-11.42A11.42,11.42,0,0,1,543.81,152.77Z"/><path d="M372,113.26v.07a28.08,28.08,0,0,0,0,56v.07h36.77V113.26Zm5.3,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,377.3,152.21Z"/><path d="M200.28,113.26v.07a28.08,28.08,0,0,0,0,56v.07h2.82a24.66,24.66,0,0,0,16.36-6.18,23.53,23.53,0,0,1-1.39,8.71c0,.14-.08.28-.13.42h-.07l-.06.14c-1.68,4.81-6.88,8.32-13,8.32-5.79,0-10.74-3.1-12.71-7.47l-15.92,6.52c3.78,10.72,15.4,18.53,29.14,18.53,13.91,0,25.63-8,29.27-18.93h.17a33.45,33.45,0,0,0,2.08-10.06h.25V113.26Zm5.31,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,205.59,152.21Z"/><path d="M489.61,113.26H415.88v56.18H434v-30a8.94,8.94,0,0,1,17.88,0v30h19.31v-30a8.94,8.94,0,0,1,8.94-8.94h0a8.93,8.93,0,0,1,8.93,8.94v30h19.56V132.26A19,19,0,0,0,489.61,113.26Z"/></svg><span class="eco">eco</span></div>
+      <a href="#"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="3"/><circle cx="14" cy="8" r="2.4"/><path d="M2 17c.6-3 2.6-4.6 5-4.6s4.4 1.6 5 4.6M12.5 12.6c2.6-.3 4.6 1 5.3 4.4"/></svg>Panel</a>
+      <a href="#" class="on" aria-current="page"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="6" height="14" rx="1.5"/><rect x="11" y="3" width="6" height="14" rx="1.5"/></svg>Test</a>
+      <a href="#"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 17V9M10 17V4M16 17v-6"/></svg>Report</a>
+      <p class="foot">Piattaforma interna Digitiamo</p>
+    </nav>
+    <div class="main">
+      <div class="doc">
+        <p class="crumbs"><span>Test</span><span aria-hidden="true">/</span><b>Nuovo test</b></p>
+        <h1 class="h1" id="t1">Nuovo test</h1>
+        <p class="lede">Confronta da 2 a 5 varianti dello stesso post</p>
+
+        <div class="mode">
+          <span class="eyebrow">Cosa testi</span>
+          <div class="seg" role="tablist"><span class="on" role="tab" aria-selected="true">Post LinkedIn</span><span role="tab" aria-selected="false">Prototipo</span></div>
+        </div>
+
+        <div class="variants">
+          <article class="var">
+            <header class="var-head"><h3><span class="tag-l">A</span>Variante A</h3><span class="count">testo e immagine</span></header>
+            <textarea aria-label="Testo variante A">La trasformazione digitale non è più un'opzione. Le PMI che adottano l'intelligenza artificiale oggi saranno le leader di domani. Sei pronto a fare il salto? #AI #PMI #Innovazione</textarea>
+            <div class="drop"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m3 17 5-4 4 3 3-2 6 4"/></svg>Immagine del post · trascina o scegli un file</div></div>
+          </article>
+          <article class="var">
+            <header class="var-head"><h3><span class="tag-l">B</span>Variante B</h3><span class="count">testo e immagine</span></header>
+            <textarea aria-label="Testo variante B">Un'azienda di valvole di Legnano passava 6 ore a settimana a compilare offerte a mano. Con un agente AI addestrato sui suoi listini ora ne bastano 40 minuti. Nessuna rivoluzione: un processo noioso, tolto di mezzo. Qual è il vostro?</textarea>
+            <div class="drop"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m3 17 5-4 4 3 3-2 6 4"/></svg>Immagine del post · trascina o scegli un file</div></div>
+          </article>
+        </div>
+        <div class="addrow">
+          <span class="btn-ghost">+ Aggiungi variante</span>
+          <span class="counter"><b>2</b> di 5</span>
+        </div>
+      </div>
+
+      <aside class="ctx" aria-label="Riepilogo del test">
+        <div class="block">
+          <span class="eyebrow">Panel</span>
+          <h3>Decision maker di PMI italiane · 30 personas</h3>
+          <dl><dt>Varianti</dt><dd>2 di 5</dd><dt>Formato</dt><dd>Post LinkedIn</dd></dl>
+        </div>
+        <div class="notice"><b>Prima reazione a freddo</b>Le personas non conoscono l'obiettivo del test: vedono il post come in feed.</div>
+        <div class="run">
+          <span class="btn">Avvia test con 30 personas</span>
+          <small>circa 3 minuti</small>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2 · REPORT ===================== -->
+<section class="frame" aria-labelledby="r1">
+  <p class="frame-label">Report · post</p>
+  <div class="app">
+    <nav class="nav" aria-label="Navigazione eco">
+      <div class="brand"><svg class="logo" role="img" aria-label="Digitiamo" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="44 48 532 160"><path d="M92.14,198.36c-1.85-.17-3.72-.29-5.57-.54a42.71,42.71,0,0,1-14.21-4.53A51.81,51.81,0,0,1,66.94,190a43.86,43.86,0,0,1-10.5-10.34,44.64,44.64,0,0,1-7.15-14.82,41.57,41.57,0,0,1-1.6-11.68q0-50.46,0-100.92V51c.73,0,1.4,0,2.06,0a52.75,52.75,0,0,1,17.5,4.7,86,86,0,0,1,9.34,4.84c1,.59,1.94,1.2,2.93,1.78a.94.94,0,0,1,.53,1c0,.27,0,.53,0,.8q0,40.81,0,81.64a29.16,29.16,0,0,0,1.41,9.38A29.53,29.53,0,0,0,86.13,164a52.13,52.13,0,0,0,5.05,5.35c.89.86,1.76,1.75,2.64,2.63,1.22,1.24,2.42,2.48,3.65,3.7a1.22,1.22,0,0,1,.4,1.23,6.59,6.59,0,0,0,5.39,7.59A6.41,6.41,0,0,0,110,181.3a6.55,6.55,0,0,0-4.32-9.63,10,10,0,0,0-2.45-.07,1,1,0,0,1-.9-.3q-2.55-2.6-5.12-5.16c-1.31-1.31-2.64-2.59-3.92-3.92a24.9,24.9,0,0,1-4-5.37,22.92,22.92,0,0,1-2.68-11.17V67.27c.22.16.42.33.54.43,2.69,2.2,5.41,4.37,8.06,6.63a116,116,0,0,1,9.59,9.24q2.25,2.42,4.44,4.87c2.57,2.9,5,5.91,7.31,9.06.63.87,1.26,1.74,1.91,2.6a2,2,0,0,1,.41,1.3c0,1.94,0,3.89,0,5.84,0,7.43,0,14.86,0,22.29a30.2,30.2,0,0,0,2.35,11.77,28.76,28.76,0,0,0,6.29,9.34l8.27,8.26c.43.43.81.92,1.27,1.3a1.35,1.35,0,0,1,.44,1.56c-.56,2.1-1,4.24-1.71,6.28s-1.59,3.77-2.42,5.65a5.19,5.19,0,0,1-.37.66c-.19-.16-.37-.31-.51-.45l-8.29-8.36-6.86-6.86c-1.75-1.76-3.56-3.46-5.26-5.27a22.69,22.69,0,0,1-3.76-5.53,23.48,23.48,0,0,1-2.29-10.5q0-13.31,0-26.62a1.51,1.51,0,0,1,.65-1.39,6.53,6.53,0,1,0-9.17-1.31,5.15,5.15,0,0,0,1.29,1.26,1.5,1.5,0,0,1,.67,1.47q0,7.42,0,14.86c0,4.39,0,8.79,0,13.18a28.43,28.43,0,0,0,3.08,12.29,26.73,26.73,0,0,0,4.53,6.59c1.68,1.79,3.46,3.48,5.19,5.22.86.85,1.72,1.7,2.57,2.57,2.08,2.09,4.14,4.19,6.22,6.28q3.54,3.57,7.09,7.11c.36.37.74.72,1.19,1.14a7.78,7.78,0,0,1-.61.87c-1.34,1.51-2.63,3.08-4.07,4.5a44.75,44.75,0,0,1-13.61,9.16,47.39,47.39,0,0,1-9.49,2.94.8.8,0,0,1-.83-.27c-.94-.94-1.9-1.85-2.84-2.79-2-2.05-4.06-4.11-6.1-6.16l-9.71-9.76L75.56,172c-1-1-2-2.11-3.08-3.17a3.17,3.17,0,0,1-.34-.39,24.09,24.09,0,0,1-4.06-7.8,24.54,24.54,0,0,1-1-7.13V86.26c0-.24,0-.55,0-.71a1,1,0,0,1,.63-1,9.55,9.55,0,0,0,4.46-3.93,9.29,9.29,0,0,0,.61-8.94,9.77,9.77,0,0,0-15.61-3.3,9.84,9.84,0,0,0-1.9,12,9.27,9.27,0,0,0,4.44,4.09,1.18,1.18,0,0,1,.79,1.33q0,13.83,0,27.68,0,20.18,0,40.33a30.39,30.39,0,0,0,2,10.87,27.88,27.88,0,0,0,6.14,9.66c2.1,2.15,4.23,4.26,6.35,6.38.82.82,1.64,1.63,2.45,2.46l6.15,6.22q3.6,3.62,7.21,7.24c.48.48,1.17,1.11,1.66,1.59C92.42,198.34,92.37,198.36,92.14,198.36Z"/><path d="M125.58,111.18c.43.69.79,1.21,1.07,1.76,1.33,2.63,2.68,5.26,3.94,7.92.85,1.79,1.63,3.63,2.33,5.49.84,2.21,1.57,4.47,2.34,6.72a68,68,0,0,1,2.54,11.33,54.15,54.15,0,0,1,.62,6.85c0,.22,0,.45,0,.87-.38-.33-.64-.53-.88-.77-2.16-2.2-4.31-4.42-6.47-6.63a8.4,8.4,0,0,1-.73-.85,24.22,24.22,0,0,1-3.84-7.52,21.53,21.53,0,0,1-1-6.17q0-9.2,0-18.39C125.54,111.66,125.56,111.52,125.58,111.18Z"/><path d="M67,75.56a3.11,3.11,0,0,1-3.12,3.25,3.21,3.21,0,1,1-.07-6.42A3.14,3.14,0,0,1,67,75.56Z"/><circle cx="156.25" cy="94.54" r="11.42"/><rect x="146.51" y="113.26" width="19.48" height="56.18"/><circle cx="254.87" cy="94.54" r="11.42"/><rect x="245.13" y="113.26" width="19.48" height="56.18"/><circle cx="328.93" cy="94.54" r="11.42"/><rect x="319.19" y="113.26" width="19.48" height="56.18"/><polygon points="312.08 112.17 301.64 112.17 301.64 93.2 282.16 93.2 282.16 112.17 271.72 112.17 271.72 127.15 282.16 127.15 282.16 169.44 301.64 169.44 301.64 127.15 312.08 127.15 312.08 112.17"/><path d="M543.81,113.26a28.09,28.09,0,1,0,28.09,28.09A28.09,28.09,0,0,0,543.81,113.26Zm0,39.51a11.42,11.42,0,1,1,11.42-11.42A11.42,11.42,0,0,1,543.81,152.77Z"/><path d="M372,113.26v.07a28.08,28.08,0,0,0,0,56v.07h36.77V113.26Zm5.3,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,377.3,152.21Z"/><path d="M200.28,113.26v.07a28.08,28.08,0,0,0,0,56v.07h2.82a24.66,24.66,0,0,0,16.36-6.18,23.53,23.53,0,0,1-1.39,8.71c0,.14-.08.28-.13.42h-.07l-.06.14c-1.68,4.81-6.88,8.32-13,8.32-5.79,0-10.74-3.1-12.71-7.47l-15.92,6.52c3.78,10.72,15.4,18.53,29.14,18.53,13.91,0,25.63-8,29.27-18.93h.17a33.45,33.45,0,0,0,2.08-10.06h.25V113.26Zm5.31,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,205.59,152.21Z"/><path d="M489.61,113.26H415.88v56.18H434v-30a8.94,8.94,0,0,1,17.88,0v30h19.31v-30a8.94,8.94,0,0,1,8.94-8.94h0a8.93,8.93,0,0,1,8.93,8.94v30h19.56V132.26A19,19,0,0,0,489.61,113.26Z"/></svg><span class="eco">eco</span></div>
+      <a href="#"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="3"/><circle cx="14" cy="8" r="2.4"/><path d="M2 17c.6-3 2.6-4.6 5-4.6s4.4 1.6 5 4.6M12.5 12.6c2.6-.3 4.6 1 5.3 4.4"/></svg>Panel</a>
+      <a href="#"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="6" height="14" rx="1.5"/><rect x="11" y="3" width="6" height="14" rx="1.5"/></svg>Test</a>
+      <a href="#" class="on" aria-current="page"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 17V9M10 17V4M16 17v-6"/></svg>Report</a>
+      <p class="foot">Piattaforma interna Digitiamo</p>
+    </nav>
+    <div class="main">
+      <div class="doc">
+        <p class="crumbs"><span>Report</span><span aria-hidden="true">/</span><b>Post LinkedIn · 2 varianti</b></p>
+        <span class="eyebrow">Report · post</span>
+        <h1 class="h1" id="r1">Vince la variante B</h1>
+        <div class="summary">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10.5 8 14l8-8"/></svg>
+          <p>La variante B convince per concretezza; la A è percepita come troppo generica.</p>
+        </div>
+
+        <div class="sec-title"><h2>Classifica</h2><span>3 risposte per variante · voti da 1 a 5</span></div>
+        <div class="ranking">
+          <article class="ins win">
+            <div class="ins-head"><span class="rank">#1</span><h3>Variante B</h3></div>
+            <div class="score">
+              <p class="mean">3,7<small>media su<br>3 risposte</small></p>
+              <div>
+                <div class="dist" role="img" aria-label="Distribuzione voti variante B: voto 1 zero, voto 2 una, voto 3 zero, voto 4 una, voto 5 una">
+                  <div><span class="n z">0</span><i class="z"></i></div>
+                  <div><span class="n">1</span><i style="height:56px"></i></div>
+                  <div><span class="n z">0</span><i class="z"></i></div>
+                  <div><span class="n">1</span><i style="height:56px"></i></div>
+                  <div><span class="n">1</span><i style="height:56px"></i></div>
+                </div>
+                <div class="axis"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+              </div>
+            </div>
+            <p class="objection"><span class="eyebrow">Obiezione</span><span>Non dice quanto costa</span></p>
+            <div class="voice">
+              <p class="said"><span class="who">Dicono</span><span>Lo trovano utile e concreto, qualcuno lo girerebbe al team.</span></p>
+              <p class="thought"><span class="who">Pensano</span><span><mark class="hl div">Si fidano, ma pensano al costo senza dirlo.</mark></span></p>
+            </div>
+          </article>
+          <article class="ins lose">
+            <div class="ins-head"><span class="rank">#2</span><h3>Variante A</h3></div>
+            <div class="score">
+              <p class="mean">2,3<small>media su<br>3 risposte</small></p>
+              <div>
+                <div class="dist" role="img" aria-label="Distribuzione voti variante A: voto 1 zero, voto 2 due, voto 3 una, voto 4 zero, voto 5 zero">
+                  <div><span class="n z">0</span><i class="z"></i></div>
+                  <div><span class="n">2</span><i style="height:70px"></i></div>
+                  <div><span class="n">1</span><i style="height:35px"></i></div>
+                  <div><span class="n z">0</span><i class="z"></i></div>
+                  <div><span class="n z">0</span><i class="z"></i></div>
+                </div>
+                <div class="axis"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+              </div>
+            </div>
+            <p class="objection"><span class="eyebrow">Obiezione</span><span>Troppo generico</span></p>
+            <div class="voice">
+              <p class="said"><span class="who">Dicono</span><span>Apprezzano il tema e lo definiscono interessante.</span></p>
+              <p class="thought"><span class="who">Pensano</span><span><mark class="hl div">In privato lo trovano vago: manca un esempio concreto.</mark></span></p>
+            </div>
+          </article>
+        </div>
+
+        <div class="sec-title"><h2>Risposte</h2><span>L’evidenziato segna dove detto e pensato divergono</span></div>
+        <div class="filters">
+          <div class="seg" role="tablist" aria-label="Filtra risposte">
+            <span class="on" role="tab" aria-selected="true">Tutte</span>
+            <span role="tab" aria-selected="false">Solo dove detto e pensato divergono</span>
+            <span role="tab" aria-selected="false">Per voto</span>
+          </div>
+        </div>
+        <div class="ev" role="table" aria-label="Risposte delle personas">
+          <div class="ev-head" role="row"><span role="columnheader">Persona</span><span role="columnheader">Voto</span><span role="columnheader">Ha detto</span><span role="columnheader">Ha pensato</span></div>
+
+          <div class="ev-group" role="row"><span class="rank" style="background:var(--brand);color:#fff">#1</span>Variante B · 3 risposte</div>
+          <div class="ev-row" role="row">
+            <div class="persona" role="cell"><b>Titolare</b><small>Manifattura · piccola · Lombardia</small></div>
+            <div class="vote" role="cell">4<small> /5</small></div>
+            <div class="saidq" role="cell"><span class="who lbl">Detto</span><span>«Esempio chiaro, complimenti.»</span></div>
+            <div class="thq" role="cell"><span class="who lbl" style="color:var(--brand)">Pensato</span><span><mark class="hl div">«Mi piace, ma se costa come l'ultimo consulente lascio stare.»</mark><span class="chip solid">diverge</span></span></div>
+          </div>
+          <div class="ev-row" role="row">
+            <div class="persona" role="cell"><b>Direttrice commerciale</b><small>Servizi B2B · media · Emilia-Romagna</small></div>
+            <div class="vote" role="cell">5<small> /5</small></div>
+            <div class="saidq" role="cell"><span class="who lbl">Detto</span><span>«Lo giro al team.»</span></div>
+            <div class="thq" role="cell"><span class="who lbl" style="color:var(--brand)">Pensato</span><span><mark class="hl">«Finalmente numeri veri. Lo giro al team.»</mark></span></div>
+          </div>
+          <div class="ev-row" role="row">
+            <div class="persona" role="cell"><b>Amministratore</b><small>Commercio · micro · Puglia</small></div>
+            <div class="vote" role="cell">2<small> /5</small></div>
+            <div class="saidq" role="cell"><span class="who lbl">Detto</span><span class="silent">non commenterebbe</span></div>
+            <div class="thq" role="cell"><span class="who lbl" style="color:var(--brand)">Pensato</span><span><mark class="hl">«Roba per aziende più grandi della mia.»</mark></span></div>
+          </div>
+
+          <div class="ev-group" role="row"><span class="rank">#2</span>Variante A · 3 risposte</div>
+          <div class="ev-row" role="row">
+            <div class="persona" role="cell"><b>Titolare</b><small>Manifattura · piccola · Lombardia</small></div>
+            <div class="vote" role="cell">2<small> /5</small></div>
+            <div class="saidq" role="cell"><span class="who lbl">Detto</span><span>«Spunto interessante, grazie.»</span></div>
+            <div class="thq" role="cell"><span class="who lbl" style="color:var(--brand)">Pensato</span><span><mark class="hl div">«Bello, ma a me cosa cambia? Non ho tempo.»</mark><span class="chip solid">diverge</span></span></div>
+          </div>
+          <div class="ev-row" role="row">
+            <div class="persona" role="cell"><b>Direttrice commerciale</b><small>Servizi B2B · media · Emilia-Romagna</small></div>
+            <div class="vote" role="cell">3<small> /5</small></div>
+            <div class="saidq" role="cell"><span class="who lbl">Detto</span><span>«Tema importante.»</span></div>
+            <div class="thq" role="cell"><span class="who lbl" style="color:var(--brand)">Pensato</span><span><mark class="hl div">«Il solito post sulla trasformazione digitale.»</mark><span class="chip solid">diverge</span></span></div>
+          </div>
+          <div class="ev-row" role="row">
+            <div class="persona" role="cell"><b>Amministratore</b><small>Commercio · micro · Puglia</small></div>
+            <div class="vote" role="cell">2<small> /5</small></div>
+            <div class="saidq" role="cell"><span class="who lbl">Detto</span><span class="silent">non commenterebbe</span></div>
+            <div class="thq" role="cell"><span class="who lbl" style="color:var(--brand)">Pensato</span><span><mark class="hl">«Non ho capito cosa vendono.»</mark></span></div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="ctx lead" aria-label="Contesto del report">
+        <div class="notice"><b>Risultati simulati.</b>Reazioni di personas sintetiche, non di persone reali. Usali per confrontare varianti, non come previsione.</div>
+        <div class="block">
+          <span class="eyebrow">Calibrazione</span>
+          <div class="state"><span class="dot" aria-hidden="true"></span><div><b style="font-weight:500">Fidelity score: calibrazione non ancora disponibile</b><small>Stato dichiarato, nessun numero stimato</small></div></div>
+        </div>
+        <div class="block">
+          <span class="eyebrow">Panel</span>
+          <dl><dt>Chi</dt><dd>Decision maker di PMI italiane</dd><dt>Risposte</dt><dd>3 per variante</dd><dt>Varianti</dt><dd>2</dd></dl>
+        </div>
+        <div class="block">
+          <span class="eyebrow">Come leggere le voci</span>
+          <p class="said" style="grid-template-columns:70px 1fr"><span class="who">Detto</span><span style="font-size:14px">il commento pubblico su LinkedIn</span></p>
+          <p class="thought" style="margin-top:2px"><span class="who">Pensato</span><span style="font-size:14px"><mark class="hl">ciò che pensa in privato</mark></span></p>
+          <p class="thought" style="margin-top:2px"><span class="who">Diverge</span><span style="font-size:14px"><mark class="hl div">evidenziato</mark> quando non coincide col detto</span></p>
+          <p class="said" style="margin-top:2px"><span class="who">Vuoto</span><span class="silent">non commenterebbe</span></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
