@@ -94,7 +94,7 @@ Avvia `uvicorn`, crea un test post con 2 varianti via `curl`, interroga `GET /te
 4. Id degli stimoli prototipo: `<flow_id>-<indice>` con indice da 0, per esempio `onboarding-0`.
 5. Body malformato o senza `kind`: 422 `Richiesta non valida: corpo`.
 6. `validate` in `backend/tests/conftest.py` è una fixture pytest, non una funzione importabile.
-7. Il formato `date-time` non viene verificato da jsonschema senza `rfc3339-validator`, che non è in `requirements.txt`. I test controllano solo che il valore sia una stringa.
+7. Il formato `date-time` non viene verificato da jsonschema senza `rfc3339-validator`, che non è in `requirements.txt`. Verificato: `not-a-date` passa la validazione. I test controllano solo che il valore sia una stringa.
 8. Le fixture stanno in `backend/app/fixtures/`, come da piano. `backend/tests/fixtures/` resta vuota.
 9. La rotta del report è in `backend/app/api/reports.py`, separata da `tests.py`.
 
