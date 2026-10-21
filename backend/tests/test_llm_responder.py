@@ -145,3 +145,12 @@ async def test_valid_response_goes_through_runner() -> None:
 
 async def test_shared_client_is_created_once() -> None:
     assert llm_client.shared_client() is llm_client.shared_client()
+
+
+async def test_model_can_be_overridden_per_responder() -> None:
+    sent: list[dict] = []
+    client = _recording_client(VALID_OUTPUT, sent)
+    await LlmResponder(client, model="altro/modello").respond(PERSONA, POST)
+    await LlmResponder(client).respond(PERSONA, POST)
+
+    assert [body["model"] for body in sent] == ["altro/modello", "modello/persona"]

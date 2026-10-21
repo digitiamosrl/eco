@@ -97,13 +97,14 @@ def _messages(persona: Persona, stimulus: Stimulus) -> list[dict[str, Any]]:
 
 
 class LlmResponder:
-    def __init__(self, client: httpx.AsyncClient | None = None) -> None:
+    def __init__(self, client: httpx.AsyncClient | None = None, model: str | None = None) -> None:
         self._client = client
+        self._model = model
 
     async def respond(self, persona: Persona, stimulus: Stimulus) -> Response:
         data = await chat_json(
             self._client or shared_client(),
-            model=settings.persona_model,
+            model=self._model or settings.persona_model,
             messages=_messages(persona, stimulus),
             schema_name="persona_response",
             schema=_MODEL_SCHEMA,
