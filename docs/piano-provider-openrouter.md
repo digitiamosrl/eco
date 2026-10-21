@@ -58,3 +58,17 @@ Crea `backend/scripts/smoke_llm.py`: carica `.env`, prende 3 personas dalle fixt
 ## Stato finale
 
 _(da compilare a fine lavoro)_
+
+## Verifica con la chiave reale (Q4)
+
+Eseguita dall'utente, non dai test. Lo script `backend/scripts/smoke_llm.py` fa 12 chiamate (3 personas × 4 ripetizioni di un post breve, senza immagine) con la concorrenza di `PANEL_CONCURRENCY` e stampa: risposte valide al primo tentativo, dopo retry, fallite, latenza media, un esempio di `thought`/`said` e i token (se OpenRouter restituisce `usage`).
+
+Come lanciarlo, da `backend/` con `.venv` attivo e nel `.env`:
+
+```bash
+OPENROUTER_API_KEY=<chiave>
+PERSONA_MODEL=<id-modello-openrouter>
+python -m scripts.smoke_llm
+```
+
+Non è incluso in `pytest`. Se mancano chiave o modello, esce con un messaggio senza stampare valori.
