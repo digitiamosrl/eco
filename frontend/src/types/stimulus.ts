@@ -14,4 +14,8 @@ export interface Stimulus {
   flow_id?: string;
   screen_index?: number;
   page_structure?: string;
+  /**
+   * Tipo dell'allegato del post in image_url: immagine o documento PDF (carosello).
+   */
+  attachment_kind?: "image" | "pdf";
 }
