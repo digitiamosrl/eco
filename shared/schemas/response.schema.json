@@ -4,10 +4,21 @@
   "title": "Response",
   "type": "object",
   "additionalProperties": false,
-  "required": ["persona_id", "stimulus_id", "thought", "said", "score", "objections"],
+  "required": [
+    "persona_id",
+    "stimulus_id",
+    "thought",
+    "said",
+    "score",
+    "objections"
+  ],
   "properties": {
-    "persona_id": { "type": "string" },
-    "stimulus_id": { "type": "string" },
+    "persona_id": {
+      "type": "string"
+    },
+    "stimulus_id": {
+      "type": "string"
+    },
     "thought": {
       "type": "string",
       "description": "Cosa pensa davvero, a caldo, senza filtri. Generato prima di said."
@@ -16,9 +27,47 @@
       "type": "string",
       "description": "Cosa direbbe o scriverebbe in pubblico (commento, frase a un collega). Può coincidere con thought."
     },
-    "score": { "type": "integer", "minimum": 1, "maximum": 5 },
-    "objections": { "type": "array", "items": { "type": "string" } },
-    "misunderstood": { "type": "array", "items": { "type": "string" } },
-    "would_abandon": { "type": "boolean" }
+    "score": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "objections": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "misunderstood": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "would_abandon": {
+      "type": "boolean"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "react",
+        "comment",
+        "share",
+        "scroll"
+      ],
+      "description": "La prima cosa che farebbe vedendo il post nel feed: reagire, commentare, condividere o scorrere oltre. Solo per i post."
+    },
+    "reaction": {
+      "type": "string",
+      "enum": [
+        "consiglio",
+        "festeggio",
+        "sostengo",
+        "adoro",
+        "perspicace",
+        "divertente"
+      ],
+      "description": "Quale reazione LinkedIn userebbe, solo se action è react."
+    }
   }
 }
