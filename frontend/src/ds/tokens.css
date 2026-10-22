@@ -1,0 +1,181 @@
+/* Token di eco, dal design system di Claude Design (design/eco UI kit.html). I font arrivano da Google Fonts in index.html. */
+/* Colori di eco. Base dal Brand Book Digitiamo (30–95) + derivati per il rilievo candy + un solo caldo. */
+:root{
+  /* brand · Brand Book */
+  --ink:#070011;          /* 30 · testo principale */
+  --night:#1C073A;        /* 50 · titoli */
+  --violet:#3E00EA;       /* 70 · logo, azioni, detto, vincitore */
+  --peri:#717FFE;         /* 80 · barre secondarie, focus */
+  --lilac:#EBEEFC;        /* 90 · superfici tenui, pensato */
+  --mist:#F4F5FA;         /* 95 · sfondo pagina, campi */
+  --white:#FFFFFF;        /* card */
+  /* derivati per il rilievo */
+  --violet-press:#2700A3; /* ombra piena sotto gli elementi viola */
+  --peri-press:#4F5CE0;   /* ombra interna sotto le barre --peri */
+  --line:#DCE0F8;         /* bordi */
+  --line-press:#C9CEF3;   /* ombra piena sotto gli elementi chiari */
+  --muted:#514A66;        /* testo secondario · 8:1 su bianco */
+  /* caldo: solo per ciò che non si dice (pensato che diverge, obiezioni, abbandono) */
+  --warm:#FF7A3D;
+  --warm-soft:#FFEBDF;
+  --warm-ink:#A3360A;     /* 5,6:1 su --warm-soft */
+  --warm-press:#E25A1C;
+  --warm-line:#F7CDB5;    /* ombra della nuvoletta che diverge */
+  --warm-deep:#6E2306;    /* ombra del tag "Diverge" */
+
+  /* alias semantici */
+  --text-body:var(--ink);
+  --text-title:var(--night);
+  --text-muted:var(--muted);
+  --text-on-violet:var(--white);
+  --text-accent:var(--violet);
+  --surface-page:var(--mist);
+  --surface-card:var(--white);
+  --surface-soft:var(--lilac);
+  --surface-field:var(--mist);
+  --border:var(--line);
+  --border-strong:var(--line-press);
+  --action:var(--violet);
+  --action-press:var(--violet-press);
+  --focus-ring:var(--peri);
+  --said-bg:var(--violet);
+  --said-ink:var(--white);
+  --thought-bg:var(--lilac);
+  --thought-ink:var(--night);
+  --diverge-bg:var(--warm-soft);
+  --diverge-ink:var(--warm-ink);
+  --bar-primary:var(--violet);
+  --bar-secondary:var(--peri);
+  --bar-empty:var(--line);
+  --signal-warm:var(--warm);
+}
+/* Errore di sistema. Valore dal tokens.css provvisorio del repo (--color-alert).
+   Separato dal caldo: il caldo è un dato del report, l'errore è un guasto dello strumento. */
+:root{
+  --alert:#B42318;        /* 6,3:1 su bianco */
+  --alert-soft:#FDECEC;   /* 5,6:1 con --alert */
+  --alert-press:#8A1A12;
+  --error-bg:var(--alert-soft);
+  --error-ink:var(--alert);
+}
+
+/* Tipografia di eco. Baloo 2 per i titoli, Nunito per il testo. */
+:root{
+  --font-title:"Baloo 2",system-ui,sans-serif;
+  --font-text:"Nunito",system-ui,sans-serif;
+  /* alternativa Brand Book: --font-title:"Montserrat"; --font-text:"Poppins" (vedi guidelines/type-pairing.card.html) */
+
+  --fs-display:72px;   /* media del punteggio */
+  --fs-h1:48px;
+  --fs-h2:32px;        /* titoli di sezione */
+  --fs-summary:30px;   /* sintesi del report, titolo card risultato */
+  --fs-h3:24px;        /* titolo variante */
+  --fs-lead:22px;      /* pulsante grande, voto, lettera */
+  --fs-h4:20px;        /* titolo di gruppo, nome del panel */
+  --fs-sub:18px;       /* sottotitolo, pulsante */
+  --fs-body:16px;
+  --fs-small:15px;     /* fumetti, chip, avvisi */
+  --fs-caption:14px;   /* descrittori, note */
+  --fs-label:13px;     /* etichetta di cornice, assi */
+  --fs-micro:12px;     /* etichette in maiuscolo */
+
+  --fw-medium:500; /* @kind font */
+  --fw-semibold:600; /* @kind font */
+  --fw-bold:700; /* @kind font */
+  --fw-black:800; /* @kind font */
+
+  --lh-tight:1.1; /* @kind font */ /* titoli */
+  --lh-snug:1.25; /* @kind font */ /* sintesi */
+  --lh-bubble:1.45; /* @kind font */ /* detto e pensato */
+  --lh-body:1.5; /* @kind font */
+  --lh-field:1.55; /* @kind font */
+
+  --tracking-title:-.01em; /* @kind font */
+  --tracking-display:-.02em; /* @kind font */
+  --tracking-label:.08em; /* @kind font */
+  --tracking-tag:.06em; /* @kind font */
+
+  --text-min:14px; /* @kind font */ /* minimo per il testo */
+  --label-min:12px; /* @kind font */ /* minimo per le etichette */
+}
+
+/* Spaziatura: scala a passi da 4px. Il nome è il valore diviso 4.
+   Le mezze tacche (1-5, 2-5, 3-5, 4-5) esistono solo sotto i 20px, per l'interno degli elementi piccoli. */
+:root{
+  --space-1:4px;
+  --space-1-5:6px;
+  --space-2:8px;
+  --space-2-5:10px;
+  --space-3:12px;
+  --space-3-5:14px;
+  --space-4:16px;
+  --space-4-5:18px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-7:28px;
+  --space-8:32px;
+  --space-9:36px;
+  --space-10:40px;
+  --space-12:48px;
+
+  /* alias di layout */
+  --gutter:var(--space-6);         /* tra card */
+  --pad-card:var(--space-5);       /* variante */
+  --pad-card-lg:var(--space-7);    /* risultato */
+  --pad-screen-x:var(--space-12);
+  --pad-screen-top:var(--space-10);
+  --pad-screen-x-mobile:var(--space-4);
+  --screen-max:1440px; /* @kind spacing */
+}
+
+/* Raggi: tutto è tondo, niente angoli vivi. */
+:root{
+  --r-screen:32px;
+  --r-card:24px;
+  --r-block:20px;    /* blocchi interni: punteggio, avvisi, selettore */
+  --r-control:16px;  /* pulsanti, campi, drop zone */
+  --r-chip:14px;     /* tab, chip, voto, segmenti */
+  --r-bar:12px;      /* testa delle barre */
+  --r-pill:999px;
+  --r-said:22px 22px 22px 6px; /* @kind radius */ /* fumetto: angolo in basso a sinistra per la coda */
+  --r-thought:28px; /* @kind radius */
+}
+
+/* Rilievo candy: un'ombra piena verso il basso, senza sfocatura. 3px piccoli, 4px standard, 6px grandi. */
+:root{
+  --lift-sm:3px; /* @kind shadow */
+  --lift:4px; /* @kind shadow */
+  --lift-lg:6px; /* @kind shadow */
+  --shadow-violet-sm:0 3px 0 var(--violet-press);
+  --shadow-violet:0 4px 0 var(--violet-press);
+  --shadow-violet-lg:0 6px 0 var(--violet-press);
+  --shadow-light-sm:0 3px 0 var(--line-press);
+  --shadow-light:0 4px 0 var(--line-press);
+  --shadow-light-lg:0 6px 0 var(--line-press);
+  --shadow-winner:0 6px 0 var(--violet);
+  --shadow-thought:0 4px 0 var(--line);
+  --shadow-diverge:0 4px 0 var(--warm-line);
+  --shadow-warm-sm:0 3px 0 var(--warm-press);
+  --shadow-pressed:0 0 0 transparent;
+  --ring-focus:3px solid var(--peri); /* @kind shadow */
+  --ring-offset:3px; /* @kind shadow */
+  --halo-field:0 0 0 4px var(--lilac); /* @kind shadow */
+  --border-w:2px; /* @kind shadow */
+}
+
+/* Movimento: solo la pressione e piccoli cambi di stato. Niente rimbalzi. */
+:root{
+  --dur-press:80ms; /* @kind other */
+  --dur-hover:150ms; /* @kind other */
+  --dur-state:200ms; /* @kind other */
+  --ease:ease; /* @kind other */
+  --hover-filter:brightness(1.08); /* @kind other */
+}
+@media (prefers-reduced-motion:reduce){
+  :root{
+    --dur-press:0ms; /* @kind other */
+    --dur-hover:0ms; /* @kind other */
+    --dur-state:0ms; /* @kind other */
+  }
+}
+
