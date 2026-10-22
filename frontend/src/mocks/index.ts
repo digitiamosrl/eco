@@ -1,6 +1,28 @@
 // Mocks based on shared schemas, used until the endpoints are ready.
+import type { Flow } from "../types/flow";
 import type { Persona } from "../types/persona";
 import type { Report } from "../types/report";
+import type { Stimulus } from "../types/stimulus";
+
+export const mockFlows: Flow[] = [
+  { id: "onboarding", name: "Onboarding", screen_count: 4, captured_at: "2026-10-01T09:00:00+00:00" },
+  { id: "preventivo", name: "Richiesta preventivo", screen_count: 5, captured_at: "2026-10-01T09:30:00+00:00" },
+];
+
+export const mockStimuli: Stimulus[] = [
+  {
+    id: "variante-a",
+    kind: "post",
+    variant_label: "A",
+    text: "La trasformazione digitale non è più una scelta: è il momento di ripensare come lavora la tua azienda.",
+  },
+  {
+    id: "variante-b",
+    kind: "post",
+    variant_label: "B",
+    text: "Un'azienda di 12 persone ha tagliato del 30% il tempo speso sui preventivi. Ecco cosa ha cambiato, passo per passo.",
+  },
+];
 
 export const mockPersonas: Persona[] = [
   {
@@ -35,7 +57,7 @@ export const mockReport: Report = {
   summary: "La variante B convince per concretezza; la A è percepita come troppo generica.",
   items: [
     {
-      stimulus_id: "B",
+      stimulus_id: "variante-b",
       rank: 1,
       mean_score: 3.7,
       score_distribution: { "1": 0, "2": 1, "3": 0, "4": 1, "5": 1 },
@@ -45,7 +67,7 @@ export const mockReport: Report = {
       responses: [
         {
           persona_id: "p1",
-          stimulus_id: "B",
+          stimulus_id: "variante-b",
           thought: "Mi piace, ma se costa come l'ultimo consulente lascio stare.",
           said: "Esempio chiaro, complimenti.",
           score: 4,
@@ -53,7 +75,7 @@ export const mockReport: Report = {
         },
         {
           persona_id: "p2",
-          stimulus_id: "B",
+          stimulus_id: "variante-b",
           thought: "Finalmente numeri veri. Lo giro al team.",
           said: "Lo giro al team.",
           score: 5,
@@ -61,7 +83,7 @@ export const mockReport: Report = {
         },
         {
           persona_id: "p3",
-          stimulus_id: "B",
+          stimulus_id: "variante-b",
           thought: "Roba per aziende più grandi della mia.",
           said: "",
           score: 2,
@@ -70,7 +92,7 @@ export const mockReport: Report = {
       ],
     },
     {
-      stimulus_id: "A",
+      stimulus_id: "variante-a",
       rank: 2,
       mean_score: 2.3,
       score_distribution: { "1": 0, "2": 2, "3": 1, "4": 0, "5": 0 },
@@ -80,7 +102,7 @@ export const mockReport: Report = {
       responses: [
         {
           persona_id: "p1",
-          stimulus_id: "A",
+          stimulus_id: "variante-a",
           thought: "Bello, ma a me cosa cambia? Non ho tempo.",
           said: "Spunto interessante, grazie.",
           score: 2,
@@ -88,7 +110,7 @@ export const mockReport: Report = {
         },
         {
           persona_id: "p2",
-          stimulus_id: "A",
+          stimulus_id: "variante-a",
           thought: "Il solito post sulla trasformazione digitale.",
           said: "Tema importante.",
           score: 3,
@@ -96,7 +118,7 @@ export const mockReport: Report = {
         },
         {
           persona_id: "p3",
-          stimulus_id: "A",
+          stimulus_id: "variante-a",
           thought: "Non ho capito cosa vendono.",
           said: "",
           score: 2,
