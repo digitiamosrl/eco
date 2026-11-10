@@ -1,0 +1,11 @@
+/* Screen layout (not components), from the kit's .kit-* rules. */
+.scr-app{max-width:1440px;margin:0 auto;padding:28px 24px 48px}
+.scr-variants{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;align-items:stretch}
+.scr-variants--two{grid-template-columns:1fr 1fr minmax(240px,.62fr)}
+.scr-podium{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;align-items:start}
+.scr-summary{margin:14px 0 32px;max-width:980px}
+.scr-summary p:last-child{margin:10px 0 0;font:700 30px/1.25 var(--font-title);color:var(--night)}
+.scr-actions{display:flex;gap:16px;flex-wrap:wrap;margin-top:28px}
+.scr-stack{display:flex;flex-direction:column;gap:24px}
+@media (max-width:1100px){.scr-variants--two{grid-template-columns:1fr 1fr}.scr-variants--two>.eco-add{grid-column:1/-1;flex-direction:row;flex-wrap:wrap}.scr-podium{grid-template-columns:1fr}}
+@media (max-width:760px){.scr-app{padding:20px 8px 32px}.scr-variants,.scr-variants--two{grid-template-columns:1fr}.scr-summary p:last-child{font-size:24px}.scr-actions .eco-btn{width:100%}}

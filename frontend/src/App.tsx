@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { AppNav, Screen, type AppNavProps } from "./ds";
 import PanelScreen from "./screens/PanelScreen";
 import ReportScreen from "./screens/ReportScreen";
 import TestScreen from "./screens/TestScreen";
+import "./screens/screens.css";
 
-const SCREENS = { panel: "Panel", test: "Test", report: "Report" } as const;
-type ScreenKey = keyof typeof SCREENS;
+type ScreenKey = NonNullable<AppNavProps["current"]>;
 
 export default function App() {
   const [current, setCurrent] = useState<ScreenKey>("panel");
@@ -16,25 +17,12 @@ export default function App() {
   };
 
   return (
-    <>
-      <nav className="app-nav">
-        <strong>eco</strong>
-        {(Object.keys(SCREENS) as ScreenKey[]).map((key) => (
-          <button
-            key={key}
-            type="button"
-            aria-current={key === current ? "page" : undefined}
-            onClick={() => setCurrent(key)}
-          >
-            {SCREENS[key]}
-          </button>
-        ))}
-      </nav>
-      <main>
+    <div className="scr-app">
+      <Screen nav={<AppNav current={current} onNavigate={setCurrent} />}>
         {current === "panel" && <PanelScreen />}
         {current === "test" && <TestScreen onShowReport={showReport} />}
-        {current === "report" && <ReportScreen testId={reportId} />}
-      </main>
-    </>
+        {current === "report" && <ReportScreen testId={reportId} onGoTest={() => setCurrent("test")} />}
+      </Screen>
+    </div>
   );
 }
