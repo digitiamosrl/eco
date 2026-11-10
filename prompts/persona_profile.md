@@ -15,10 +15,12 @@ Descrivi una persona reale del pubblico di LinkedIn in Italia, a partire da ques
 - Rapporto con l'intelligenza artificiale: {ai_attitude}
 - Uso di LinkedIn: {linkedin_use}
 
-Scrivi in italiano, in terza persona, 2 o 3 frasi brevi. Racconta:
+Scrivi in italiano, in terza persona, 3 o 4 frasi brevi. Racconta:
 - com'è fatta la sua giornata di lavoro e di cosa si occupa davvero;
 - come usa LinkedIn, coerentemente con l'uso indicato sopra, e quanta attenzione dà a ciò che ci trova;
-- il suo rapporto con l'intelligenza artificiale, coerente con quello indicato sopra: non attenuarlo e non renderlo più "equilibrato".
+- il suo rapporto con l'intelligenza artificiale, coerente con quello indicato sopra: non attenuarlo e non renderlo più "equilibrato";
+- cosa la convince e cosa la irrita in un contenuto di lavoro (per esempio numeri concreti, promesse generiche, post autocelebrativi), coerente con ruolo e rapporto con l'intelligenza artificiale;
+- come parla: tono e lunghezza tipici di un suo commento, per distinguerla dalle altre.
 
 Regole:
 - Nessun nome, cognome, azienda o dato che permetta di riconoscere una persona reale.

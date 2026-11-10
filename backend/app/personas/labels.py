@@ -1,5 +1,7 @@
 """Etichette italiane per le categorie di LinkedIn. Quelle non elencate restano in inglese."""
 
+from app.personas.audience import HYPOTHESES
+
 SENIORITY_IT = {
     "Entry": "Professionista junior",
     "Senior": "Professionista senior",
@@ -99,3 +101,16 @@ def role_of(seniority: str, job_function: str) -> str:
 
 def sector_of(industry: str) -> str:
     return INDUSTRY_IT.get(industry, industry)
+
+
+# Chiavi brevi di persona.schema.json per le due ipotesi di app/personas/audience.py.
+_LINKEDIN_USE_KEYS = ("legge", "ogni_tanto", "partecipa", "solo_contatti")
+
+
+def ai_attitude_key(label: str) -> str:
+    """«pragmatica: la usa solo se…» diventa «pragmatica»."""
+    return label.split(":", 1)[0]
+
+
+def linkedin_use_key(label: str) -> str:
+    return _LINKEDIN_USE_KEYS[list(HYPOTHESES["linkedin_use"]).index(label)]

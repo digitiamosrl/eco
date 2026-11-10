@@ -10,6 +10,6 @@ router = APIRouter()
 PERSONAS = load_personas(settings.personas_path)
 
 
-@router.get("/personas", response_model=list[Persona])
+@router.get("/personas", response_model=list[Persona], response_model_exclude_none=True)
 def list_personas() -> tuple[Persona, ...]:
     return PERSONAS

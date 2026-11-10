@@ -9,6 +9,7 @@ Poi in .env: PERSONAS_PATH=data/processed/personas.json
 import argparse
 import asyncio
 import json
+import logging
 from collections import Counter
 
 import httpx
@@ -17,9 +18,11 @@ from app.config import REPO_ROOT, settings
 from app.engine.llm_client import LlmError, chat_json, load_prompt
 from app.models import Persona
 from app.personas.audience import pool_weights
-from app.personas.labels import role_of, sector_of
+from app.personas.fallback import fallback_profile
+from app.personas.labels import ai_attitude_key, linkedin_use_key, role_of, sector_of
 from app.personas.sampler import Attributes, sample_attributes
 
+logger = logging.getLogger(__name__)
 AUDIENCE_PATH = REPO_ROOT / "data" / "processed" / "linkedin_audience.json"
 DEFAULT_OUT = "data/processed/personas.json"
 SIZE_TEXT = {
@@ -30,10 +33,28 @@ SIZE_TEXT = {
 }
 PROFILE_SCHEMA = {
     "type": "object",
-    "properties": {"profile": {"type": "string", "minLength": 20, "maxLength": 700}},
+    "properties": {"profile": {"type": "string", "minLength": 20, "maxLength": 900}},
     "required": ["profile"],
     "additionalProperties": False,
 }
+
+
+async def _profile(
+    prompt: str, client: httpx.AsyncClient, semaphore: asyncio.Semaphore
+) -> str | None:
+    """None se il modello fallisce anche dopo il retry di chat_json."""
+    async with semaphore:
+        try:
+            data = await chat_json(
+                client,
+                model=settings.persona_model,
+                messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
+                schema_name="persona_profile",
+                schema=PROFILE_SCHEMA,
+            )
+        except LlmError:
+            return None
+    return data["profile"].strip()
 
 
 async def _persona(
@@ -48,13 +69,16 @@ async def _persona(
         ai_attitude=attrs.ai_attitude,
         linkedin_use=attrs.linkedin_use,
     )
-    async with semaphore:
-        data = await chat_json(
-            client,
-            model=settings.persona_model,
-            messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
-            schema_name="persona_profile",
-            schema=PROFILE_SCHEMA,
+    profile = await _profile(prompt, client, semaphore)
+    if profile is None:
+        logger.warning("p%d: biografia da template, il modello non ha risposto", index + 1)
+        profile = fallback_profile(
+            role,
+            sector,
+            SIZE_TEXT[attrs.company_size],
+            attrs.region,
+            attrs.ai_attitude,
+            attrs.linkedin_use,
         )
     return Persona(
         id=f"p{index + 1}",
@@ -62,7 +86,9 @@ async def _persona(
         sector=sector,
         company_size=attrs.company_size,
         region=attrs.region,
-        profile=data["profile"].strip(),
+        profile=profile,
+        ai_attitude=ai_attitude_key(attrs.ai_attitude),
+        linkedin_use=linkedin_use_key(attrs.linkedin_use),
     )
 
 

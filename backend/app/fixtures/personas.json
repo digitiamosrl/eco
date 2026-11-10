@@ -5,7 +5,9 @@
     "sector": "Manifattura",
     "company_size": "piccola",
     "region": "Lombardia",
-    "profile": "Guida l'azienda di famiglia, poco tempo per LinkedIn."
+    "profile": "Guida l'azienda di famiglia, poco tempo per LinkedIn.",
+    "ai_attitude": "pragmatica",
+    "linkedin_use": "legge"
   },
   {
     "id": "p2",
@@ -13,7 +15,9 @@
     "sector": "Servizi B2B",
     "company_size": "media",
     "region": "Emilia-Romagna",
-    "profile": "Valuta fornitori digitali, diffidente verso le promesse generiche."
+    "profile": "Valuta fornitori digitali, diffidente verso le promesse generiche.",
+    "ai_attitude": "curiosa",
+    "linkedin_use": "ogni_tanto"
   },
   {
     "id": "p3",
@@ -21,7 +25,9 @@
     "sector": "Consulenza IT",
     "company_size": "media",
     "region": "Piemonte",
-    "profile": "Legge LinkedIn la sera e diffida dei post autopromozionali."
+    "profile": "Legge LinkedIn la sera e diffida dei post autopromozionali.",
+    "ai_attitude": "scettica",
+    "linkedin_use": "legge"
   },
   {
     "id": "p4",
@@ -29,7 +35,9 @@
     "sector": "Edilizia",
     "company_size": "micro",
     "region": "Veneto",
-    "profile": "Lavora in cantiere, pubblica raramente e solo per farsi trovare dai clienti."
+    "profile": "Lavora in cantiere, pubblica raramente e solo per farsi trovare dai clienti.",
+    "ai_attitude": "entusiasta",
+    "linkedin_use": "partecipa"
   },
   {
     "id": "p5",
@@ -37,7 +45,9 @@
     "sector": "Commercio all'ingrosso",
     "company_size": "media",
     "region": "Lazio",
-    "profile": "Confronta i fornitori su prezzo, tempi e referenze verificabili."
+    "profile": "Confronta i fornitori su prezzo, tempi e referenze verificabili.",
+    "ai_attitude": "pragmatica",
+    "linkedin_use": "legge"
   },
   {
     "id": "p6",
@@ -45,6 +55,8 @@
     "sector": "Studio professionale",
     "company_size": "piccola",
     "region": "Toscana",
-    "profile": "Cerca strumenti pratici e ne parla con il socio prima di decidere."
+    "profile": "Cerca strumenti pratici e ne parla con il socio prima di decidere.",
+    "ai_attitude": "indifferente",
+    "linkedin_use": "solo_contatti"
   }
 ]

@@ -12,6 +12,10 @@ class Persona(BaseModel):
     company_size: Literal["micro", "piccola", "media", "grande"]
     region: str
     profile: str
+    ai_attitude: (
+        Literal["entusiasta", "curiosa", "pragmatica", "scettica", "indifferente"] | None
+    ) = None
+    linkedin_use: Literal["legge", "ogni_tanto", "partecipa", "solo_contatti"] | None = None
 
 
 class Stimulus(BaseModel):
