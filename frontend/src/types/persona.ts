@@ -18,4 +18,12 @@ export interface Persona {
    * Descrizione sintetica, senza dati identificabili
    */
   profile: string;
+  /**
+   * Rapporto con l'intelligenza artificiale, campionato (ipotesi dichiarata, docs/ipotesi-personas.md).
+   */
+  ai_attitude?: "entusiasta" | "curiosa" | "pragmatica" | "scettica" | "indifferente";
+  /**
+   * Come usa LinkedIn, campionato (ipotesi dichiarata, docs/ipotesi-personas.md).
+   */
+  linkedin_use?: "legge" | "ogni_tanto" | "partecipa" | "solo_contatti";
 }

@@ -11,7 +11,8 @@ Frontend e design system sono su `main` e sono pronti per tutti i punti qui sott
 | 3 | Import del prototipo da Figma o da artifact | [handoff](handoff-post-singolo-e-import-prototipo.md) §2 | L'import riceve un 404 e il test di prototipo non parte |
 | 4 | Divergenza calcolata dal report | sotto | Il frontend confronta i testi di detto e pensato |
 | 5 | Fidelity score nel report | sotto | Compare "calibrazione non ancora disponibile" |
-| 6 | Report del prototipo | TBD | Compare "non ancora disponibile" |
+| 6 | Report del prototipo | TBD, da pensare insieme | Compare "non ancora disponibile" |
+| 7 | Personas: attributi come campi, biografia, ripiego | [contratto-personas.md](contratto-personas.md) | Panel e risposte funzionano come oggi |
 
 Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. Poi 1–2, che riusano la pipeline dei post. Il 3 è il più grosso.
 
