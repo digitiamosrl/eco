@@ -74,6 +74,7 @@ def test_model_dumps_match_schemas(validate) -> None:
                 said_summary="Ok.",
                 thought_summary="Ok.",
                 responses=[response],
+                divergent_persona_ids=[],
             )
         ],
     )

@@ -6,11 +6,11 @@ Frontend e design system sono su `main` e sono pronti per tutti i punti qui sott
 
 | # | Cosa | Contratto | Senza backend, oggi |
 | --- | --- | --- | --- |
-| 1 | Test con un solo post e allegato PDF | [handoff](handoff-post-singolo-e-import-prototipo.md) §1 | Il test con 1 post o con un PDF riceve un 422 |
-| 2 | Azioni nel feed (`action`, `reaction`) | [handoff](handoff-post-singolo-e-import-prototipo.md) §1 | La card "La prima cosa che farebbero" dice che i dati non sono disponibili |
+| 1 | ✅ Test con un solo post e allegato PDF | [handoff](handoff-post-singolo-e-import-prototipo.md) §1 | Il test con 1 post o con un PDF riceve un 422 |
+| 2 | ✅ Azioni nel feed (`action`, `reaction`) | [handoff](handoff-post-singolo-e-import-prototipo.md) §1 | La card "La prima cosa che farebbero" dice che i dati non sono disponibili |
 | 3 | Import del prototipo da Figma o da artifact | [handoff](handoff-post-singolo-e-import-prototipo.md) §2 | L'import riceve un 404 e il test di prototipo non parte |
-| 4 | Divergenza calcolata dal report | sotto | Il frontend confronta i testi di detto e pensato |
-| 5 | Fidelity score nel report | sotto | Compare "calibrazione non ancora disponibile" |
+| 4 | ✅ Divergenza calcolata dal report | sotto | Il frontend confronta i testi di detto e pensato |
+| 5 | ✅ Fidelity score nel report (manca il dato) | sotto | Compare "calibrazione non ancora disponibile" |
 | 6 | Report del prototipo | TBD, da pensare insieme | Compare "non ancora disponibile" |
 | 7 | Personas: attributi come campi, biografia, ripiego | [contratto-personas.md](contratto-personas.md) | Panel e risposte funzionano come oggi |
 
@@ -37,6 +37,7 @@ Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. P
 
 - Se la calibrazione non c'è ancora, il campo si omette e il frontend mostra lo stato "non disponibile".
 - Va calcolato una volta, in `backend/app/report/calibration.py`, e riusato in ogni report. Non va ricalcolato per ogni test.
+- Il report legge `data/processed/calibration.json` (`{score, basis}`). Finché il file non esiste, il campo si omette. Per produrlo servono l'engagement reale dei post pubblicati e un run del panel su quegli stessi post.
 
 ## Da decidere insieme
 

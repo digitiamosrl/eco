@@ -92,7 +92,7 @@ def test_non_image_content_returns_422_in_italian() -> None:
         files={**fields, "variants[0][image]": ("a.png", b"<html>no</html>", "image/png")},
     )
     assert response.status_code == 422
-    assert response.json() == {"detail": "Formato immagine non valido: usa PNG, JPEG o WebP"}
+    assert response.json() == {"detail": "Formato non valido: usa PNG, JPEG, WebP o PDF"}
     assert _uploads_dir_files() == []
 
 
@@ -104,13 +104,29 @@ def test_image_over_limit_returns_422() -> None:
         files={**fields, "variants[0][image]": ("big.png", big, "image/png")},
     )
     assert response.status_code == 422
-    assert response.json() == {"detail": "L'immagine supera 5 MB"}
+    assert response.json() == {"detail": "L'allegato supera 5 MB"}
 
 
-def test_one_variant_returns_422() -> None:
-    response = client.post("/tests", files=_form({"label": "A", "text": "Uno"}))
+def test_no_variants_returns_422() -> None:
+    response = client.post("/tests", files=_form())
     assert response.status_code == 422
     assert response.json() == {"detail": "Richiesta non valida: variants"}
+
+
+def test_single_variant_with_pdf_is_accepted_and_marked_as_pdf() -> None:
+    pdf = b"%PDF-1.7\n" + b"\x00" * 32
+    files = {**_form({"label": "A", "text": "Uno"}), "variants[0][image]": ("a.pdf", pdf, "x/y")}
+    response = client.post("/tests", files=files)
+    assert response.status_code == 201
+    [stimulus] = response.json()["stimuli"]
+    assert stimulus["attachment_kind"] == "pdf"
+    assert stimulus["image_url"].endswith(".pdf")
+
+
+def test_image_attachment_is_marked_as_image() -> None:
+    files = {**_form({"label": "A", "text": "Uno"}), "variants[0][image]": ("a.png", PNG, "x/y")}
+    [stimulus] = client.post("/tests", files=files).json()["stimuli"]
+    assert stimulus["attachment_kind"] == "image"
 
 
 def test_duplicate_labels_return_422() -> None:

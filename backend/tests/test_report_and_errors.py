@@ -53,7 +53,7 @@ def test_post_report_has_one_item_per_stimulus(validate) -> None:
 
 
 def test_validation_error_returns_italian_detail_string() -> None:
-    body = {"kind": "post", "variants": [{"label": "A", "text": "Solo una variante."}]}
+    body = {"kind": "post", "variants": []}
     response = client.post("/tests", json=body)
     assert response.status_code == 422
     assert response.json() == {"detail": "Richiesta non valida: variants"}

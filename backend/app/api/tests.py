@@ -19,7 +19,7 @@ from app.models import (
     Stimulus,
     Test,
 )
-from app.uploads import Upload, delete_uploads, save_uploads, upload_url
+from app.uploads import Upload, attachment_kind, delete_uploads, save_uploads, upload_url
 
 router = APIRouter()
 
@@ -34,6 +34,7 @@ def _post_stimuli(body: PostTestRequest, uploads: tuple[Upload | None, ...]) -> 
             variant_label=variant.label,
             text=variant.text,
             image_url=upload_url(uploads[index]) if uploads else None,
+            attachment_kind=attachment_kind(uploads[index]) if uploads else None,
         )
         for index, variant in enumerate(body.variants)
     ]

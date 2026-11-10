@@ -25,6 +25,7 @@ class Stimulus(BaseModel):
     flow_id: str | None = None
     screen_index: int | None = Field(default=None, ge=0)
     page_structure: str | None = None
+    attachment_kind: Literal["image", "pdf"] | None = None
 
 
 class Response(BaseModel):
@@ -38,6 +39,10 @@ class Response(BaseModel):
     objections: list[str]
     misunderstood: list[str] | None = None
     would_abandon: bool | None = None
+    action: Literal["react", "comment", "share", "scroll"] | None = None
+    reaction: (
+        Literal["consiglio", "festeggio", "sostengo", "adoro", "perspicace", "divertente"] | None
+    ) = None
 
 
 class Test(BaseModel):
@@ -73,6 +78,14 @@ class ReportItem(BaseModel):
     said_summary: str
     thought_summary: str
     responses: list[Response]
+    divergent_persona_ids: list[str]
+
+
+class Fidelity(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    score: float = Field(ge=-1, le=1)
+    basis: str = Field(min_length=1)
 
 
 class Report(BaseModel):
@@ -82,6 +95,7 @@ class Report(BaseModel):
     simulated: Literal[True]
     summary: str
     items: list[ReportItem]
+    fidelity: Fidelity | None = None
 
 
 class Variant(BaseModel):
@@ -95,7 +109,7 @@ class PostTestRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     kind: Literal["post"]
-    variants: list[Variant] = Field(min_length=2, max_length=5)
+    variants: list[Variant] = Field(min_length=1, max_length=5)
 
     @field_validator("variants")
     @classmethod
