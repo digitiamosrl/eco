@@ -25,6 +25,7 @@ PRIVATE_FILE = (
 )
 IMPORT_FAILED = "Import da Figma non riuscito. Riprova tra poco."
 _IMAGE_HOSTS = (".amazonaws.com", ".figma.com")
+BAD_TOKEN = "Il token Figma non è valido o è scaduto."
 NO_TOKEN = "Import da Figma non configurato: manca FIGMA_TOKEN."
 
 
@@ -84,6 +85,8 @@ async def _get(client: httpx.AsyncClient, url: str, **kwargs: Any) -> httpx.Resp
         logger.exception("Figma non raggiungibile")
         raise HTTPException(status_code=502, detail=IMPORT_FAILED) from exc
     if response.status_code in (403, 404):
+        if "token" in response.text.lower():
+            raise HTTPException(status_code=502, detail=BAD_TOKEN)
         raise HTTPException(status_code=403, detail=PRIVATE_FILE)
     if response.is_error:
         logger.error("Figma ha risposto %s", response.status_code)
@@ -96,9 +99,14 @@ def _is_image_host(url: str) -> bool:
     return parsed.scheme == "https" and (parsed.hostname or "").endswith(_IMAGE_HOSTS)
 
 
-async def _render(client: httpx.AsyncClient, key: str, ids: list[str]) -> dict[str, bytes]:
+async def _render(
+    client: httpx.AsyncClient, key: str, ids: list[str], headers: dict[str, str]
+) -> dict[str, bytes]:
     response = await _get(
-        client, f"{FIGMA_API}/images/{key}", params={"ids": ",".join(ids), "format": "png"}
+        client,
+        f"{FIGMA_API}/images/{key}",
+        headers=headers,
+        params={"ids": ",".join(ids), "format": "png"},
     )
     urls: dict[str, str | None] = response.json().get("images", {})
     rendered: dict[str, bytes] = {}
@@ -124,7 +132,7 @@ async def import_figma(url: str, client: httpx.AsyncClient) -> RawPrototype:
     if not paths:
         raise HTTPException(status_code=502, detail="Nel file Figma non ci sono schermate.")
     ids = list(dict.fromkeys(node_id for _, path in paths for node_id in path))
-    rendered = await _render(client, key, ids)
+    rendered = await _render(client, key, ids, headers)
     starts = tuple(
         RawStart(name, tuple(RawScreen(frames[i]["name"], rendered[i]) for i in path))
         for name, path in paths

@@ -94,6 +94,9 @@ def _figma_handler(status: int = 200):
             assert request.headers["X-Figma-Token"] == "tok"
             return httpx.Response(200, json={"name": "App", "document": document})
         if request.url.path.startswith("/v1/images/"):
+            # Figma risponde 403 a /images senza token: lo stesso errore visto da Fabio.
+            if request.headers.get("X-Figma-Token") != "tok":
+                return httpx.Response(403, json={"status": 403, "err": "Forbidden"})
             ids = request.url.params["ids"].split(",")
             return httpx.Response(
                 200,
@@ -104,6 +107,7 @@ def _figma_handler(status: int = 200):
                     }
                 },
             )
+        assert "X-Figma-Token" not in request.headers  # il token non va ai server delle immagini
         return httpx.Response(200, content=PNG)
 
     return handler
@@ -274,3 +278,16 @@ def test_too_big_screen_is_a_502(monkeypatch) -> None:
     monkeypatch.setattr(service, "import_artifact", capture)
     response = client.post("/prototypes/import", json={"source": "artifact", "url": ARTIFACT})
     assert (response.status_code, response.json()["detail"]) == (502, service.BAD_SCREEN)
+
+
+@pytest.mark.anyio
+async def test_invalid_figma_token_is_not_reported_as_private_file(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "figma_token", "tok")
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(403, json={"status": 403, "err": "Invalid token"})
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+        with pytest.raises(HTTPException) as error:
+            await figma.import_figma("https://www.figma.com/proto/Key1/x", http)
+    assert (error.value.status_code, error.value.detail) == (502, figma.BAD_TOKEN)
