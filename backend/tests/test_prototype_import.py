@@ -12,6 +12,7 @@ from app.prototypes.source import check_artifact_url, parse_figma_url
 client = TestClient(app)
 PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 16
 ARTIFACT = "https://claude.ai/public/artifacts/abc-123"
+LINK = "https://www.figma.com/proto/Key1/x?page-id=0%3A1"
 
 
 def _raw() -> RawPrototype:
@@ -99,15 +100,10 @@ def _figma_handler(status: int = 200):
         if request.url.path.startswith("/v1/files/"):
             assert request.headers["X-Figma-Token"] == "tok"
             canvas = document["children"][0]
-            if request.url.path.endswith("/nodes"):
-                assert request.url.params["ids"] == "0:1"
-                return httpx.Response(
-                    200, json={"name": "App", "nodes": {"0:1": {"document": canvas}}}
-                )
-            # Il file intero può pesare centinaia di MB: si accetta solo l'elenco delle pagine.
-            assert request.url.params["depth"] == "1"
-            shallow = {k: v for k, v in canvas.items() if k != "children"}
-            return httpx.Response(200, json={"name": "App", "document": {"children": [shallow]}})
+            # Il file intero può pesare centinaia di MB: si scarica solo la pagina del link.
+            assert request.url.path.endswith("/nodes")
+            assert request.url.params["ids"] == "0:1"
+            return httpx.Response(200, json={"name": "App", "nodes": {"0:1": {"document": canvas}}})
         if request.url.path.startswith("/v1/images/"):
             # Figma risponde 403 a /images senza token: lo stesso errore visto da Fabio.
             if request.headers.get("X-Figma-Token") != "tok":
@@ -128,9 +124,7 @@ def _figma_handler(status: int = 200):
     return handler
 
 
-async def _figma(
-    status: int = 200, link: str = "https://www.figma.com/proto/Key1/x"
-) -> RawPrototype:
+async def _figma(status: int = 200, link: str = LINK) -> RawPrototype:
     async with httpx.AsyncClient(transport=httpx.MockTransport(_figma_handler(status))) as http:
         return await figma.import_figma(link, http)
 
@@ -274,7 +268,7 @@ async def test_figma_image_from_unknown_host_is_refused(monkeypatch) -> None:
 
     async with httpx.AsyncClient(transport=httpx.MockTransport(evil)) as http:
         with pytest.raises(HTTPException) as error:
-            await figma.import_figma("https://www.figma.com/proto/Key1/x", http)
+            await figma.import_figma(LINK, http)
     assert error.value.status_code == 502
 
 
@@ -306,7 +300,7 @@ async def test_invalid_figma_token_is_not_reported_as_private_file(monkeypatch) 
 
     async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
         with pytest.raises(HTTPException) as error:
-            await figma.import_figma("https://www.figma.com/proto/Key1/x", http)
+            await figma.import_figma(LINK, http)
     assert (error.value.status_code, error.value.detail) == (502, figma.BAD_TOKEN)
 
 
@@ -319,3 +313,27 @@ async def test_figma_with_page_id_downloads_only_that_page(monkeypatch) -> None:
     names = [[s.name for s in start.screens] for start in raw.starts]
     # Il nodo di partenza del link viene prima dei punti di partenza dichiarati.
     assert names == [["Dettaglio", "Fine"], ["Home", "Dettaglio", "Fine"]]
+
+
+@pytest.mark.anyio
+async def test_figma_link_without_page_id_is_asked_again(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "figma_token", "tok")
+    with pytest.raises(HTTPException) as error:
+        await _figma(link="https://www.figma.com/proto/Key1/x")
+    assert (error.value.status_code, error.value.detail) == (422, figma.NO_PAGE)
+
+
+@pytest.mark.anyio
+async def test_figma_returns_every_starting_point_up_to_the_cap(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "figma_token", "tok")
+    frames = {f"1:{i}": {"name": f"F{i}", "type": "FRAME"} for i in range(1, 6)}
+    points = [{"nodeId": node_id, "name": f"Flusso {n}"} for n, node_id in enumerate(frames, 1)]
+    document = {
+        "children": [
+            {
+                "flowStartingPoints": points,
+                "children": list(map(lambda f: {**f[1], "id": f[0]}, frames.items())),
+            }
+        ]
+    }
+    assert len(figma._start_points(document, figma._frames(document), None)) == 5

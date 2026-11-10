@@ -47,7 +47,7 @@ Deciso: il segmento è il pubblico della pagina LinkedIn di Digitiamo, PMI e gra
 
 ## Come si usa l'import del prototipo (punto 3)
 
-- **Figma:** serve `FIGMA_TOKEN` nel `.env` (token personale, sola lettura). Il file va condiviso con «chiunque abbia il link». Scarica solo la pagina indicata da `page-id` nel link (un file intero può pesare centinaia di MB); senza `page-id` elenca le pagine e prende fino a 3 con punti di partenza. Parte dai punti di partenza del prototipo (o dal nodo del link) e segue il primo collegamento di ogni schermata, fino a 8 schermate per percorso.
+- **Figma:** serve `FIGMA_TOKEN` nel `.env` (token personale, sola lettura). Il file va condiviso con «chiunque abbia il link». Il link deve contenere `page-id` (Condividi › Copia link al prototipo): si scarica solo quella pagina, perché un file intero può pesare centinaia di MB. Senza `page-id` risponde 422. Parte dai punti di partenza del prototipo (o dal nodo del link) e segue il primo collegamento di ogni schermata, fino a 10 punti di partenza e 8 schermate per percorso (nel test se ne scelgono al massimo 3).
 - **Artifact:** serve Chromium (`playwright install chromium`). Per ogni percorso si preme l'i-esimo pulsante della prima schermata e poi il primo che cambia la pagina, fino a 6 schermate. Al massimo 3 percorsi.
 - **Test:** `POST /tests` con `prototype_id` e `paths` passa dalle personas come i post. `flow_ids` resta valido per i flussi già catturati. Il report del prototipo risponde ancora 501 (punto 6).
 - Limite noto: un percorso è una catena, non esplora i rami. Si sceglie il primo collegamento non visitato.
