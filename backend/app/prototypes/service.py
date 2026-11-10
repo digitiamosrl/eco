@@ -55,7 +55,7 @@ async def _save(source: str, raw: RawPrototype) -> Prototype:
 
 
 async def import_from_figma(url: str) -> Prototype:
-    async with _SLOTS, httpx.AsyncClient(timeout=30) as client:
+    async with _SLOTS, httpx.AsyncClient(timeout=60) as client:
         return await _save("figma", await import_figma(url, client))
 
 

@@ -27,12 +27,18 @@ def fake_artifact(monkeypatch):
     monkeypatch.setattr(service, "import_artifact", capture)
 
 
+def test_figma_page_id_is_read_from_the_link() -> None:
+    url = "https://www.figma.com/proto/Key1/x?page-id=2390%3A45481&starting-point-node-id=2447%3A67110"
+    assert parse_figma_url(url) == ("Key1", "2447:67110", "2390:45481")
+
+
 def test_figma_url_is_parsed_and_node_id_is_normalised() -> None:
     assert parse_figma_url("https://www.figma.com/proto/AbC123/Nome?node-id=1-2") == (
         "AbC123",
         "1:2",
+        None,
     )
-    assert parse_figma_url("https://figma.com/design/Key9/x") == ("Key9", None)
+    assert parse_figma_url("https://figma.com/design/Key9/x") == ("Key9", None, None)
 
 
 @pytest.mark.parametrize(
@@ -92,7 +98,16 @@ def _figma_handler(status: int = 200):
             return httpx.Response(status)
         if request.url.path.startswith("/v1/files/"):
             assert request.headers["X-Figma-Token"] == "tok"
-            return httpx.Response(200, json={"name": "App", "document": document})
+            canvas = document["children"][0]
+            if request.url.path.endswith("/nodes"):
+                assert request.url.params["ids"] == "0:1"
+                return httpx.Response(
+                    200, json={"name": "App", "nodes": {"0:1": {"document": canvas}}}
+                )
+            # Il file intero può pesare centinaia di MB: si accetta solo l'elenco delle pagine.
+            assert request.url.params["depth"] == "1"
+            shallow = {k: v for k, v in canvas.items() if k != "children"}
+            return httpx.Response(200, json={"name": "App", "document": {"children": [shallow]}})
         if request.url.path.startswith("/v1/images/"):
             # Figma risponde 403 a /images senza token: lo stesso errore visto da Fabio.
             if request.headers.get("X-Figma-Token") != "tok":
@@ -113,9 +128,11 @@ def _figma_handler(status: int = 200):
     return handler
 
 
-async def _figma(status: int = 200) -> RawPrototype:
+async def _figma(
+    status: int = 200, link: str = "https://www.figma.com/proto/Key1/x"
+) -> RawPrototype:
     async with httpx.AsyncClient(transport=httpx.MockTransport(_figma_handler(status))) as http:
-        return await figma.import_figma("https://www.figma.com/proto/Key1/x", http)
+        return await figma.import_figma(link, http)
 
 
 @pytest.mark.anyio
@@ -291,3 +308,14 @@ async def test_invalid_figma_token_is_not_reported_as_private_file(monkeypatch) 
         with pytest.raises(HTTPException) as error:
             await figma.import_figma("https://www.figma.com/proto/Key1/x", http)
     assert (error.value.status_code, error.value.detail) == (502, figma.BAD_TOKEN)
+
+
+@pytest.mark.anyio
+async def test_figma_with_page_id_downloads_only_that_page(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "figma_token", "tok")
+    raw = await _figma(
+        link="https://www.figma.com/proto/Key1/x?page-id=0%3A1&starting-point-node-id=1%3A2"
+    )
+    names = [[s.name for s in start.screens] for start in raw.starts]
+    # Il nodo di partenza del link viene prima dei punti di partenza dichiarati.
+    assert names == [["Dettaglio", "Fine"], ["Home", "Dettaglio", "Fine"]]

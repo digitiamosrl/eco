@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 FIGMA_API = "https://api.figma.com/v1"
 MAX_STARTS = 3
 MAX_SCREENS = 8
+MAX_PAGES = 3
 PRIVATE_FILE = (
     "Non possiamo aprire il file: è privato. "
     "In Figma imposta la condivisione su «chiunque abbia il link» e riprova."
@@ -26,6 +27,7 @@ PRIVATE_FILE = (
 IMPORT_FAILED = "Import da Figma non riuscito. Riprova tra poco."
 _IMAGE_HOSTS = (".amazonaws.com", ".figma.com")
 BAD_TOKEN = "Il token Figma non è valido o è scaduto."
+NO_SCREENS = "Nel file Figma non ci sono schermate."
 NO_TOKEN = "Import da Figma non configurato: manca FIGMA_TOKEN."
 
 
@@ -118,23 +120,47 @@ async def _render(
     return rendered
 
 
+async def _page_ids(client: httpx.AsyncClient, key: str, headers: dict[str, str]) -> list[str]:
+    """Pagine con punti di partenza (o la prima). Con depth=1 non si scarica il file intero."""
+    pages = (
+        (await _get(client, f"{FIGMA_API}/files/{key}", headers=headers, params={"depth": 1}))
+        .json()["document"]
+        .get("children", [])
+    )
+    with_flows = [p["id"] for p in pages if p.get("flowStartingPoints")]
+    return (with_flows or [p["id"] for p in pages])[:MAX_PAGES]
+
+
+async def _document(
+    client: httpx.AsyncClient, key: str, page_id: str | None, headers: dict[str, str]
+) -> tuple[str, dict[str, Any]]:
+    """Solo le pagine che servono: un file Figma intero può pesare centinaia di MB."""
+    ids = [page_id] if page_id else await _page_ids(client, key, headers)
+    if not ids:
+        raise HTTPException(status_code=502, detail=NO_SCREENS)
+    data = (
+        await _get(
+            client, f"{FIGMA_API}/files/{key}/nodes", headers=headers, params={"ids": ",".join(ids)}
+        )
+    ).json()
+    canvases = [node["document"] for node in data.get("nodes", {}).values() if node]
+    return data.get("name", "Prototipo Figma"), {"children": canvases}
+
+
 async def import_figma(url: str, client: httpx.AsyncClient) -> RawPrototype:
-    key, wanted = parse_figma_url(url)
+    key, wanted, page_id = parse_figma_url(url)
     if not settings.figma_token:
         raise HTTPException(status_code=502, detail=NO_TOKEN)
     headers = {"X-Figma-Token": settings.figma_token}
-    data = (await _get(client, f"{FIGMA_API}/files/{key}", headers=headers)).json()
-    frames = _frames(data["document"])
-    paths = [
-        (name, _path(node_id, frames))
-        for node_id, name in _start_points(data["document"], frames, wanted)
-    ]
+    name, document = await _document(client, key, page_id, headers)
+    frames = _frames(document)
+    paths = [(n, _path(i, frames)) for i, n in _start_points(document, frames, wanted)]
     if not paths:
-        raise HTTPException(status_code=502, detail="Nel file Figma non ci sono schermate.")
+        raise HTTPException(status_code=502, detail=NO_SCREENS)
     ids = list(dict.fromkeys(node_id for _, path in paths for node_id in path))
     rendered = await _render(client, key, ids, headers)
     starts = tuple(
-        RawStart(name, tuple(RawScreen(frames[i]["name"], rendered[i]) for i in path))
-        for name, path in paths
+        RawStart(start, tuple(RawScreen(frames[i]["name"], rendered[i]) for i in path))
+        for start, path in paths
     )
-    return RawPrototype(name=data.get("name", "Prototipo Figma"), starts=starts)
+    return RawPrototype(name=name, starts=starts)
