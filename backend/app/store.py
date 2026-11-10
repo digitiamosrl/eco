@@ -4,7 +4,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 
 from app.config import settings
-from app.models import Response, Stimulus, Test
+from app.models import Prototype, Response, Stimulus, Test
 
 INTERRUPTED_MESSAGE = "Il server è stato riavviato durante il test"
 _ACTIVE_STATUSES = ("queued", "running")
@@ -20,6 +20,10 @@ CREATE TABLE IF NOT EXISTS tests (
     total_count INTEGER NOT NULL,
     stimuli TEXT NOT NULL,
     error TEXT
+);
+CREATE TABLE IF NOT EXISTS prototypes (
+    id TEXT PRIMARY KEY,
+    data TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS responses (
     test_id TEXT NOT NULL,
@@ -142,3 +146,17 @@ def count_responses(test_id: str) -> int:
     with _connect() as conn:
         row = conn.execute("SELECT COUNT(*) AS n FROM responses WHERE test_id = ?", (test_id,))
         return int(row.fetchone()["n"])
+
+
+def add_prototype(prototype: Prototype) -> None:
+    with _connect() as conn:
+        conn.execute(
+            "INSERT INTO prototypes (id, data) VALUES (?, ?)",
+            (prototype.id, prototype.model_dump_json()),
+        )
+
+
+def get_prototype(prototype_id: str) -> Prototype | None:
+    with _connect() as conn:
+        row = conn.execute("SELECT data FROM prototypes WHERE id = ?", (prototype_id,)).fetchone()
+    return None if row is None else Prototype.model_validate_json(row["data"])

@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     openrouter_api_key: str = ""
+    # Token personale Figma (sola lettura): serve all'import dei prototipi Figma.
+    figma_token: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     # Id modello di OpenRouter, da impostare nel .env (nessun default).
     persona_model: str = ""

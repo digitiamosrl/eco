@@ -10,6 +10,7 @@ from app.api.files import router as files_router
 from app.api.flows import router as flows_router
 from app.api.health import router as health_router
 from app.api.personas import router as personas_router
+from app.api.prototypes import router as prototypes_router
 from app.api.reports import router as reports_router
 from app.api.tests import router as tests_router
 from app.config import validate_startup
@@ -27,6 +28,7 @@ app = FastAPI(title="eco", lifespan=lifespan)
 app.include_router(health_router)
 app.include_router(personas_router)
 app.include_router(flows_router)
+app.include_router(prototypes_router)
 app.include_router(tests_router)
 app.include_router(reports_router)
 app.include_router(files_router)

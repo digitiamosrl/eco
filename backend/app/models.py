@@ -1,6 +1,6 @@
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class Persona(BaseModel):
@@ -109,6 +109,32 @@ class Variant(BaseModel):
     text: str = Field(min_length=1)
 
 
+class PrototypeScreen(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    index: int = Field(ge=0)
+    name: str
+    image_url: str
+
+
+class PrototypeStart(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    id: str
+    name: str
+    screens: list[PrototypeScreen]
+
+
+class Prototype(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    id: str
+    source: Literal["figma", "artifact"]
+    name: str
+    imported_at: str
+    starts: list[PrototypeStart]
+
+
 class PostTestRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
 
@@ -124,16 +150,38 @@ class PostTestRequest(BaseModel):
         return variants
 
 
+class PrototypePath(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    start_id: str
+    screen_indexes: list[Annotated[int, Field(ge=0)]] = Field(min_length=1)
+
+
 class PrototypeTestRequest(BaseModel):
+    """Prototipo importato (`prototype_id` e `paths`) oppure flusso già catturato (`flow_ids`)."""
+
     model_config = ConfigDict(frozen=True)
 
     kind: Literal["prototype"]
-    flow_ids: list[str] = Field(min_length=1)
+    prototype_id: str | None = None
+    paths: list[PrototypePath] | None = Field(default=None, min_length=1, max_length=3)
+    flow_ids: list[str] | None = Field(default=None, min_length=1)
+
+    @model_validator(mode="after")
+    def one_source(self) -> "PrototypeTestRequest":
+        imported = self.prototype_id is not None and self.paths is not None
+        if imported == (self.flow_ids is not None):
+            raise ValueError("indica prototype_id e paths, oppure flow_ids")
+        if self.paths is not None:
+            starts = [p.start_id for p in self.paths]
+            if len(set(starts)) != len(starts):
+                raise ValueError("percorsi duplicati")
+        return self
 
     @field_validator("flow_ids")
     @classmethod
-    def flow_ids_are_unique(cls, flow_ids: list[str]) -> list[str]:
-        if len(set(flow_ids)) != len(flow_ids):
+    def flow_ids_are_unique(cls, flow_ids: list[str] | None) -> list[str] | None:
+        if flow_ids is not None and len(set(flow_ids)) != len(flow_ids):
             raise ValueError("flussi duplicati")
         return flow_ids
 

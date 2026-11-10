@@ -8,11 +8,11 @@ Frontend e design system sono su `main` e sono pronti per tutti i punti qui sott
 | --- | --- | --- | --- |
 | 1 | ✅ Test con un solo post e allegato PDF | [handoff](handoff-post-singolo-e-import-prototipo.md) §1 | Il test con 1 post o con un PDF riceve un 422 |
 | 2 | ✅ Azioni nel feed (`action`, `reaction`) | [handoff](handoff-post-singolo-e-import-prototipo.md) §1 | La card "La prima cosa che farebbero" dice che i dati non sono disponibili |
-| 3 | Import del prototipo da Figma o da artifact | [handoff](handoff-post-singolo-e-import-prototipo.md) §2 | L'import riceve un 404 e il test di prototipo non parte |
+| 3 | ✅ Import del prototipo da Figma o da artifact | [handoff](handoff-post-singolo-e-import-prototipo.md) §2 | L'import riceve un 404 e il test di prototipo non parte |
 | 4 | ✅ Divergenza calcolata dal report | sotto | Il frontend confronta i testi di detto e pensato |
 | 5 | ✅ Fidelity score nel report (manca il dato) | sotto | Compare "calibrazione non ancora disponibile" |
 | 6 | Report del prototipo | TBD, da pensare insieme | Compare "non ancora disponibile" |
-| 7 | Personas: attributi come campi, biografia, ripiego | [contratto-personas.md](contratto-personas.md) | Panel e risposte funzionano come oggi |
+| 7 | ✅ Personas: attributi come campi, biografia, ripiego | [contratto-personas.md](contratto-personas.md) | Panel e risposte funzionano come oggi |
 
 Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. Poi 1–2, che riusano la pipeline dei post. Il 3 è il più grosso.
 
@@ -44,3 +44,10 @@ Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. P
 - **Report del prototipo** (punto 6). Lo pensiamo insieme quando decidiamo cosa misurare per ogni schermata.
 
 Deciso: il segmento è il pubblico della pagina LinkedIn di Digitiamo, PMI e grandi aziende, come lo campiona già il pool. Il testo di Panel, README e scheda di contesto è aggiornato. Il campionamento resta com'è.
+
+## Come si usa l'import del prototipo (punto 3)
+
+- **Figma:** serve `FIGMA_TOKEN` nel `.env` (token personale, sola lettura). Il file va condiviso con «chiunque abbia il link». Il backend parte dai punti di partenza del prototipo (o dal `node-id` del link) e segue il primo collegamento di ogni schermata, fino a 8 schermate per percorso.
+- **Artifact:** serve Chromium (`playwright install chromium`). Per ogni percorso si preme l'i-esimo pulsante della prima schermata e poi il primo che cambia la pagina, fino a 6 schermate. Al massimo 3 percorsi.
+- **Test:** `POST /tests` con `prototype_id` e `paths` passa dalle personas come i post. `flow_ids` resta valido per i flussi già catturati. Il report del prototipo risponde ancora 501 (punto 6).
+- Limite noto: un percorso è una catena, non esplora i rami. Si sceglie il primo collegamento non visitato.
