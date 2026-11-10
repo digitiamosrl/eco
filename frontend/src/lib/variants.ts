@@ -1,21 +1,25 @@
 import type { Stimulus } from "../types/stimulus";
 
-// image is the object URL given by the DS VariantEditor; the API turns it back into a file.
-export type VariantDraft = { id: string; label: string; text: string; image: string | null };
+// The attachment keeps the File for the upload and an object URL for the preview.
+export type Attachment = { file: File; url: string; kind: "image" | "pdf" };
 
-export const MIN_VARIANTS = 2;
+export type VariantDraft = { id: string; label: string; text: string; attachment: Attachment | null };
+
+export const MIN_VARIANTS = 1;
 export const MAX_VARIANTS = 5;
 
 export const nextLabel = (index: number) => String.fromCharCode(65 + index);
 
-export const textError = (v: VariantDraft) => (v.text.trim() ? null : `La variante ${v.label} non ha testo.`);
+// With a single variant the UI calls it "il post".
+export const textError = (v: VariantDraft, single = false) =>
+  v.text.trim() ? null : single ? "Il post non ha testo." : `La variante ${v.label} non ha testo.`;
 
 export function validateVariants(variants: VariantDraft[]): string[] {
   const errors: string[] = [];
-  if (variants.length < MIN_VARIANTS) errors.push(`Servono almeno ${MIN_VARIANTS} varianti.`);
+  if (variants.length < MIN_VARIANTS) errors.push("Serve almeno un post.");
   if (variants.length > MAX_VARIANTS) errors.push(`Massimo ${MAX_VARIANTS} varianti.`);
   for (const v of variants) {
-    const error = textError(v);
+    const error = textError(v, variants.length === 1);
     if (error) errors.push(error);
   }
   return errors;

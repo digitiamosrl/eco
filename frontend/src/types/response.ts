@@ -20,4 +20,12 @@ export interface Response {
   objections: string[];
   misunderstood?: string[];
   would_abandon?: boolean;
+  /**
+   * La prima cosa che farebbe vedendo il post nel feed: reagire, commentare, condividere o scorrere oltre. Solo per i post.
+   */
+  action?: "react" | "comment" | "share" | "scroll";
+  /**
+   * Quale reazione LinkedIn userebbe, solo se action è react.
+   */
+  reaction?: "consiglio" | "festeggio" | "sostengo" | "adoro" | "perspicace" | "divertente";
 }

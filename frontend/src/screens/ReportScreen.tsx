@@ -16,6 +16,7 @@ import { diverges } from "../lib/diverge";
 import { useLoad } from "../lib/useLoad";
 import { variantName } from "../lib/variants";
 import type { Report } from "../types/report";
+import SinglePostReport from "./SinglePostReport";
 
 type Filter = "all" | "gap" | "vote";
 
@@ -66,8 +67,8 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
       <>
         {notices}
         <EmptyState title="Nessun test ancora" action={<Button onClick={onGoTest}>Vai a Test</Button>}>
-          Il report compare qui quando il primo test è completato. Servono da 2 a 5 varianti di un post, oppure un flusso
-          del prototipo.
+          Il report compare qui quando il primo test è completato. Basta un post, o fino a 5 varianti da confrontare,
+          oppure un prototipo.
         </EmptyState>
       </>
     );
@@ -98,6 +99,20 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
     );
 
   const stimuli = test.stimuli;
+  if (report.data.items.length === 1) {
+    const item = report.data.items[0];
+    return (
+      <>
+        {notices}
+        <SinglePostReport
+          summary={report.data.summary}
+          item={item}
+          stimulus={stimuli.find((s) => s.id === item.stimulus_id)}
+          personas={personas.data}
+        />
+      </>
+    );
+  }
   const personaById = new Map(personas.data.map((p) => [p.id, p]));
   const items = [...report.data.items].sort((a, b) => a.rank - b.rank);
   const responseCount = items.reduce((n, it) => n + it.responses.length, 0);

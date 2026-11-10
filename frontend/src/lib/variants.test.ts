@@ -1,16 +1,20 @@
 import { describe, expect, it } from "vitest";
 import type { Stimulus } from "../types/stimulus";
-import { nextLabel, validateVariants, variantName, type VariantDraft } from "./variants";
+import { nextLabel, textError, validateVariants, variantName, type VariantDraft } from "./variants";
 
-const variant = (label: string, text: string): VariantDraft => ({ id: label, label, text, image: null });
+const variant = (label: string, text: string): VariantDraft => ({ id: label, label, text, attachment: null });
 
 describe("validateVariants", () => {
+  it("accepts a single post with text", () => {
+    expect(validateVariants([variant("A", "uno")])).toEqual([]);
+  });
+
   it("accepts 2 variants with text", () => {
     expect(validateVariants([variant("A", "uno"), variant("B", "due")])).toEqual([]);
   });
 
-  it("rejects fewer than 2 variants", () => {
-    expect(validateVariants([variant("A", "uno")])).toEqual(["Servono almeno 2 varianti."]);
+  it("rejects no variants", () => {
+    expect(validateVariants([])).toEqual(["Serve almeno un post."]);
   });
 
   it("rejects more than 5 variants", () => {
@@ -19,9 +23,12 @@ describe("validateVariants", () => {
   });
 
   it("rejects variants with blank text", () => {
-    expect(validateVariants([variant("A", "uno"), variant("B", "   ")])).toEqual([
-      "La variante B non ha testo.",
-    ]);
+    expect(validateVariants([variant("A", "uno"), variant("B", "   ")])).toEqual(["La variante B non ha testo."]);
+  });
+
+  it("calls a single blank variant the post", () => {
+    expect(validateVariants([variant("A", " ")])).toEqual(["Il post non ha testo."]);
+    expect(textError(variant("A", ""), true)).toBe("Il post non ha testo.");
   });
 });
 
