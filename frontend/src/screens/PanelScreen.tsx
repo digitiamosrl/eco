@@ -3,8 +3,24 @@ import { getPersonas } from "../api";
 import { Alert, Button, Icon, PanelDots, PersonaList, QuotaCard, Skeleton } from "../ds";
 import { useLoad } from "../lib/useLoad";
 import { areaOf, quotaRows } from "../lib/quotas";
+import type { Persona } from "../types/persona";
 
 const TOP_SECTORS = 4;
+
+// Labels for the sampled hypotheses (docs/ipotesi-personas.md).
+const AI_LABELS: Record<NonNullable<Persona["ai_attitude"]>, string> = {
+  entusiasta: "Entusiasta",
+  curiosa: "Curiosa",
+  pragmatica: "Pragmatica",
+  scettica: "Scettica",
+  indifferente: "Indifferente",
+};
+const LINKEDIN_LABELS: Record<NonNullable<Persona["linkedin_use"]>, string> = {
+  legge: "Legge in silenzio",
+  ogni_tanto: "Ci passa ogni tanto",
+  partecipa: "Commenta e scrive",
+  solo_contatti: "Solo contatti e offerte",
+};
 
 export default function PanelScreen() {
   const [attempt, setAttempt] = useState(0);
@@ -76,6 +92,8 @@ export default function PanelScreen() {
         <QuotaCard title="Dimensione d'impresa" rows={quotaRows(personas.map((p) => p.company_size))} />
         <QuotaCard title="Area" rows={quotaRows(personas.map((p) => areaOf(p.region)))} />
         <QuotaCard title="Settore" rows={quotaRows(personas.map((p) => p.sector), TOP_SECTORS)} />
+        <QuotaCard title="Rapporto con l'AI" rows={quotaRows(personas.flatMap((p) => (p.ai_attitude ? [AI_LABELS[p.ai_attitude]] : [])))} />
+        <QuotaCard title="Uso di LinkedIn" rows={quotaRows(personas.flatMap((p) => (p.linkedin_use ? [LINKEDIN_LABELS[p.linkedin_use]] : [])))} />
       </div>
       <div className="eco-answers-head">
         <h2>
