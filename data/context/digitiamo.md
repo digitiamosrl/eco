@@ -25,10 +25,9 @@ Claim ricorrenti: "Formiamo. Ripensiamo. Costruiamo.", "L'AI accelera, le person
 
 ## 3. Pubblico e obiettivi dei post
 
-- **Segmento della POC:** decision maker di PMI italiane (README). È il segmento da cui si campionano le personas.
+- **Segmento della POC:** il pubblico della pagina LinkedIn di Digitiamo, PMI e grandi aziende (README). È il segmento da cui si campionano le personas.
 - **Obiettivo dei post LinkedIn:** _da confermare._ Le ipotesi sono generare contatti commerciali, costruire autorevolezza sull'AI e raccogliere iscrizioni a eventi e formazione. Il report dovrebbe sapere quale obiettivo pesa di più.
 
 ## Da chiarire
 
-- I clienti citati sul sito sono soprattutto grandi aziende, mentre il panel è fatto solo di PMI. Va bene così, oppure il panel deve rappresentare anche chi oggi compra?
 - Brand book e tono di voce restano fuori di proposito: se finissero nei prompt delle personas, le renderebbero di parte.

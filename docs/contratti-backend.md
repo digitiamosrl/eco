@@ -39,5 +39,6 @@ Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. P
 
 ## Da decidere insieme
 
-- **Segmento del panel.** Il Panel dice "Decision maker di PMI italiane", ma nel pool attuale 12 personas su 30 lavorano in aziende `grande`. O si cambia il testo, o si ricampiona solo dalle PMI, come dice il README.
-- **Report del prototipo** (punto 6). Lo definiamo quando abbiamo deciso cosa misurare per ogni schermata.
+- **Report del prototipo** (punto 6). Lo pensiamo insieme quando decidiamo cosa misurare per ogni schermata.
+
+Deciso: il segmento è il pubblico della pagina LinkedIn di Digitiamo, PMI e grandi aziende, come lo campiona già il pool. Il testo di Panel, README e scheda di contesto è aggiornato. Il campionamento resta com'è.

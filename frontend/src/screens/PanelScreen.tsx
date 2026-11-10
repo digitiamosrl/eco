@@ -67,7 +67,7 @@ export default function PanelScreen() {
           <PanelDots total={personas.length} />
           <div>
             <b>{personas.length} personas</b>
-            <span>Decision maker di PMI italiane · campionate da ISTAT e dalla pagina LinkedIn, seed fisso</span>
+            <span>Pubblico della pagina LinkedIn di Digitiamo · campionate dalla sua audience, seed fisso</span>
           </div>
         </div>
       </div>
