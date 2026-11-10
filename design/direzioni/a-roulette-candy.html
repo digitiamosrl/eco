@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eco · Candy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+/* Direzione A · Roulette "Friendly Geometric Candy"
+   Brand Book Digitiamo + un solo caldo (mandarino): è il colore di ciò che non si dice. */
+:root {
+  /* brand */
+  --ink: #070011;          /* 30 */
+  --night: #1C073A;        /* 50 */
+  --violet: #3E00EA;       /* 70 · logo */
+  --peri: #717FFE;         /* 80 */
+  --lilac: #EBEEFC;        /* 90 */
+  --mist: #F4F5FA;         /* 95 */
+  /* derivati per il rilievo candy */
+  --violet-press: #2700A3; /* ombra piena sotto i pulsanti viola */
+  --line: #DCE0F8;         /* bordo card */
+  --line-press: #C9CEF3;   /* ombra piena sotto card e pulsanti chiari */
+  --muted: #514A66;        /* testo secondario, 8:1 su bianco */
+  --white: #FFFFFF;
+  /* accento caldo: solo per il "pensato" che diverge e per le obiezioni */
+  --warm: #FF7A3D;
+  --warm-soft: #FFEBDF;
+  --warm-ink: #A3360A;     /* testo caldo, 5,6:1 su --warm-soft */
+  --warm-press: #E25A1C;
+
+  --r-xl: 32px;
+  --r-lg: 24px;
+  --r-md: 16px;
+  --font-title: "Baloo 2", system-ui, sans-serif;
+  --font-text: "Nunito", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--mist); color: var(--ink);
+  font: 500 16px/1.5 var(--font-text);
+}
+h1, h2, h3 { font-family: var(--font-title); line-height: 1.1; margin: 0; color: var(--night); }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+/* ——— cornice delle schermate ——— */
+.frame { max-width: 1440px; margin: 0 auto; padding: 40px 0 24px; }
+.frame-label {
+  display: inline-flex; align-items: center; gap: 8px; margin: 0 32px 12px;
+  font: 800 13px/1 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+}
+.frame-label::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--violet); }
+.screen { background: var(--white); border-radius: var(--r-xl); box-shadow: 0 6px 0 var(--line-press); border: 2px solid var(--line); overflow: hidden; }
+
+/* ——— nav ——— */
+.nav { display: flex; align-items: center; gap: 20px; padding: 16px 32px; border-bottom: 2px solid var(--lilac); flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 4px; margin-right: auto; }
+.logo { height: 44px; width: auto; display: block; margin-left: -16px; }
+.lg { fill: var(--violet); }
+.brand-sep { width: 2px; height: 26px; background: var(--line); border-radius: 2px; margin: 0 10px 0 0; }
+.brand-eco { font: 800 30px/1 var(--font-title); color: var(--violet); letter-spacing: -.01em; }
+.tabs { display: flex; gap: 8px; }
+.tab { padding: 8px 18px; border-radius: 14px; font: 800 16px/1.2 var(--font-text); color: var(--muted); text-decoration: none; border: 2px solid transparent; }
+.tab.on { color: var(--violet); background: var(--lilac); border-color: var(--line); box-shadow: 0 3px 0 var(--line-press); }
+
+.body { padding: 40px 48px 48px; }
+
+/* ——— pulsanti candy ——— */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  border: 0; border-radius: var(--r-md); padding: 14px 26px;
+  font: 800 18px/1.2 var(--font-title); letter-spacing: .01em;
+  background: var(--violet); color: var(--white);
+  box-shadow: 0 4px 0 var(--violet-press);
+  transition: transform .08s ease, box-shadow .08s ease, filter .15s;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn:active { transform: translateY(4px); box-shadow: 0 0 0 var(--violet-press); }
+.btn:focus-visible, .chip:focus-visible, .seg button:focus-visible { outline: 3px solid var(--peri); outline-offset: 3px; }
+.btn.light { background: var(--white); color: var(--violet); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line-press); }
+.btn.light:active { box-shadow: 0 0 0 var(--line-press); }
+.btn.big { padding: 18px 34px; font-size: 22px; border-radius: 20px; box-shadow: 0 6px 0 var(--violet-press); }
+.btn.big:active { transform: translateY(6px); box-shadow: 0 0 0 var(--violet-press); }
+
+/* ——— test ——— */
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; }
+h1 { font-size: 48px; font-weight: 800; letter-spacing: -.01em; }
+.sub { margin: 6px 0 0; font-size: 18px; color: var(--muted); }
+.seg { display: inline-flex; gap: 6px; padding: 6px; background: var(--mist); border: 2px solid var(--line); border-radius: 20px; }
+.seg button { border: 0; background: none; padding: 10px 20px; border-radius: 14px; font: 800 16px/1.2 var(--font-text); color: var(--muted); display: inline-flex; gap: 8px; align-items: center; }
+.seg button.on { background: var(--violet); color: var(--white); box-shadow: 0 3px 0 var(--violet-press); }
+.seg svg { width: 18px; height: 18px; }
+
+.variants { display: grid; grid-template-columns: 1fr 1fr minmax(240px, .62fr); gap: 24px; align-items: stretch; }
+.card { background: var(--white); border: 2px solid var(--line); border-radius: var(--r-lg); box-shadow: 0 4px 0 var(--line-press); }
+.variant { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.variant-head { display: flex; align-items: center; gap: 12px; }
+.letter { width: 44px; height: 44px; flex: none; border-radius: 50%; display: grid; place-items: center; font: 800 22px/1 var(--font-title); background: var(--violet); color: var(--white); box-shadow: 0 3px 0 var(--violet-press); }
+.variant-head h2 { font-size: 24px; }
+.variant-head .count { margin-left: auto; font-size: 13px; font-weight: 700; color: var(--muted); }
+.textarea { width: 100%; min-height: 168px; resize: vertical; border: 2px solid var(--line); border-radius: var(--r-md); background: var(--mist); padding: 14px 16px; font: 600 16px/1.55 var(--font-text); color: var(--ink); }
+.textarea:focus { outline: none; border-color: var(--peri); background: var(--white); box-shadow: 0 0 0 4px var(--lilac); }
+.drop {
+  aspect-ratio: 1.91 / 1; border: 2px dashed var(--peri); border-radius: var(--r-md); background: var(--lilac);
+  display: grid; place-items: center; align-content: center; gap: 10px; padding: 12px; text-align: center;
+  font: 700 14px/1.35 var(--font-text); color: var(--night);
+}
+.drop .ico { width: 48px; height: 48px; border-radius: 16px; background: var(--white); display: grid; place-items: center; box-shadow: 0 3px 0 var(--line-press); }
+.drop svg { width: 26px; height: 26px; color: var(--violet); }
+
+.add { padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; border-style: dashed; box-shadow: none; background: var(--mist); }
+.slots { display: flex; gap: 8px; }
+.slot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line-press); background: var(--white); }
+.slot.full { background: var(--violet); border-color: var(--violet); box-shadow: 0 2px 0 var(--violet-press); }
+.add-count { font: 800 16px/1 var(--font-text); color: var(--night); }
+.add-count small { display: block; font-weight: 600; font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+.launch { margin-top: 36px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 24px 28px; background: var(--lilac); border-radius: var(--r-lg); }
+.panel { display: flex; align-items: center; gap: 16px; }
+.dots { display: grid; grid-template-columns: repeat(10, 12px); gap: 5px; }
+.dots i { width: 12px; height: 12px; border-radius: 50%; background: var(--peri); }
+.dots i:nth-child(3n) { background: var(--violet); }
+.panel b { display: block; font: 800 20px/1.2 var(--font-title); color: var(--night); }
+.panel span { font-size: 15px; color: var(--muted); font-weight: 600; }
+.go { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.go small { font-size: 14px; font-weight: 700; color: var(--muted); }
+
+/* ——— report ——— */
+.notice { display: grid; grid-template-columns: 1fr auto; gap: 16px; margin-bottom: 36px; }
+.pill-box { display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-radius: 20px; font-size: 15px; }
+.pill-box.sim { background: var(--lilac); color: var(--night); }
+.pill-box.sim b { font-weight: 800; }
+.pill-box .badge { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--violet); color: var(--white); display: grid; place-items: center; font: 800 18px/1 var(--font-title); }
+.pill-box.fid { background: var(--white); border: 2px dashed var(--line-press); color: var(--night); }
+.ring { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 4px dotted var(--peri); }
+.fid b { font-weight: 800; display: block; }
+.fid span { color: var(--muted); font-weight: 600; }
+
+.summary { display: flex; gap: 20px; align-items: flex-start; margin: 14px 0 32px; max-width: 980px; }
+.summary p:not(.kicker) { margin: 0; font: 700 30px/1.25 var(--font-title); color: var(--night); }
+.summary p em { font-style: normal; color: var(--violet); }
+.kicker { font: 800 13px/1 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+.podium { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; align-items: start; }
+.result { padding: 28px; }
+.result.win { border-color: var(--violet); box-shadow: 0 6px 0 var(--violet); }
+.result-top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.medal { width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; font: 800 24px/1 var(--font-title); background: var(--violet); color: var(--white); box-shadow: 0 4px 0 var(--violet-press); flex: none; }
+.medal.second { background: var(--lilac); color: var(--violet); box-shadow: 0 4px 0 var(--line-press); }
+.result h2 { font-size: 30px; }
+.result-top .quote { flex-basis: 100%; margin: 0; font-size: 15px; color: var(--muted); font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+.score { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin: 24px 0; padding: 20px 22px; background: var(--mist); border-radius: 20px; }
+.mean { font: 800 72px/.9 var(--font-title); color: var(--violet); letter-spacing: -.02em; }
+.second-card .mean { color: var(--night); }
+.mean small { display: block; font: 700 14px/1.3 var(--font-text); color: var(--muted); letter-spacing: 0; margin-top: 8px; }
+.dist { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; align-items: end; height: 112px; }
+.col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 4px; }
+.col b { font: 800 16px/1 var(--font-title); color: var(--night); }
+.col i { display: block; width: 100%; max-width: 44px; border-radius: 12px 12px 6px 6px; background: var(--violet); box-shadow: inset 0 -5px 0 var(--violet-press); }
+.second-card .col i { background: var(--peri); box-shadow: inset 0 -5px 0 #4F5CE0; }
+.col i.h0 { height: 6px; background: var(--line); box-shadow: none !important; border-radius: 6px; }
+.second-card .col i.h0 { background: var(--line); }
+.col i.h1 { height: 38px; }
+.col i.h2 { height: 76px; }
+.axis { grid-column: 2; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: -18px; text-align: center; font: 700 13px/1 var(--font-text); color: var(--muted); }
+.axis-label { grid-column: 2; font-size: 12px; font-weight: 700; color: var(--muted); text-align: center; margin-top: -20px; }
+
+.objection { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border-radius: 999px; background: var(--warm-soft); color: var(--warm-ink); font-weight: 800; font-size: 15px; margin-bottom: 20px; }
+.objection span { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; background: var(--white); padding: 4px 10px; border-radius: 999px; }
+
+/* ——— il motivo: detto (fumetto) / pensato (nuvoletta) ——— */
+.voices { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 16px; }
+.voice-label { font: 800 12px/1 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.say {
+  position: relative; margin: 0 0 14px;
+  background: var(--violet); color: var(--white);
+  padding: 12px 16px; border-radius: 22px 22px 22px 6px;
+  font-weight: 700; font-size: 15px; line-height: 1.45;
+  box-shadow: 0 4px 0 var(--violet-press);
+}
+/* coda del fumetto: un triangolo pieno, la voce esce in pubblico */
+.say::after { content: ""; position: absolute; left: 0; bottom: -12px; border-left: 14px solid var(--violet-press); border-bottom: 12px solid transparent; }
+.say.empty {
+  background: transparent; color: var(--muted); box-shadow: none;
+  border: 2px dashed var(--line-press); font-style: italic; font-weight: 700;
+}
+.say.empty::after { border-left-color: var(--line-press); bottom: -14px; left: -2px; }
+.think {
+  position: relative; margin: 0 0 22px 16px;
+  background: var(--lilac); color: var(--night);
+  padding: 12px 18px; border-radius: 28px; box-shadow: 0 4px 0 var(--line);
+  font-style: italic; font-weight: 600; font-size: 15px; line-height: 1.45;
+}
+/* la scia di bolle della nuvoletta: il pensiero resta dentro */
+.think::before, .think::after { content: ""; position: absolute; border-radius: 50%; background: inherit; }
+.think::before { width: 16px; height: 16px; left: -6px; bottom: -14px; box-shadow: 0 3px 0 var(--line); }
+.think::after { width: 9px; height: 9px; left: -17px; bottom: -26px; box-shadow: 0 2px 0 var(--line); }
+/* quando diverge, la nuvoletta si scosta dal fumetto: il pensiero prende un'altra strada */
+.think.gap { transform: rotate(-.8deg) translateX(6px); box-shadow: 0 4px 0 #F7CDB5; }
+.think.gap::before { box-shadow: 0 3px 0 #F7CDB5; } .think.gap::after { box-shadow: 0 2px 0 #F7CDB5; }
+.think.gap { background: var(--warm-soft); color: var(--ink); }
+.gap-tag {
+  display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px;
+  font: 800 12px/1 var(--font-text); font-style: normal; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--white); background: var(--warm-ink); padding: 5px 10px 5px 8px; border-radius: 999px;
+  box-shadow: 0 2px 0 #6E2306;
+}
+.gap-tag svg { width: 14px; height: 14px; }
+
+/* ——— tabella risposte ——— */
+.answers { margin-top: 40px; }
+.answers-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.answers-head h2 { font-size: 32px; }
+.answers-head h2 small { font: 700 15px/1 var(--font-text); color: var(--muted); margin-left: 10px; }
+.chips { display: flex; gap: 10px; flex-wrap: wrap; }
+.chip { border: 2px solid var(--line); background: var(--white); border-radius: 14px; padding: 8px 16px; font: 800 15px/1.2 var(--font-text); color: var(--night); box-shadow: 0 3px 0 var(--line-press); transition: transform .08s, box-shadow .08s; display: inline-flex; align-items: center; gap: 8px; }
+.chip:active { transform: translateY(3px); box-shadow: 0 0 0 var(--line-press); }
+.chip.on { background: var(--violet); color: var(--white); border-color: var(--violet); box-shadow: 0 3px 0 var(--violet-press); }
+.chip .mini { width: 10px; height: 10px; border-radius: 50%; background: var(--warm); }
+
+table { width: 100%; border-collapse: separate; border-spacing: 0; }
+th { text-align: left; font: 800 12px/1 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 0 16px 12px; }
+td { padding: 18px 16px 6px; vertical-align: top; border-top: 2px solid var(--lilac); }
+tr.group td { border-top: 0; padding: 26px 16px 10px; }
+.group-title { display: inline-flex; align-items: center; gap: 12px; font: 800 20px/1 var(--font-title); color: var(--night); }
+.group-title .letter { width: 34px; height: 34px; font-size: 17px; }
+.group-title small { font: 700 14px/1 var(--font-text); color: var(--muted); }
+.who { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
+.ava { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 800 16px/1 var(--font-title); background: var(--lilac); color: var(--violet); border: 2px solid var(--line); }
+.who b { display: block; font-weight: 800; font-size: 15px; color: var(--night); }
+.who span { font-size: 14px; color: var(--muted); font-weight: 600; }
+.vote { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; font: 800 22px/1 var(--font-title); background: var(--mist); color: var(--night); border: 2px solid var(--line); box-shadow: 0 3px 0 var(--line-press); }
+.vote.hi { background: var(--violet); color: var(--white); border-color: var(--violet); box-shadow: 0 3px 0 var(--violet-press); }
+.vote-cap { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-top: 8px; }
+.col-who { width: 300px; }
+.col-vote { width: 88px; }
+.scope-note { margin: 24px 0 0; font-size: 14px; color: var(--muted); font-weight: 600; }
+
+/* ——— 375 ——— */
+@media (max-width: 1100px) {
+  .variants { grid-template-columns: 1fr 1fr; }
+  .add { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
+  .podium { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .frame { padding-top: 28px; }
+  .frame-label { margin: 0 16px 10px; }
+  .screen { border-radius: 24px; margin: 0 8px; }
+  .nav { padding: 12px 16px; gap: 10px; }
+  .logo { height: 36px; }
+  .brand-eco { font-size: 26px; }
+  .tabs { width: 100%; }
+  .tab { flex: 1; text-align: center; padding: 8px 10px; }
+  .body { padding: 24px 16px 28px; }
+  h1 { font-size: 36px; }
+  .sub { font-size: 16px; }
+  .variants { grid-template-columns: 1fr; }
+  .launch { padding: 20px; }
+  .go, .go .btn { width: 100%; }
+  .btn.big { font-size: 20px; padding: 16px 20px; }
+  .notice { grid-template-columns: 1fr; }
+  .summary p { font-size: 24px; }
+  .result { padding: 18px; }
+  .score { grid-template-columns: 1fr; gap: 16px; }
+  .axis, .axis-label { grid-column: 1; }
+  .mean { font-size: 60px; }
+  .voices { grid-template-columns: 1fr; }
+  .panel { flex-direction: column; align-items: flex-start; }
+  .answers-head h2 small { display: block; margin: 8px 0 0; }
+  thead { display: none; }
+  table, tbody, tr, td { display: block; width: 100%; }
+  tr:not(.group) { display: grid; grid-template-columns: 1fr auto; padding-top: 16px; border-top: 2px solid var(--lilac); }
+  tr:not(.group) td { border: 0; padding: 0 0 10px; }
+  tr:not(.group) td:nth-child(3), tr:not(.group) td:nth-child(4) { grid-column: 1 / -1; }
+  tr.group td { padding: 20px 0 6px; }
+  .vote-cap { display: none; }
+  td[data-l]::before { content: attr(data-l); display: block; font: 800 12px/1 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 1 · TEST · POST ============ -->
+<section class="frame" aria-labelledby="t1">
+  <div class="frame-label">Test · post</div>
+  <div class="screen">
+    <nav class="nav" aria-label="Navigazione eco">
+      <div class="brand"><svg class="logo" role="img" aria-label="Digitiamo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 250"><path class="lg" d="M92.14,198.36c-1.85-.17-3.72-.29-5.57-.54a42.71,42.71,0,0,1-14.21-4.53A51.81,51.81,0,0,1,66.94,190a43.86,43.86,0,0,1-10.5-10.34,44.64,44.64,0,0,1-7.15-14.82,41.57,41.57,0,0,1-1.6-11.68q0-50.46,0-100.92V51c.73,0,1.4,0,2.06,0a52.75,52.75,0,0,1,17.5,4.7,86,86,0,0,1,9.34,4.84c1,.59,1.94,1.2,2.93,1.78a.94.94,0,0,1,.53,1c0,.27,0,.53,0,.8q0,40.81,0,81.64a29.16,29.16,0,0,0,1.41,9.38A29.53,29.53,0,0,0,86.13,164a52.13,52.13,0,0,0,5.05,5.35c.89.86,1.76,1.75,2.64,2.63,1.22,1.24,2.42,2.48,3.65,3.7a1.22,1.22,0,0,1,.4,1.23,6.59,6.59,0,0,0,5.39,7.59A6.41,6.41,0,0,0,110,181.3a6.55,6.55,0,0,0-4.32-9.63,10,10,0,0,0-2.45-.07,1,1,0,0,1-.9-.3q-2.55-2.6-5.12-5.16c-1.31-1.31-2.64-2.59-3.92-3.92a24.9,24.9,0,0,1-4-5.37,22.92,22.92,0,0,1-2.68-11.17V67.27c.22.16.42.33.54.43,2.69,2.2,5.41,4.37,8.06,6.63a116,116,0,0,1,9.59,9.24q2.25,2.42,4.44,4.87c2.57,2.9,5,5.91,7.31,9.06.63.87,1.26,1.74,1.91,2.6a2,2,0,0,1,.41,1.3c0,1.94,0,3.89,0,5.84,0,7.43,0,14.86,0,22.29a30.2,30.2,0,0,0,2.35,11.77,28.76,28.76,0,0,0,6.29,9.34l8.27,8.26c.43.43.81.92,1.27,1.3a1.35,1.35,0,0,1,.44,1.56c-.56,2.1-1,4.24-1.71,6.28s-1.59,3.77-2.42,5.65a5.19,5.19,0,0,1-.37.66c-.19-.16-.37-.31-.51-.45l-8.29-8.36-6.86-6.86c-1.75-1.76-3.56-3.46-5.26-5.27a22.69,22.69,0,0,1-3.76-5.53,23.48,23.48,0,0,1-2.29-10.5q0-13.31,0-26.62a1.51,1.51,0,0,1,.65-1.39,6.53,6.53,0,1,0-9.17-1.31,5.15,5.15,0,0,0,1.29,1.26,1.5,1.5,0,0,1,.67,1.47q0,7.42,0,14.86c0,4.39,0,8.79,0,13.18a28.43,28.43,0,0,0,3.08,12.29,26.73,26.73,0,0,0,4.53,6.59c1.68,1.79,3.46,3.48,5.19,5.22.86.85,1.72,1.7,2.57,2.57,2.08,2.09,4.14,4.19,6.22,6.28q3.54,3.57,7.09,7.11c.36.37.74.72,1.19,1.14a7.78,7.78,0,0,1-.61.87c-1.34,1.51-2.63,3.08-4.07,4.5a44.75,44.75,0,0,1-13.61,9.16,47.39,47.39,0,0,1-9.49,2.94.8.8,0,0,1-.83-.27c-.94-.94-1.9-1.85-2.84-2.79-2-2.05-4.06-4.11-6.1-6.16l-9.71-9.76L75.56,172c-1-1-2-2.11-3.08-3.17a3.17,3.17,0,0,1-.34-.39,24.09,24.09,0,0,1-4.06-7.8,24.54,24.54,0,0,1-1-7.13V86.26c0-.24,0-.55,0-.71a1,1,0,0,1,.63-1,9.55,9.55,0,0,0,4.46-3.93,9.29,9.29,0,0,0,.61-8.94,9.77,9.77,0,0,0-15.61-3.3,9.84,9.84,0,0,0-1.9,12,9.27,9.27,0,0,0,4.44,4.09,1.18,1.18,0,0,1,.79,1.33q0,13.83,0,27.68,0,20.18,0,40.33a30.39,30.39,0,0,0,2,10.87,27.88,27.88,0,0,0,6.14,9.66c2.1,2.15,4.23,4.26,6.35,6.38.82.82,1.64,1.63,2.45,2.46l6.15,6.22q3.6,3.62,7.21,7.24c.48.48,1.17,1.11,1.66,1.59C92.42,198.34,92.37,198.36,92.14,198.36Z"/><path class="lg" d="M125.58,111.18c.43.69.79,1.21,1.07,1.76,1.33,2.63,2.68,5.26,3.94,7.92.85,1.79,1.63,3.63,2.33,5.49.84,2.21,1.57,4.47,2.34,6.72a68,68,0,0,1,2.54,11.33,54.15,54.15,0,0,1,.62,6.85c0,.22,0,.45,0,.87-.38-.33-.64-.53-.88-.77-2.16-2.2-4.31-4.42-6.47-6.63a8.4,8.4,0,0,1-.73-.85,24.22,24.22,0,0,1-3.84-7.52,21.53,21.53,0,0,1-1-6.17q0-9.2,0-18.39C125.54,111.66,125.56,111.52,125.58,111.18Z"/><path class="lg" d="M67,75.56a3.11,3.11,0,0,1-3.12,3.25,3.21,3.21,0,1,1-.07-6.42A3.14,3.14,0,0,1,67,75.56Z"/><circle class="lg" cx="156.25" cy="94.54" r="11.42"/><rect class="lg" x="146.51" y="113.26" width="19.48" height="56.18"/><circle class="lg" cx="254.87" cy="94.54" r="11.42"/><rect class="lg" x="245.13" y="113.26" width="19.48" height="56.18"/><circle class="lg" cx="328.93" cy="94.54" r="11.42"/><rect class="lg" x="319.19" y="113.26" width="19.48" height="56.18"/><polygon class="lg" points="312.08 112.17 301.64 112.17 301.64 93.2 282.16 93.2 282.16 112.17 271.72 112.17 271.72 127.15 282.16 127.15 282.16 169.44 301.64 169.44 301.64 127.15 312.08 127.15 312.08 112.17"/><path class="lg" d="M543.81,113.26a28.09,28.09,0,1,0,28.09,28.09A28.09,28.09,0,0,0,543.81,113.26Zm0,39.51a11.42,11.42,0,1,1,11.42-11.42A11.42,11.42,0,0,1,543.81,152.77Z"/><path class="lg" d="M372,113.26v.07a28.08,28.08,0,0,0,0,56v.07h36.77V113.26Zm5.3,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,377.3,152.21Z"/><path class="lg" d="M200.28,113.26v.07a28.08,28.08,0,0,0,0,56v.07h2.82a24.66,24.66,0,0,0,16.36-6.18,23.53,23.53,0,0,1-1.39,8.71c0,.14-.08.28-.13.42h-.07l-.06.14c-1.68,4.81-6.88,8.32-13,8.32-5.79,0-10.74-3.1-12.71-7.47l-15.92,6.52c3.78,10.72,15.4,18.53,29.14,18.53,13.91,0,25.63-8,29.27-18.93h.17a33.45,33.45,0,0,0,2.08-10.06h.25V113.26Zm5.31,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,205.59,152.21Z"/><path class="lg" d="M489.61,113.26H415.88v56.18H434v-30a8.94,8.94,0,0,1,17.88,0v30h19.31v-30a8.94,8.94,0,0,1,8.94-8.94h0a8.93,8.93,0,0,1,8.93,8.94v30h19.56V132.26A19,19,0,0,0,489.61,113.26Z"/></svg><span class="brand-sep" aria-hidden="true"></span><span class="brand-eco">eco</span></div>
+      <div class="tabs"><a class="tab" href="#">Panel</a><a class="tab on" href="#" aria-current="page">Test</a><a class="tab" href="#">Report</a></div>
+    </nav>
+    <div class="body">
+      <div class="head">
+        <div>
+          <h1 id="t1">Nuovo test</h1>
+          <p class="sub">Confronta da 2 a 5 varianti dello stesso post</p>
+        </div>
+        <div class="seg" role="tablist" aria-label="Modalità">
+          <button class="on" role="tab" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"/></svg>Post LinkedIn</button>
+          <button role="tab" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="4"/><path d="M11 18h2"/></svg>Prototipo</button>
+        </div>
+      </div>
+
+      <div class="variants">
+        <article class="card variant">
+          <div class="variant-head"><span class="letter" aria-hidden="true">A</span><h2>Variante A</h2></div>
+          <label class="sr" hidden for="va">Testo variante A</label>
+          <textarea id="va" class="textarea">La trasformazione digitale non è più un'opzione. Le PMI che adottano l'intelligenza artificiale oggi saranno le leader di domani. Sei pronto a fare il salto? #AI #PMI #Innovazione</textarea>
+          <div class="drop"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="4"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></span>Immagine del post · trascina o scegli un file</div>
+        </article>
+        <article class="card variant">
+          <div class="variant-head"><span class="letter b" aria-hidden="true">B</span><h2>Variante B</h2></div>
+          <label class="sr" hidden for="vb">Testo variante B</label>
+          <textarea id="vb" class="textarea">Un'azienda di valvole di Legnano passava 6 ore a settimana a compilare offerte a mano. Con un agente AI addestrato sui suoi listini ora ne bastano 40 minuti. Nessuna rivoluzione: un processo noioso, tolto di mezzo. Qual è il vostro?</textarea>
+          <div class="drop"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="4"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg></span>Immagine del post · trascina o scegli un file</div>
+        </article>
+        <div class="card add">
+          <div class="slots" role="img" aria-label="2 varianti su 5"><i class="slot full"></i><i class="slot full"></i><i class="slot"></i><i class="slot"></i><i class="slot"></i></div>
+          <div class="add-count">2 di 5<small>puoi aggiungerne altre 3</small></div>
+          <button class="btn light">+ Aggiungi variante</button>
+        </div>
+      </div>
+
+      <div class="launch">
+        <div class="panel">
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div><b>30 personas</b><span>Decision maker di PMI italiane · 30 personas</span></div>
+        </div>
+        <div class="go">
+          <button class="btn big">Avvia test con 30 personas</button>
+          <small>circa 3 minuti</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · REPORT · POST ============ -->
+<section class="frame" aria-labelledby="t2">
+  <div class="frame-label">Report · post</div>
+  <div class="screen">
+    <nav class="nav" aria-label="Navigazione eco">
+      <div class="brand"><svg class="logo" role="img" aria-label="Digitiamo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 250"><path class="lg" d="M92.14,198.36c-1.85-.17-3.72-.29-5.57-.54a42.71,42.71,0,0,1-14.21-4.53A51.81,51.81,0,0,1,66.94,190a43.86,43.86,0,0,1-10.5-10.34,44.64,44.64,0,0,1-7.15-14.82,41.57,41.57,0,0,1-1.6-11.68q0-50.46,0-100.92V51c.73,0,1.4,0,2.06,0a52.75,52.75,0,0,1,17.5,4.7,86,86,0,0,1,9.34,4.84c1,.59,1.94,1.2,2.93,1.78a.94.94,0,0,1,.53,1c0,.27,0,.53,0,.8q0,40.81,0,81.64a29.16,29.16,0,0,0,1.41,9.38A29.53,29.53,0,0,0,86.13,164a52.13,52.13,0,0,0,5.05,5.35c.89.86,1.76,1.75,2.64,2.63,1.22,1.24,2.42,2.48,3.65,3.7a1.22,1.22,0,0,1,.4,1.23,6.59,6.59,0,0,0,5.39,7.59A6.41,6.41,0,0,0,110,181.3a6.55,6.55,0,0,0-4.32-9.63,10,10,0,0,0-2.45-.07,1,1,0,0,1-.9-.3q-2.55-2.6-5.12-5.16c-1.31-1.31-2.64-2.59-3.92-3.92a24.9,24.9,0,0,1-4-5.37,22.92,22.92,0,0,1-2.68-11.17V67.27c.22.16.42.33.54.43,2.69,2.2,5.41,4.37,8.06,6.63a116,116,0,0,1,9.59,9.24q2.25,2.42,4.44,4.87c2.57,2.9,5,5.91,7.31,9.06.63.87,1.26,1.74,1.91,2.6a2,2,0,0,1,.41,1.3c0,1.94,0,3.89,0,5.84,0,7.43,0,14.86,0,22.29a30.2,30.2,0,0,0,2.35,11.77,28.76,28.76,0,0,0,6.29,9.34l8.27,8.26c.43.43.81.92,1.27,1.3a1.35,1.35,0,0,1,.44,1.56c-.56,2.1-1,4.24-1.71,6.28s-1.59,3.77-2.42,5.65a5.19,5.19,0,0,1-.37.66c-.19-.16-.37-.31-.51-.45l-8.29-8.36-6.86-6.86c-1.75-1.76-3.56-3.46-5.26-5.27a22.69,22.69,0,0,1-3.76-5.53,23.48,23.48,0,0,1-2.29-10.5q0-13.31,0-26.62a1.51,1.51,0,0,1,.65-1.39,6.53,6.53,0,1,0-9.17-1.31,5.15,5.15,0,0,0,1.29,1.26,1.5,1.5,0,0,1,.67,1.47q0,7.42,0,14.86c0,4.39,0,8.79,0,13.18a28.43,28.43,0,0,0,3.08,12.29,26.73,26.73,0,0,0,4.53,6.59c1.68,1.79,3.46,3.48,5.19,5.22.86.85,1.72,1.7,2.57,2.57,2.08,2.09,4.14,4.19,6.22,6.28q3.54,3.57,7.09,7.11c.36.37.74.72,1.19,1.14a7.78,7.78,0,0,1-.61.87c-1.34,1.51-2.63,3.08-4.07,4.5a44.75,44.75,0,0,1-13.61,9.16,47.39,47.39,0,0,1-9.49,2.94.8.8,0,0,1-.83-.27c-.94-.94-1.9-1.85-2.84-2.79-2-2.05-4.06-4.11-6.1-6.16l-9.71-9.76L75.56,172c-1-1-2-2.11-3.08-3.17a3.17,3.17,0,0,1-.34-.39,24.09,24.09,0,0,1-4.06-7.8,24.54,24.54,0,0,1-1-7.13V86.26c0-.24,0-.55,0-.71a1,1,0,0,1,.63-1,9.55,9.55,0,0,0,4.46-3.93,9.29,9.29,0,0,0,.61-8.94,9.77,9.77,0,0,0-15.61-3.3,9.84,9.84,0,0,0-1.9,12,9.27,9.27,0,0,0,4.44,4.09,1.18,1.18,0,0,1,.79,1.33q0,13.83,0,27.68,0,20.18,0,40.33a30.39,30.39,0,0,0,2,10.87,27.88,27.88,0,0,0,6.14,9.66c2.1,2.15,4.23,4.26,6.35,6.38.82.82,1.64,1.63,2.45,2.46l6.15,6.22q3.6,3.62,7.21,7.24c.48.48,1.17,1.11,1.66,1.59C92.42,198.34,92.37,198.36,92.14,198.36Z"/><path class="lg" d="M125.58,111.18c.43.69.79,1.21,1.07,1.76,1.33,2.63,2.68,5.26,3.94,7.92.85,1.79,1.63,3.63,2.33,5.49.84,2.21,1.57,4.47,2.34,6.72a68,68,0,0,1,2.54,11.33,54.15,54.15,0,0,1,.62,6.85c0,.22,0,.45,0,.87-.38-.33-.64-.53-.88-.77-2.16-2.2-4.31-4.42-6.47-6.63a8.4,8.4,0,0,1-.73-.85,24.22,24.22,0,0,1-3.84-7.52,21.53,21.53,0,0,1-1-6.17q0-9.2,0-18.39C125.54,111.66,125.56,111.52,125.58,111.18Z"/><path class="lg" d="M67,75.56a3.11,3.11,0,0,1-3.12,3.25,3.21,3.21,0,1,1-.07-6.42A3.14,3.14,0,0,1,67,75.56Z"/><circle class="lg" cx="156.25" cy="94.54" r="11.42"/><rect class="lg" x="146.51" y="113.26" width="19.48" height="56.18"/><circle class="lg" cx="254.87" cy="94.54" r="11.42"/><rect class="lg" x="245.13" y="113.26" width="19.48" height="56.18"/><circle class="lg" cx="328.93" cy="94.54" r="11.42"/><rect class="lg" x="319.19" y="113.26" width="19.48" height="56.18"/><polygon class="lg" points="312.08 112.17 301.64 112.17 301.64 93.2 282.16 93.2 282.16 112.17 271.72 112.17 271.72 127.15 282.16 127.15 282.16 169.44 301.64 169.44 301.64 127.15 312.08 127.15 312.08 112.17"/><path class="lg" d="M543.81,113.26a28.09,28.09,0,1,0,28.09,28.09A28.09,28.09,0,0,0,543.81,113.26Zm0,39.51a11.42,11.42,0,1,1,11.42-11.42A11.42,11.42,0,0,1,543.81,152.77Z"/><path class="lg" d="M372,113.26v.07a28.08,28.08,0,0,0,0,56v.07h36.77V113.26Zm5.3,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,377.3,152.21Z"/><path class="lg" d="M200.28,113.26v.07a28.08,28.08,0,0,0,0,56v.07h2.82a24.66,24.66,0,0,0,16.36-6.18,23.53,23.53,0,0,1-1.39,8.71c0,.14-.08.28-.13.42h-.07l-.06.14c-1.68,4.81-6.88,8.32-13,8.32-5.79,0-10.74-3.1-12.71-7.47l-15.92,6.52c3.78,10.72,15.4,18.53,29.14,18.53,13.91,0,25.63-8,29.27-18.93h.17a33.45,33.45,0,0,0,2.08-10.06h.25V113.26Zm5.31,39a10.86,10.86,0,1,1,10.86-10.86A10.86,10.86,0,0,1,205.59,152.21Z"/><path class="lg" d="M489.61,113.26H415.88v56.18H434v-30a8.94,8.94,0,0,1,17.88,0v30h19.31v-30a8.94,8.94,0,0,1,8.94-8.94h0a8.93,8.93,0,0,1,8.93,8.94v30h19.56V132.26A19,19,0,0,0,489.61,113.26Z"/></svg><span class="brand-sep" aria-hidden="true"></span><span class="brand-eco">eco</span></div>
+      <div class="tabs"><a class="tab" href="#">Panel</a><a class="tab" href="#">Test</a><a class="tab on" href="#" aria-current="page">Report</a></div>
+    </nav>
+    <div class="body">
+      <div class="notice">
+        <div class="pill-box sim" role="note"><span class="badge" aria-hidden="true">i</span><span><b>Risultati simulati.</b> Reazioni di personas sintetiche, non di persone reali. Usali per confrontare varianti, non come previsione.</span></div>
+        <div class="pill-box fid"><span class="ring" aria-hidden="true"></span><span class="fid"><b>Fidelity score</b><span>calibrazione non ancora disponibile</span></span></div>
+      </div>
+
+      <h1 id="t2">Report · post</h1>
+      <div class="summary">
+        <div>
+          <p class="kicker" style="margin:18px 0 10px">Sintesi</p>
+          <p>La variante B convince per <em>concretezza</em>; la A è percepita come troppo generica.</p>
+        </div>
+      </div>
+
+      <div class="podium">
+        <article class="card result win">
+          <div class="result-top">
+            <span class="medal">#1</span>
+            <h2>Variante B</h2>
+            <p class="quote">«Un'azienda di valvole di Legnano passava 6 ore a settimana a compilare offerte a mano…»</p>
+          </div>
+          <div class="score">
+            <div class="mean">3,7<small>media · 3 risposte</small></div>
+            <div>
+              <div class="dist" role="img" aria-label="Voti: 1 zero, 2 uno, 3 zero, 4 uno, 5 uno">
+                <div class="col"><b>0</b><i class="h0"></i></div>
+                <div class="col"><b>1</b><i class="h1"></i></div>
+                <div class="col"><b>0</b><i class="h0"></i></div>
+                <div class="col"><b>1</b><i class="h1"></i></div>
+                <div class="col"><b>1</b><i class="h1"></i></div>
+              </div>
+            </div>
+            <div class="axis" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            <div class="axis-label" aria-hidden="true">voto</div>
+          </div>
+          <div class="objection"><span>Obiezione</span>Non dice quanto costa</div>
+          <div class="voices">
+            <div><div class="voice-label">Cosa dicono</div><p class="say">Lo trovano utile e concreto, qualcuno lo girerebbe al team.</p></div>
+            <div><div class="voice-label">Cosa pensano</div><p class="think">Si fidano, ma pensano al costo senza dirlo.</p></div>
+          </div>
+        </article>
+
+        <article class="card result second-card">
+          <div class="result-top">
+            <span class="medal second">#2</span>
+            <h2>Variante A</h2>
+            <p class="quote">«La trasformazione digitale non è più un'opzione. Le PMI che adottano l'intelligenza artificiale…»</p>
+          </div>
+          <div class="score">
+            <div class="mean">2,3<small>media · 3 risposte</small></div>
+            <div>
+              <div class="dist" role="img" aria-label="Voti: 1 zero, 2 due, 3 uno, 4 zero, 5 zero">
+                <div class="col"><b>0</b><i class="h0"></i></div>
+                <div class="col"><b>2</b><i class="h2"></i></div>
+                <div class="col"><b>1</b><i class="h1"></i></div>
+                <div class="col"><b>0</b><i class="h0"></i></div>
+                <div class="col"><b>0</b><i class="h0"></i></div>
+              </div>
+            </div>
+            <div class="axis" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            <div class="axis-label" aria-hidden="true">voto</div>
+          </div>
+          <div class="objection"><span>Obiezione</span>Troppo generico</div>
+          <div class="voices">
+            <div><div class="voice-label">Cosa dicono</div><p class="say">Apprezzano il tema e lo definiscono interessante.</p></div>
+            <div><div class="voice-label">Cosa pensano</div><p class="think">In privato lo trovano vago: manca un esempio concreto.</p></div>
+          </div>
+        </article>
+      </div>
+
+      <section class="answers" aria-labelledby="t3">
+        <div class="answers-head">
+          <h2 id="t3">Le risposte <small>3 personas · 3 risposte per variante</small></h2>
+          <div class="chips" role="group" aria-label="Filtro">
+            <button class="chip on" aria-pressed="true">Tutte</button>
+            <button class="chip" aria-pressed="false"><i class="mini" aria-hidden="true"></i>Solo dove detto e pensato divergono</button>
+            <button class="chip" aria-pressed="false">Per voto</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th class="col-who">Persona</th><th class="col-vote">Voto</th><th>Ha detto</th><th>Ha pensato</th></tr></thead>
+          <tbody>
+            <tr class="group"><td colspan="4"><span class="group-title"><span class="letter b" aria-hidden="true">B</span>Variante B <small>#1</small></span></td></tr>
+            <tr>
+              <td><div class="who"><span class="ava" aria-hidden="true">p1</span><div><b>Titolare</b><span>Manifattura · piccola · Lombardia</span></div></div></td>
+              <td><span class="vote hi">4</span><span class="vote-cap">su 5</span></td>
+              <td data-l="Ha detto"><p class="say">«Esempio chiaro, complimenti.»</p></td>
+              <td data-l="Ha pensato"><p class="think gap"><span class="gap-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 21v-7L5 4M12 14l7-10"/></svg>Diverge</span><br>«Mi piace, ma se costa come l'ultimo consulente lascio stare.»</p></td>
+            </tr>
+            <tr>
+              <td><div class="who"><span class="ava" aria-hidden="true">p2</span><div><b>Direttrice commerciale</b><span>Servizi B2B · media · Emilia-Romagna</span></div></div></td>
+              <td><span class="vote hi">5</span><span class="vote-cap">su 5</span></td>
+              <td data-l="Ha detto"><p class="say">«Lo giro al team.»</p></td>
+              <td data-l="Ha pensato"><p class="think">«Finalmente numeri veri. Lo giro al team.»</p></td>
+            </tr>
+            <tr>
+              <td><div class="who"><span class="ava" aria-hidden="true">p3</span><div><b>Amministratore</b><span>Commercio · micro · Puglia</span></div></div></td>
+              <td><span class="vote">2</span><span class="vote-cap">su 5</span></td>
+              <td data-l="Ha detto"><p class="say empty">non commenterebbe</p></td>
+              <td data-l="Ha pensato"><p class="think">«Roba per aziende più grandi della mia.»</p></td>
+            </tr>
+
+            <tr class="group"><td colspan="4"><span class="group-title"><span class="letter" aria-hidden="true">A</span>Variante A <small>#2</small></span></td></tr>
+            <tr>
+              <td><div class="who"><span class="ava" aria-hidden="true">p1</span><div><b>Titolare</b><span>Manifattura · piccola · Lombardia</span></div></div></td>
+              <td><span class="vote">2</span><span class="vote-cap">su 5</span></td>
+              <td data-l="Ha detto"><p class="say">«Spunto interessante, grazie.»</p></td>
+              <td data-l="Ha pensato"><p class="think gap"><span class="gap-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 21v-7L5 4M12 14l7-10"/></svg>Diverge</span><br>«Bello, ma a me cosa cambia? Non ho tempo.»</p></td>
+            </tr>
+            <tr>
+              <td><div class="who"><span class="ava" aria-hidden="true">p2</span><div><b>Direttrice commerciale</b><span>Servizi B2B · media · Emilia-Romagna</span></div></div></td>
+              <td><span class="vote">3</span><span class="vote-cap">su 5</span></td>
+              <td data-l="Ha detto"><p class="say">«Tema importante.»</p></td>
+              <td data-l="Ha pensato"><p class="think gap"><span class="gap-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 21v-7L5 4M12 14l7-10"/></svg>Diverge</span><br>«Il solito post sulla trasformazione digitale.»</p></td>
+            </tr>
+            <tr>
+              <td><div class="who"><span class="ava" aria-hidden="true">p3</span><div><b>Amministratore</b><span>Commercio · micro · Puglia</span></div></div></td>
+              <td><span class="vote">2</span><span class="vote-cap">su 5</span></td>
+              <td data-l="Ha detto"><p class="say empty">non commenterebbe</p></td>
+              <td data-l="Ha pensato"><p class="think">«Non ho capito cosa vendono.»</p></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
