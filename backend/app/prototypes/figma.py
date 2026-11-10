@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 FIGMA_API = "https://api.figma.com/v1"
 MAX_STARTS = 10  # importati; i percorsi scelti per il test restano al massimo 3
 MAX_SCREENS = 8
+_FULL_SCALE_SIDE = 3000  # px: oltre questo lato si riduce la scala
+_HALF_SCALE_SIDE = 8000  # px: oltre si scende a un quarto (1440×6373 a metà pesa circa 1,5 MB)
 PRIVATE_FILE = (
     "Non possiamo aprire il file: è privato. "
     "In Figma imposta la condivisione su «chiunque abbia il link» e riprova."
@@ -103,16 +105,34 @@ def _is_image_host(url: str) -> bool:
     return parsed.scheme == "https" and (parsed.hostname or "").endswith(_IMAGE_HOSTS)
 
 
+def _scale_for(frame: dict[str, Any]) -> float:
+    """Frame molto alti o larghi si rendono più piccoli: restano leggibili e sotto i 5 MB."""
+    box = frame.get("absoluteBoundingBox") or {}
+    side = max(box.get("width", 0), box.get("height", 0))
+    if side <= _FULL_SCALE_SIDE:
+        return 1
+    return 0.5 if side <= _HALF_SCALE_SIDE else 0.25
+
+
 async def _render(
-    client: httpx.AsyncClient, key: str, ids: list[str], headers: dict[str, str]
+    client: httpx.AsyncClient,
+    key: str,
+    frames: dict[str, dict[str, Any]],
+    ids: list[str],
+    headers: dict[str, str],
 ) -> dict[str, bytes]:
-    response = await _get(
-        client,
-        f"{FIGMA_API}/images/{key}",
-        headers=headers,
-        params={"ids": ",".join(ids), "format": "png"},
-    )
-    urls: dict[str, str | None] = response.json().get("images", {})
+    by_scale: dict[float, list[str]] = {}
+    for node_id in ids:
+        by_scale.setdefault(_scale_for(frames[node_id]), []).append(node_id)
+    urls: dict[str, str | None] = {}
+    for scale, scaled_ids in by_scale.items():
+        response = await _get(
+            client,
+            f"{FIGMA_API}/images/{key}",
+            headers=headers,
+            params={"ids": ",".join(scaled_ids), "format": "png", "scale": scale},
+        )
+        urls = {**urls, **response.json().get("images", {})}
     rendered: dict[str, bytes] = {}
     for node_id in ids:
         image_url = urls.get(node_id)
@@ -148,7 +168,7 @@ async def import_figma(url: str, client: httpx.AsyncClient) -> RawPrototype:
     if not paths:
         raise HTTPException(status_code=502, detail=NO_SCREENS)
     ids = list(dict.fromkeys(node_id for _, path in paths for node_id in path))
-    rendered = await _render(client, key, ids, headers)
+    rendered = await _render(client, key, frames, ids, headers)
     starts = tuple(
         RawStart(start, tuple(RawScreen(frames[i]["name"], rendered[i]) for i in path))
         for start, path in paths

@@ -337,3 +337,51 @@ async def test_figma_returns_every_starting_point_up_to_the_cap(monkeypatch) -> 
         ]
     }
     assert len(figma._start_points(document, figma._frames(document), None)) == 5
+
+
+@pytest.mark.anyio
+async def test_tall_figma_frames_are_rendered_at_a_smaller_scale(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "figma_token", "tok")
+    scales: dict[str, str] = {}
+    base = _figma_handler()
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path.startswith("/v1/images/"):
+            scales[request.url.params["ids"]] = request.url.params["scale"]
+        if request.url.path.endswith("/nodes"):
+            response = base(request)
+            canvas = response.json()["nodes"]["0:1"]["document"]
+            sizes = {"1:1": 900, "1:2": 6373, "1:3": 900}
+            for frame in canvas["children"]:
+                frame["absoluteBoundingBox"] = {"width": 1440, "height": sizes[frame["id"]]}
+            return httpx.Response(200, json={"name": "App", "nodes": {"0:1": {"document": canvas}}})
+        return base(request)
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http:
+        await figma.import_figma(LINK, http)
+    assert scales == {"1:1,1:3": "1", "1:2": "0.5"}
+
+
+def test_one_oversized_screen_cuts_its_path_but_not_the_import(monkeypatch) -> None:
+    too_big = b"\x89PNG\r\n\x1a\n" + b"\x00" * (5 * 1024 * 1024)
+
+    async def capture(*, url=None, html=None):
+        return RawPrototype(
+            "Demo",
+            (
+                RawStart("Lungo", (RawScreen("A", too_big), RawScreen("B", PNG))),
+                RawStart(
+                    "Misto", (RawScreen("A", PNG), RawScreen("B", too_big), RawScreen("C", PNG))
+                ),
+                RawStart("Ok", (RawScreen("A", PNG),)),
+            ),
+        )
+
+    monkeypatch.setattr(service, "import_artifact", capture)
+    response = client.post("/prototypes/import", json={"source": "artifact", "url": ARTIFACT})
+    assert response.status_code == 201
+    starts = response.json()["starts"]
+    assert [(s["id"], s["name"], len(s["screens"])) for s in starts] == [
+        ("s1", "Misto (accorciato: schermata troppo grande)", 1),
+        ("s2", "Ok", 1),
+    ]

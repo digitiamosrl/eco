@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import uuid
 from datetime import UTC, datetime
 
@@ -9,34 +10,52 @@ from app import store
 from app.models import Prototype, PrototypeScreen, PrototypeStart
 from app.prototypes.artifact import import_artifact
 from app.prototypes.figma import import_figma
-from app.prototypes.raw import RawPrototype
+from app.prototypes.raw import RawPrototype, RawStart
 from app.prototypes.source import check_artifact_url
 from app.uploads import Upload, make_upload, save_uploads, upload_url
 
+logger = logging.getLogger(__name__)
 # Un browser o un import per volta (al massimo due): non c'è altro limite alle richieste.
 _SLOTS = asyncio.Semaphore(2)
 BAD_SCREEN = "Una schermata supera 5 MB o non è un'immagine valida."
 
 
-def _checked(png: bytes) -> Upload:
+def _checked(png: bytes) -> Upload | None:
     try:
         return make_upload(png)
-    except HTTPException as exc:
-        raise HTTPException(status_code=502, detail=BAD_SCREEN) from exc
+    except HTTPException:
+        return None
+
+
+def _screens(start: RawStart) -> tuple[list[PrototypeScreen], list[Upload], bool]:
+    """Le schermate valide in ordine, fino alla prima troppo grande (il resto non si raggiunge)."""
+    screens: list[PrototypeScreen] = []
+    uploads: list[Upload] = []
+    for index, screen in enumerate(start.screens):
+        upload = _checked(screen.png)
+        if upload is None:
+            logger.warning("%s: schermata %d scartata (oltre 5 MB o non valida)", start.name, index)
+            return screens, uploads, True
+        uploads.append(upload)
+        screens.append(
+            PrototypeScreen(index=index, name=screen.name, image_url=upload_url(upload) or "")
+        )
+    return screens, uploads, False
 
 
 def _to_prototype(source: str, raw: RawPrototype) -> tuple[Prototype, list[Upload]]:
+    """Un percorso con una schermata troppo grande si accorcia o si scarta: gli altri restano."""
     uploads: list[Upload] = []
     starts: list[PrototypeStart] = []
-    for start_index, start in enumerate(raw.starts, start=1):
-        screens: list[PrototypeScreen] = []
-        for index, screen in enumerate(start.screens):
-            upload = _checked(screen.png)
-            uploads.append(upload)
-            screens.append(
-                PrototypeScreen(index=index, name=screen.name, image_url=upload_url(upload) or "")
-            )
-        starts.append(PrototypeStart(id=f"s{start_index}", name=start.name, screens=screens))
+    for start in raw.starts:
+        screens, start_uploads, cut = _screens(start)
+        if not screens:
+            continue
+        uploads += start_uploads
+        name = f"{start.name} (accorciato: schermata troppo grande)" if cut else start.name
+        starts.append(PrototypeStart(id=f"s{len(starts) + 1}", name=name, screens=screens))
+    if not starts:
+        raise HTTPException(status_code=502, detail=BAD_SCREEN)
     prototype = Prototype(
         id=uuid.uuid4().hex,
         source=source,  # type: ignore[arg-type]
