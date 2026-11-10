@@ -154,3 +154,16 @@ async def test_model_can_be_overridden_per_responder() -> None:
     await LlmResponder(client).respond(PERSONA, POST)
 
     assert [body["model"] for body in sent] == ["altro/modello", "modello/persona"]
+
+
+async def test_pdf_attachment_is_sent_as_file_block(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr(settings, "upload_dir", tmp_path)
+    (tmp_path / "doc.pdf").write_bytes(b"%PDF-1.7 dati")
+    stimulus = POST.model_copy(update={"image_url": "/files/doc.pdf", "attachment_kind": "pdf"})
+    sent: list[dict] = []
+    client = _recording_client({**VALID_OUTPUT, "action": "react", "reaction": "adoro"}, sent)
+    response = await LlmResponder(client=client).respond(PERSONA, stimulus)
+    assert (response.action, response.reaction) == ("react", "adoro")
+    block = sent[0]["messages"][0]["content"][1]
+    assert block["type"] == "file"
+    assert block["file"]["file_data"].startswith("data:application/pdf;base64,")

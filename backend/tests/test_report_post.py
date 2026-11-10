@@ -139,3 +139,28 @@ def test_report_is_retried_after_a_failure(monkeypatch) -> None:
     created = _done_post()
     assert client.get(f"/tests/{created['id']}/report").status_code == 503
     assert client.get(f"/tests/{created['id']}/report").status_code == 200
+
+
+def test_report_lists_divergent_personas_and_validates(validate) -> None:
+    created = _done_post()
+    report = client.get(f"/tests/{created['id']}/report").json()
+    validate("report.schema.json", report)
+    for item in report["items"]:
+        expected = [r["persona_id"] for r in item["responses"] if r["said"] != r["thought"]]
+        assert item["divergent_persona_ids"] == expected
+
+
+def test_report_has_fidelity_only_when_calibrated(monkeypatch, tmp_path, validate) -> None:
+    from app.api import reports
+    from app.config import settings
+
+    monkeypatch.setattr(reports, "_REPORTS", {})
+    monkeypatch.setattr(settings, "calibration_path", str(tmp_path / "assente.json"))
+    assert "fidelity" not in client.get(f"/tests/{_done_post()['id']}/report").json()
+
+    path = tmp_path / "calibration.json"
+    path.write_text('{"score": 0.5, "basis": "12 post"}', "utf-8")
+    monkeypatch.setattr(settings, "calibration_path", str(path))
+    report = client.get(f"/tests/{_done_post()['id']}/report").json()
+    validate("report.schema.json", report)
+    assert report["fidelity"] == {"score": 0.5, "basis": "12 post"}

@@ -1,7 +1,6 @@
-const normalize = (s: string) => s.trim().replace(/\s+/g, " ").toLowerCase();
+import type { Report } from "../types/report";
+import type { Response } from "../types/response";
 
-// shortcut: computed on the client because the Report schema has no field for it; it should come from the backend report, as decided in PR #2.
-export function diverges(said: string, thought: string): boolean {
-  const s = normalize(said);
-  return s !== "" && s !== normalize(thought);
-}
+// The backend report lists, per item, the personas whose said and thought diverge (decision in PR #2).
+export const isDivergent = (item: Report["items"][number], r: Response) =>
+  item.divergent_persona_ids?.includes(r.persona_id) ?? false;

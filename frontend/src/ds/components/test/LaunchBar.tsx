@@ -12,7 +12,7 @@ export type LaunchBarProps = {
 
 export function LaunchBar({
   personas = 30,
-  description = "Decision maker di PMI italiane",
+  description = "Pubblico LinkedIn di Digitiamo",
   eta = "circa 3 minuti",
   onStart,
   loading,

@@ -102,7 +102,7 @@ export default function PrototypeImport({ personas, loading, onStart }: Props) {
           {source === "figma"
             ? "Frame e collegamenti del prototipo Figma."
             : "Schermate dell’artifact, seguendo pulsanti e link."}{" "}
-          Ci vuole meno di un minuto.
+          Può volerci fino a un minuto e mezzo.
         </Alert>
         <div className="scr-pt-strip" role="status" aria-label="Importazione in corso">
           {[0, 1, 2, 3, 4].map((i) => (

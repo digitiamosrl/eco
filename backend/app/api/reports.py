@@ -6,6 +6,7 @@ from app import store
 from app.engine.llm_client import LlmError
 from app.models import Report, Test
 from app.report.builder import build_post_report
+from app.report.calibration import load_fidelity
 from app.report.summarize import build_summarizer
 
 router = APIRouter()
@@ -20,7 +21,11 @@ async def _report_for(test: Test) -> Report:
     if task is None:
         task = asyncio.create_task(
             build_post_report(
-                test.id, test.stimuli, store.list_responses(test.id), build_summarizer()
+                test.id,
+                test.stimuli,
+                store.list_responses(test.id),
+                build_summarizer(),
+                load_fidelity(),
             )
         )
         _REPORTS[test.id] = task

@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     openrouter_api_key: str = ""
+    # Token personale Figma (sola lettura): serve all'import dei prototipi Figma.
+    figma_token: str = ""
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     # Id modello di OpenRouter, da impostare nel .env (nessun default).
     persona_model: str = ""
@@ -25,6 +27,8 @@ class Settings(BaseSettings):
     # fake: risponditore deterministico senza rete. llm: modelli via OpenRouter.
     responder: Literal["fake", "llm"] = "fake"
     summarizer: Literal["fake", "llm"] = "fake"
+    # Fidelity score già calcolato (vedi report/calibration.py). Assente: il report lo dichiara.
+    calibration_path: str = str(REPO_ROOT / "data" / "processed" / "calibration.json")
     # Pool di personas generato (percorso dalla radice del repo). Vuoto: le fixture.
     personas_path: str = ""
 

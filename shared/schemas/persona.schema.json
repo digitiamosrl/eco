@@ -4,13 +4,61 @@
   "title": "Persona",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "role", "sector", "company_size", "region", "profile"],
+  "required": [
+    "id",
+    "role",
+    "sector",
+    "company_size",
+    "region",
+    "profile"
+  ],
   "properties": {
-    "id": { "type": "string" },
-    "role": { "type": "string", "description": "Ruolo della persona" },
-    "sector": { "type": "string" },
-    "company_size": { "type": "string", "enum": ["micro", "piccola", "media", "grande"] },
-    "region": { "type": "string" },
-    "profile": { "type": "string", "description": "Descrizione sintetica, senza dati identificabili" }
+    "id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "description": "Ruolo della persona"
+    },
+    "sector": {
+      "type": "string"
+    },
+    "company_size": {
+      "type": "string",
+      "enum": [
+        "micro",
+        "piccola",
+        "media",
+        "grande"
+      ]
+    },
+    "region": {
+      "type": "string"
+    },
+    "profile": {
+      "type": "string",
+      "description": "Descrizione sintetica, senza dati identificabili"
+    },
+    "ai_attitude": {
+      "type": "string",
+      "enum": [
+        "entusiasta",
+        "curiosa",
+        "pragmatica",
+        "scettica",
+        "indifferente"
+      ],
+      "description": "Rapporto con l'intelligenza artificiale, campionato (ipotesi dichiarata, docs/ipotesi-personas.md)."
+    },
+    "linkedin_use": {
+      "type": "string",
+      "enum": [
+        "legge",
+        "ogni_tanto",
+        "partecipa",
+        "solo_contatti"
+      ],
+      "description": "Come usa LinkedIn, campionato (ipotesi dichiarata, docs/ipotesi-personas.md)."
+    }
   }
 }

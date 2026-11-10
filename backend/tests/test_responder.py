@@ -43,3 +43,12 @@ def test_build_responder_defaults_to_fake(monkeypatch) -> None:
     assert isinstance(build_responder(), FakeResponder)
     monkeypatch.setattr(settings, "responder", "llm")
     assert isinstance(build_responder(), LlmResponder)
+
+
+async def test_fake_responder_gives_action_only_for_posts() -> None:
+    post = Stimulus(id="variante-a", kind="post", text="Testo")
+    screen = Stimulus(id="f-0", kind="prototype_screen", flow_id="f", screen_index=0)
+    reply = await FakeResponder().respond(PERSONAS[0], post)
+    assert reply.action in {"react", "comment", "share", "scroll"}
+    assert (reply.reaction is not None) == (reply.action == "react")
+    assert (await FakeResponder().respond(PERSONAS[0], screen)).action is None

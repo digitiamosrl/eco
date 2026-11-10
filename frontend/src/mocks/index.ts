@@ -26,6 +26,8 @@ export const mockPersonas: Persona[] = [
     company_size: "piccola",
     region: "Lombardia",
     profile: "Guida l'azienda di famiglia, poco tempo per LinkedIn.",
+    ai_attitude: "pragmatica",
+    linkedin_use: "legge",
   },
   {
     id: "p2",
@@ -34,6 +36,8 @@ export const mockPersonas: Persona[] = [
     company_size: "media",
     region: "Emilia-Romagna",
     profile: "Valuta fornitori digitali, diffidente verso le promesse generiche.",
+    ai_attitude: "scettica",
+    linkedin_use: "partecipa",
   },
   {
     id: "p3",
@@ -42,6 +46,8 @@ export const mockPersonas: Persona[] = [
     company_size: "micro",
     region: "Puglia",
     profile: "Decide da solo, molto attento ai costi.",
+    ai_attitude: "indifferente",
+    linkedin_use: "solo_contatti",
   },
 ];
 
@@ -52,6 +58,7 @@ export const mockReport: Report = {
   items: [
     {
       stimulus_id: "variante-b",
+      divergent_persona_ids: ["p1"],
       rank: 1,
       mean_score: 3.7,
       score_distribution: { "1": 0, "2": 1, "3": 0, "4": 1, "5": 1 },
@@ -91,6 +98,7 @@ export const mockReport: Report = {
     },
     {
       stimulus_id: "variante-a",
+      divergent_persona_ids: ["p1", "p2"],
       rank: 2,
       mean_score: 2.3,
       score_distribution: { "1": 0, "2": 2, "3": 1, "4": 0, "5": 0 },
@@ -134,6 +142,7 @@ export const mockReport: Report = {
 // Report of a test with one post: one item, every response has a feed action.
 export const mockSingleItem = (stimulusId: string): Report["items"][number] => ({
   stimulus_id: stimulusId,
+  divergent_persona_ids: ["p1", "p2"],
   rank: 1,
   mean_score: 3.7,
   score_distribution: { "1": 0, "2": 1, "3": 0, "4": 1, "5": 1 },

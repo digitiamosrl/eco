@@ -10,7 +10,7 @@ from starlette.datastructures import UploadFile
 from app.config import MAX_IMAGE_BYTES, settings
 
 _VARIANT_KEY = re.compile(r"^variants\[(\d+)\]\[(label|text|image)\]$")
-_FORMAT_ERROR = "Formato immagine non valido: usa PNG, JPEG o WebP"
+_FORMAT_ERROR = "Formato non valido: usa PNG, JPEG, WebP o PDF"
 
 
 class Upload(NamedTuple):
@@ -36,6 +36,8 @@ def _extension(data: bytes) -> str | None:
         return ".png"
     if data.startswith(b"\xff\xd8\xff"):
         return ".jpg"
+    if data.startswith(b"%PDF"):
+        return ".pdf"
     if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
         return ".webp"
     return None
@@ -43,7 +45,7 @@ def _extension(data: bytes) -> str | None:
 
 def make_upload(data: bytes) -> Upload:
     if len(data) > MAX_IMAGE_BYTES:
-        raise HTTPException(status_code=422, detail="L'immagine supera 5 MB")
+        raise HTTPException(status_code=422, detail="L'allegato supera 5 MB")
     extension = _extension(data)
     if extension is None:
         raise HTTPException(status_code=422, detail=_FORMAT_ERROR)
@@ -53,6 +55,12 @@ def make_upload(data: bytes) -> Upload:
 async def read_upload(file: UploadFile) -> Upload:
     """Legge al massimo un byte oltre il limite, così un file enorme non finisce in memoria."""
     return make_upload(await file.read(MAX_IMAGE_BYTES + 1))
+
+
+def attachment_kind(upload: Upload | None) -> str | None:
+    if upload is None:
+        return None
+    return "pdf" if upload.name.endswith(".pdf") else "image"
 
 
 def upload_url(upload: Upload | None) -> str | None:

@@ -11,7 +11,7 @@ POC interna Digitiamo: un panel di personas sintetiche, costruite su dati reali,
 | Pre-test di post | Post LinkedIn: testo + immagine, 2–5 varianti | Ranking, distribuzione delle risposte, obiezioni, citazioni |
 | Test di prototipo | 2–3 flussi catturati con Playwright | Criticità e punti di abbandono per schermata |
 
-**Segmento unico:** decision maker di PMI italiane.
+**Segmento unico:** il pubblico della pagina LinkedIn di Digitiamo (PMI e grandi aziende), campionato dalla sua audience.
 
 **Prova di valore:** il panel classifica post Digitiamo già pubblicati e la classifica si confronta con l'engagement reale. Sul prototipo, le criticità rilevate si confrontano con feedback reali già raccolti.
 

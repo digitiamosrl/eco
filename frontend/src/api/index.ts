@@ -51,6 +51,15 @@ export function startPostTest(variants: VariantDraft[]): Promise<Test> {
   return post<Test>("/tests", form);
 }
 
+// The backend serves captures at /files/…, reachable from the browser under /api.
+export const withApiUrls = (p: Prototype): Prototype => ({
+  ...p,
+  starts: p.starts.map((s) => ({
+    ...s,
+    screens: s.screens.map((sc) => ({ ...sc, image_url: sc.image_url.startsWith("/") ? `/api${sc.image_url}` : sc.image_url })),
+  })),
+});
+
 // A link goes as JSON, an artifact HTML file as multipart. The signal backs "Annulla".
 export function importPrototype(input: mock.ImportInput, signal?: AbortSignal): Promise<Prototype> {
   if (useMocks) return mock.importPrototype(input, signal);
@@ -58,9 +67,9 @@ export function importPrototype(input: mock.ImportInput, signal?: AbortSignal): 
     const form = new FormData();
     form.append("source", "artifact");
     form.append("file", input.file);
-    return post<Prototype>("/prototypes/import", form, signal);
+    return post<Prototype>("/prototypes/import", form, signal).then(withApiUrls);
   }
-  return post<Prototype>("/prototypes/import", { source: input.source, url: input.url }, signal);
+  return post<Prototype>("/prototypes/import", { source: input.source, url: input.url }, signal).then(withApiUrls);
 }
 
 export const startPrototypeTest = (prototypeId: string, paths: PrototypePath[]) =>

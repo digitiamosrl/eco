@@ -29,7 +29,24 @@ export interface Report {
      */
     thought_summary: string;
     responses: Response[];
+    /**
+     * Personas la cui risposta a questo stimolo diverge tra said e thought. Calcolato dal report (decisione PR #2).
+     */
+    divergent_persona_ids?: string[];
   }[];
+  /**
+   * Calibrazione: quanto la classifica del panel rispecchia l'engagement reale dei post già pubblicati. Assente se non ancora calcolata.
+   */
+  fidelity?: {
+    /**
+     * Tau-b di Kendall tra ranking del panel ed engagement reale.
+     */
+    score: number;
+    /**
+     * Su cosa è calcolato, in italiano, per esempio «12 post Digitiamo pubblicati, ott 2025–set 2026».
+     */
+    basis: string;
+  };
 }
 export interface Response {
   persona_id: string;

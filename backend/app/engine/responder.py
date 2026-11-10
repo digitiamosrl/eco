@@ -30,6 +30,10 @@ _OBJECTIONS = (
 )
 
 
+_ACTIONS = ("react", "comment", "share", "scroll")
+_REACTIONS = ("consiglio", "festeggio", "sostengo", "adoro", "perspicace", "divertente")
+
+
 class Responder(Protocol):
     async def respond(self, persona: Persona, stimulus: Stimulus) -> Response: ...
 
@@ -39,6 +43,7 @@ class FakeResponder:
 
     async def respond(self, persona: Persona, stimulus: Stimulus) -> Response:
         rng = random.Random(f"{persona.id}|{stimulus.id}")
+        action = rng.choice(_ACTIONS) if stimulus.kind == "post" else None
         return Response(
             persona_id=persona.id,
             stimulus_id=stimulus.id,
@@ -46,6 +51,8 @@ class FakeResponder:
             said=rng.choice(_SAID),
             score=rng.randint(1, 5),
             objections=rng.sample(_OBJECTIONS, k=rng.choice([0, 0, 1, 2])),
+            action=action,
+            reaction=rng.choice(_REACTIONS) if action == "react" else None,
         )
 
 
@@ -60,6 +67,7 @@ _MODEL_SCHEMA = {
     "required": [r for r in _FULL_SCHEMA["required"] if r not in _IDS],
 }
 _IMAGE_TYPES = {".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp"}
+_PDF_SUFFIX = ".pdf"
 _FILES_PREFIX = "/files/"
 _IMAGE_ERROR = "Immagine dello stimolo non disponibile."
 _INVALID_OUTPUT = "La risposta della persona non è valida."
@@ -76,9 +84,18 @@ def _image_block(image_url: str) -> dict[str, Any]:
     if not image_url.startswith(_FILES_PREFIX):
         raise LlmError(_IMAGE_ERROR)
     path = find_upload(image_url.removeprefix(_FILES_PREFIX))
-    if path is None or path.suffix not in _IMAGE_TYPES:
+    if path is None or path.suffix not in {*_IMAGE_TYPES, _PDF_SUFFIX}:
         raise LlmError(_IMAGE_ERROR)
     encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    if path.suffix == _PDF_SUFFIX:
+        # Formato OpenRouter per i documenti: il PDF viaggia come blocco "file".
+        return {
+            "type": "file",
+            "file": {
+                "filename": "allegato.pdf",
+                "file_data": f"data:application/pdf;base64,{encoded}",
+            },
+        }
     return {
         "type": "image_url",
         "image_url": {"url": f"data:{_IMAGE_TYPES[path.suffix]};base64,{encoded}"},

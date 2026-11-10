@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Test } from "../types/test";
 import { IMPORT_MS, RUN_MS, getReport, importPrototype, progress, startPostTest } from "./mock";
+import { withApiUrls } from "./index";
 
 const test: Test = {
   id: "t9",
@@ -60,5 +61,18 @@ describe("getReport", () => {
     const report = await getReport(t.id);
     expect(report.items).toHaveLength(1);
     expect(report.items[0].responses.every((r) => r.action)).toBe(true);
+  });
+});
+
+describe("withApiUrls", () => {
+  it("prefixes server paths with /api and leaves other URLs alone", () => {
+    const p = withApiUrls({
+      id: "x",
+      source: "artifact",
+      name: "n",
+      imported_at: "2026-11-10T00:00:00Z",
+      starts: [{ id: "s", name: "s", screens: [{ index: 0, name: "a", image_url: "/files/a.png" }, { index: 1, name: "b", image_url: "data:image/svg+xml,x" }] }],
+    });
+    expect(p.starts[0].screens.map((s) => s.image_url)).toEqual(["/api/files/a.png", "data:image/svg+xml,x"]);
   });
 });

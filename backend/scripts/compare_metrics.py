@@ -7,10 +7,10 @@ su tutti i post); un modello ha più run.
 from collections import defaultdict
 from collections.abc import Sequence
 from itertools import combinations
-from math import sqrt
 from statistics import mean, pstdev
 
 from app.models import Response
+from app.report.calibration import kendall_tau_b
 
 Run = Sequence[Response]
 
@@ -20,25 +20,6 @@ def post_means(run: Run) -> dict[str, float]:
     for response in run:
         scores[response.stimulus_id].append(response.score)
     return {post: mean(values) for post, values in scores.items()}
-
-
-def kendall_tau_b(x: Sequence[float], y: Sequence[float]) -> float | None:
-    """Correlazione di rango con gestione dei pareggi. None se un vettore è costante."""
-    concordant = discordant = tied_x = tied_y = 0
-    for (x1, y1), (x2, y2) in combinations(zip(x, y, strict=True), 2):
-        dx, dy = x1 - x2, y1 - y2
-        if dx == 0 and dy == 0:
-            continue
-        if dx == 0:
-            tied_x += 1
-        elif dy == 0:
-            tied_y += 1
-        elif (dx > 0) == (dy > 0):
-            concordant += 1
-        else:
-            discordant += 1
-    denominator = sqrt((concordant + discordant + tied_x) * (concordant + discordant + tied_y))
-    return None if denominator == 0 else (concordant - discordant) / denominator
 
 
 def _tau_between(a: dict[str, float], b: dict[str, float]) -> float | None:

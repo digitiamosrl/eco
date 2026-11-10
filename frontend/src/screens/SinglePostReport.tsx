@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button, Card, Eyebrow, FilterChips, Objection, ResponseTable, ScoreBlock, Voices } from "../ds";
 import { countActions } from "../lib/actions";
-import { diverges } from "../lib/diverge";
+import { isDivergent } from "../lib/diverge";
 import type { Persona } from "../types/persona";
 import type { Report } from "../types/report";
 import type { Stimulus } from "../types/stimulus";
@@ -38,12 +38,12 @@ export default function SinglePostReport({ summary, item, stimulus, personas }: 
       score: r.score,
       said: r.said,
       thought: r.thought,
-      diverge: diverges(r.said, r.thought),
+      diverge: isDivergent(item, r),
     }))
     .filter((r) => filter !== "gap" || r.diverge)
     .sort((a, b) => (filter === "vote" ? b.score - a.score : 0));
   const visible = showAll ? rows : rows.slice(0, VISIBLE);
-  const gapCount = item.responses.filter((r) => diverges(r.said, r.thought)).length;
+  const gapCount = item.responses.filter((r) => isDivergent(item, r)).length;
 
   return (
     <>

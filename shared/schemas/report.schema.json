@@ -73,7 +73,35 @@
             "items": {
               "$ref": "response.schema.json"
             }
+          },
+          "divergent_persona_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Personas la cui risposta a questo stimolo diverge tra said e thought. Calcolato dal report (decisione PR #2)."
           }
+        }
+      }
+    },
+    "fidelity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "score",
+        "basis"
+      ],
+      "description": "Calibrazione: quanto la classifica del panel rispecchia l'engagement reale dei post già pubblicati. Assente se non ancora calcolata.",
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1,
+          "description": "Tau-b di Kendall tra ranking del panel ed engagement reale."
+        },
+        "basis": {
+          "type": "string",
+          "description": "Su cosa è calcolato, in italiano, per esempio «12 post Digitiamo pubblicati, ott 2025–set 2026»."
         }
       }
     }

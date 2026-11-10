@@ -12,7 +12,7 @@ import {
   SimulatedNotice,
   VariantResult,
 } from "../ds";
-import { diverges } from "../lib/diverge";
+import { isDivergent } from "../lib/diverge";
 import { useLoad } from "../lib/useLoad";
 import { variantName } from "../lib/variants";
 import type { Report } from "../types/report";
@@ -39,7 +39,7 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
   const notices = (
     <div className="eco-notices" style={{ marginBottom: 36 }}>
       <SimulatedNotice />
-      <FidelityStatus />
+      <FidelityStatus value={report.data?.fidelity?.score} basis={report.data?.fidelity?.basis} />
     </div>
   );
 
@@ -133,13 +133,13 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
           score: r.score,
           said: r.said,
           thought: r.thought,
-          diverge: diverges(r.said, r.thought),
+          diverge: isDivergent(it, r),
         }))
         .filter((r) => filter !== "gap" || r.diverge)
         .sort((a, b) => (filter === "vote" ? b.score - a.score : 0)),
     }))
     .filter((g) => g.rows.length > 0);
-  const gapCount = items.reduce((n, it) => n + it.responses.filter((r) => diverges(r.said, r.thought)).length, 0);
+  const gapCount = items.reduce((n, it) => n + it.responses.filter((r) => isDivergent(it, r)).length, 0);
 
   return (
     <>
