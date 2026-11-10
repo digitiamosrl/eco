@@ -96,7 +96,13 @@ def _figma_handler(status: int = 200):
         if request.url.path.startswith("/v1/images/"):
             ids = request.url.params["ids"].split(",")
             return httpx.Response(
-                200, json={"images": {i: f"https://img.test/{i}.png" for i in ids}}
+                200,
+                json={
+                    "images": {
+                        i: f"https://figma-alpha-api.s3.us-west-2.amazonaws.com/{i}.png"
+                        for i in ids
+                    }
+                },
             )
         return httpx.Response(200, content=PNG)
 
@@ -216,3 +222,55 @@ def test_prototype_test_rejects_unknown_or_inconsistent_input(fake_artifact) -> 
         {"kind": "prototype"},
     ]
     assert [client.post("/tests", json=c).status_code for c in cases] == [422] * len(cases)
+
+
+def test_artifact_browser_is_limited_to_known_hosts() -> None:
+    from app.prototypes.artifact import is_allowed
+
+    assert is_allowed("https://claude.ai/public/artifacts/x")
+    assert is_allowed("https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/react.min.js")
+    assert is_allowed("data:image/png;base64,AAAA") and is_allowed("about:blank")
+    for url in (
+        "http://localhost:8000/files/x.png",
+        "http://169.254.169.254/latest/meta-data/",
+        "https://claude.ai.evil.com/x",
+        "http://claude.ai/x",
+        "file:///etc/passwd",
+    ):
+        assert not is_allowed(url)
+
+
+@pytest.mark.anyio
+async def test_figma_image_from_unknown_host_is_refused(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "figma_token", "tok")
+    handler = _figma_handler()
+
+    def evil(request: httpx.Request) -> httpx.Response:
+        response = handler(request)
+        if request.url.path.startswith("/v1/images/"):
+            return httpx.Response(200, json={"images": {"1:1": "http://169.254.169.254/x.png"}})
+        return response
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(evil)) as http:
+        with pytest.raises(HTTPException) as error:
+            await figma.import_figma("https://www.figma.com/proto/Key1/x", http)
+    assert error.value.status_code == 502
+
+
+def test_oversized_or_unmeasured_import_bodies_are_rejected() -> None:
+    big = {
+        "source": (None, "artifact"),
+        "file": ("a.html", b"x" * (2 * 1024 * 1024 + 200_000), "text/html"),
+    }
+    assert client.post("/prototypes/import", files=big).status_code == 413
+    huge_json = {"source": "figma", "url": "https://figma.com/proto/K/" + "a" * 5000}
+    assert client.post("/prototypes/import", json=huge_json).status_code == 413
+
+
+def test_too_big_screen_is_a_502(monkeypatch) -> None:
+    async def capture(*, url=None, html=None):
+        return RawPrototype("Demo", (RawStart("P", (RawScreen("S", b"non e' un png"),)),))
+
+    monkeypatch.setattr(service, "import_artifact", capture)
+    response = client.post("/prototypes/import", json={"source": "artifact", "url": ARTIFACT})
+    assert (response.status_code, response.json()["detail"]) == (502, service.BAD_SCREEN)

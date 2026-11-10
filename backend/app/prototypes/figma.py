@@ -5,6 +5,7 @@ Il file deve essere condiviso con «chiunque abbia il link»; serve FIGMA_TOKEN 
 
 import logging
 from typing import Any
+from urllib.parse import urlparse
 
 import httpx
 from fastapi import HTTPException
@@ -23,6 +24,7 @@ PRIVATE_FILE = (
     "In Figma imposta la condivisione su «chiunque abbia il link» e riprova."
 )
 IMPORT_FAILED = "Import da Figma non riuscito. Riprova tra poco."
+_IMAGE_HOSTS = (".amazonaws.com", ".figma.com")
 NO_TOKEN = "Import da Figma non configurato: manca FIGMA_TOKEN."
 
 
@@ -89,6 +91,11 @@ async def _get(client: httpx.AsyncClient, url: str, **kwargs: Any) -> httpx.Resp
     return response
 
 
+def _is_image_host(url: str) -> bool:
+    parsed = urlparse(url)
+    return parsed.scheme == "https" and (parsed.hostname or "").endswith(_IMAGE_HOSTS)
+
+
 async def _render(client: httpx.AsyncClient, key: str, ids: list[str]) -> dict[str, bytes]:
     response = await _get(
         client, f"{FIGMA_API}/images/{key}", params={"ids": ",".join(ids), "format": "png"}
@@ -96,9 +103,10 @@ async def _render(client: httpx.AsyncClient, key: str, ids: list[str]) -> dict[s
     urls: dict[str, str | None] = response.json().get("images", {})
     rendered: dict[str, bytes] = {}
     for node_id in ids:
-        if urls.get(node_id) is None:
+        image_url = urls.get(node_id)
+        if image_url is None or not _is_image_host(image_url):
             raise HTTPException(status_code=502, detail=IMPORT_FAILED)
-        rendered[node_id] = (await _get(client, urls[node_id])).content
+        rendered[node_id] = (await _get(client, image_url)).content
     return rendered
 
 

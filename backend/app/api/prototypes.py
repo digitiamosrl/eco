@@ -12,6 +12,16 @@ from app.prototypes.source import INVALID_LINK
 router = APIRouter()
 
 MAX_HTML_BYTES = 2 * 1024 * 1024
+_FORM_OVERHEAD = 64 * 1024
+_MAX_JSON_BYTES = 4 * 1024
+TOO_LARGE = "Richiesta troppo grande"
+
+
+def _check_size(request: Request, limit: int) -> None:
+    """Prima di leggere il corpo: form() e json() lo caricherebbero tutto in memoria o su disco."""
+    length = request.headers.get("content-length", "")
+    if not length.isdigit() or int(length) > limit:
+        raise HTTPException(status_code=413, detail=TOO_LARGE)
 
 
 class ImportRequest(BaseModel):
@@ -34,6 +44,7 @@ async def _read_html(form_file: Any) -> str:
 
 
 async def _import_html(request: Request) -> Prototype:
+    _check_size(request, MAX_HTML_BYTES + _FORM_OVERHEAD)
     form = await request.form()
     if form.get("source") != "artifact":
         raise HTTPException(status_code=422, detail="Con un file la sorgente è «artifact»")
@@ -41,6 +52,7 @@ async def _import_html(request: Request) -> Prototype:
 
 
 async def _import_link(request: Request) -> Prototype:
+    _check_size(request, _MAX_JSON_BYTES)
     try:
         payload = await request.json()
     except ValueError as exc:

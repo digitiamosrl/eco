@@ -154,7 +154,7 @@ class PrototypePath(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     start_id: str
-    screen_indexes: list[Annotated[int, Field(ge=0)]] = Field(min_length=1)
+    screen_indexes: list[Annotated[int, Field(ge=0)]] = Field(min_length=1, max_length=8)
 
 
 class PrototypeTestRequest(BaseModel):
