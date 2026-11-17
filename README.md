@@ -29,7 +29,7 @@ Il contratto tra le due parti è in `shared/schemas/`: si modifica solo insieme.
 ## Stack
 
 - **Backend:** Python 3.12, FastAPI, SQLite
-- **AI:** modelli via OpenRouter (modello leggero per le personas, modello più capace per il report, ids da `PERSONA_MODEL` e `REPORT_MODEL`), output in JSON validato contro lo schema
+- **AI:** modelli locali con Ollama, via API compatibile OpenAI (ids da `PERSONA_MODEL` e `REPORT_MODEL`; OpenRouter resta un'alternativa da `.env`), output in JSON validato contro lo schema
 - **Cattura prototipo:** Playwright, 2–3 sessioni da script
 - **Frontend:** React + Vite + TypeScript
 
@@ -64,7 +64,7 @@ cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 playwright install chromium
-cp .env.example .env        # inserire OPENROUTER_API_KEY, PERSONA_MODEL e REPORT_MODEL
+cp .env.example .env        # poi le variabili di docs/provider-ollama.md
 uvicorn app.main:app --reload
 
 # frontend
