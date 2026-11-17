@@ -167,3 +167,16 @@ async def test_pdf_attachment_is_sent_as_file_block(monkeypatch, tmp_path) -> No
     block = sent[0]["messages"][0]["content"][1]
     assert block["type"] == "file"
     assert block["file"]["file_data"].startswith("data:application/pdf;base64,")
+
+
+async def test_model_decides_the_action_before_writing_what_it_says() -> None:
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, POST)
+    order = list(sent[0]["response_format"]["json_schema"]["schema"]["properties"])
+    assert order[:4] == ["thought", "action", "reaction", "said"]
+
+
+async def test_persona_calls_keep_the_model_temperature() -> None:
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, POST)
+    assert "temperature" not in sent[0]  # la varietà tra personas viene anche da qui

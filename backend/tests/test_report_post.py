@@ -109,6 +109,9 @@ class CountingSummarizer:
     async def summary(self, ranking) -> str:
         return "riepilogo"
 
+    async def divergent_ids(self, stats) -> list[str]:
+        return []
+
 
 def test_report_is_built_once_per_test(monkeypatch) -> None:
     from app.api import reports as reports_api

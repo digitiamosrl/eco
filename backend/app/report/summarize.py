@@ -17,6 +17,12 @@ class Summarizer(Protocol):
 
     async def summary(self, ranking: Sequence[StimulusStats]) -> str: ...
 
+    async def divergent_ids(self, stats: StimulusStats) -> list[str]: ...
+
+
+def _norm(text: str) -> str:
+    return " ".join(text.lower().split())
+
 
 class FakeSummarizer:
     """Testo semplice composto dai numeri, nessun modello."""
@@ -31,6 +37,10 @@ class FakeSummarizer:
         positive = sum(1 for r in stats.responses if r.score >= 4)
         return f"{positive} risposte su {len(stats.responses)} con punteggio 4 o 5."
 
+    async def divergent_ids(self, stats: StimulusStats) -> list[str]:
+        """Regola sui testi: basta per i test, dove le risposte sono finte."""
+        return [r.persona_id for r in stats.responses if _norm(r.said) != _norm(r.thought)]
+
     async def summary(self, ranking: Sequence[StimulusStats]) -> str:
         if not ranking:
             return "Nessuna risposta registrata."
@@ -42,13 +52,39 @@ class FakeSummarizer:
         )
 
 
+_TONES = ("positivo", "neutro", "negativo")
+
+
+def _diverges(thought_tone: str, said_tone: str) -> bool:
+    """Diverge solo un giudizio opposto: pensa male e in pubblico loda, o il contrario.
+
+    Un «Ok.» o un «Già.» di cortesia non conta: tacere la critica non è dire il contrario.
+    """
+    return {thought_tone, said_tone} == {"positivo", "negativo"}
+
+
 _VARIANT_SCHEMA = {
     "type": "object",
     "additionalProperties": False,
-    "required": ["said_summary", "thought_summary"],
+    "required": ["said_summary", "thought_summary", "tones"],
     "properties": {
         "said_summary": {"type": "string", "minLength": 1},
         "thought_summary": {"type": "string", "minLength": 1},
+        # Tono di pensato e detto per ogni persona: due etichette facili al posto di un verdetto,
+        # che i modelli piccoli a volte appiattiscono su "coerente". La regola è nel codice.
+        "tones": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["persona_id", "thought_tone", "said_tone"],
+                "properties": {
+                    "persona_id": {"type": "string"},
+                    "thought_tone": {"enum": list(_TONES)},
+                    "said_tone": {"enum": list(_TONES)},
+                },
+            },
+        },
     },
 }
 _OVERVIEW_SCHEMA = {
@@ -65,7 +101,13 @@ _INVALID_SUMMARY = "Il riepilogo generato non è valido."
 
 def _responses_json(stats: StimulusStats) -> str:
     rows = [
-        {"thought": r.thought, "said": r.said, "score": r.score, "objections": r.objections}
+        {
+            "persona_id": r.persona_id,
+            "thought": r.thought,
+            "said": r.said,
+            "score": r.score,
+            "objections": r.objections,
+        }
         for r in stats.responses
     ]
     return json.dumps(rows, ensure_ascii=False, indent=2)
@@ -87,13 +129,20 @@ class LlmSummarizer:
     def __init__(self, client: httpx.AsyncClient | None = None) -> None:
         self._client = client
         # Said e thought di una variante vengono dalla stessa chiamata: il dict evita la seconda.
-        self._variants: dict[str, dict[str, str]] = {}
+        self._variants: dict[str, dict[str, Any]] = {}
 
     async def said_summary(self, stats: StimulusStats) -> str:
         return (await self._variant(stats))["said_summary"]
 
     async def thought_summary(self, stats: StimulusStats) -> str:
         return (await self._variant(stats))["thought_summary"]
+
+    async def divergent_ids(self, stats: StimulusStats) -> list[str]:
+        """Giudicata dal modello nella stessa chiamata; restano solo id che esistono davvero."""
+        tones = (await self._variant(stats))["tones"]
+        chosen = {t["persona_id"] for t in tones if _diverges(t["thought_tone"], t["said_tone"])}
+        # Chi scorre oltre senza dire niente non può divergere, qualunque cosa dica il modello.
+        return [r.persona_id for r in stats.responses if r.persona_id in chosen and r.said.strip()]
 
     async def summary(self, ranking: Sequence[StimulusStats]) -> str:
         if not ranking:
@@ -104,7 +153,7 @@ class LlmSummarizer:
             raise LlmError(_INVALID_SUMMARY)
         return data["summary"]
 
-    async def _variant(self, stats: StimulusStats) -> dict[str, str]:
+    async def _variant(self, stats: StimulusStats) -> dict[str, Any]:
         key = stats.stimulus.id
         if key not in self._variants:
             label = stats.stimulus.variant_label or stats.stimulus.id
@@ -124,6 +173,7 @@ class LlmSummarizer:
             messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}],
             schema_name=schema_name,
             schema=schema,
+            temperature=settings.report_temperature,
         )
 
 
