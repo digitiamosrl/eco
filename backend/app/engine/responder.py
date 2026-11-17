@@ -31,6 +31,7 @@ _OBJECTIONS = (
 
 
 _ACTIONS = ("react", "comment", "share", "scroll")
+_MISUNDERSTOOD = ("Non capisco cosa succede se clicco qui", "Il prezzo è mensile o annuale?")
 _REACTIONS = ("consiglio", "festeggio", "sostengo", "adoro", "perspicace", "divertente")
 
 
@@ -44,6 +45,7 @@ class FakeResponder:
     async def respond(self, persona: Persona, stimulus: Stimulus) -> Response:
         rng = random.Random(f"{persona.id}|{stimulus.id}")
         action = rng.choice(_ACTIONS) if stimulus.kind == "post" else None
+        screen = rng.choice([0, 0, 1]) if stimulus.kind == "prototype_screen" else None
         return Response(
             persona_id=persona.id,
             stimulus_id=stimulus.id,
@@ -53,6 +55,8 @@ class FakeResponder:
             objections=rng.sample(_OBJECTIONS, k=rng.choice([0, 0, 1, 2])),
             action=action,
             reaction=rng.choice(_REACTIONS) if action == "react" else None,
+            misunderstood=None if screen is None else rng.sample(_MISUNDERSTOOD, k=screen),
+            would_abandon=None if screen is None else rng.random() < 0.3,
         )
 
 
@@ -102,10 +106,17 @@ def _image_block(image_url: str) -> dict[str, Any]:
     }
 
 
+def _stimulus_text(stimulus: Stimulus) -> str:
+    if stimulus.kind == "prototype_screen":
+        return load_prompt("prototype_screen.md").format(
+            step=(stimulus.screen_index or 0) + 1, name=stimulus.page_structure or ""
+        )
+    return stimulus.text or ""
+
+
 def _messages(persona: Persona, stimulus: Stimulus) -> list[dict[str, Any]]:
     text = load_prompt("persona_response.md").format(
-        persona=_persona_text(persona),
-        stimulus=stimulus.text or stimulus.page_structure or "",
+        persona=_persona_text(persona), stimulus=_stimulus_text(stimulus)
     )
     content: list[dict[str, Any]] = [{"type": "text", "text": text}]
     if stimulus.image_url is not None:

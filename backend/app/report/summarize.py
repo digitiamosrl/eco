@@ -7,6 +7,7 @@ from jsonschema import Draft202012Validator
 
 from app.config import settings
 from app.engine.llm_client import LlmError, chat_json, load_prompt, shared_client
+from app.models import Stimulus
 from app.report.aggregate import StimulusStats
 
 
@@ -35,9 +36,13 @@ class FakeSummarizer:
         if not ranking:
             return "Nessuna risposta registrata."
         top = ranking[0]
-        label = top.stimulus.variant_label or top.stimulus.id
+        if top.abandon_count is not None:
+            return (
+                f"Punto più critico la {label(top.stimulus)}, con {top.abandon_count} abbandoni "
+                f"su {len(top.responses)} risposte. Risultati simulati."
+            )
         return (
-            f"In testa la variante {label} con media {top.mean_score:.2f} su {len(ranking)} "
+            f"In testa la {label(top.stimulus)} con media {top.mean_score:.2f} su {len(ranking)} "
             "varianti. Risultati simulati."
         )
 
@@ -63,22 +68,29 @@ _NO_RESPONSES = "Nessuna risposta registrata."
 _INVALID_SUMMARY = "Il riepilogo generato non è valido."
 
 
+def label(stimulus: Stimulus) -> str:
+    """Come il report nomina uno stimolo: la variante di un post o la schermata di un prototipo."""
+    if stimulus.kind == "prototype_screen":
+        return f"schermata {(stimulus.screen_index or 0) + 1} «{stimulus.page_structure or ''}»"
+    return f"variante {stimulus.variant_label or stimulus.id}"
+
+
+_RESPONSE_FIELDS = {"thought", "said", "score", "objections", "misunderstood", "would_abandon"}
+
+
 def _responses_json(stats: StimulusStats) -> str:
-    rows = [
-        {"thought": r.thought, "said": r.said, "score": r.score, "objections": r.objections}
-        for r in stats.responses
-    ]
+    rows = [r.model_dump(include=_RESPONSE_FIELDS, exclude_none=True) for r in stats.responses]
     return json.dumps(rows, ensure_ascii=False, indent=2)
 
 
 def _ranking_text(ranking: Sequence[StimulusStats]) -> str:
     lines = []
     for stats in ranking:
-        label = stats.stimulus.variant_label or stats.stimulus.id
         objections = ", ".join(stats.objections) or "nessuna"
+        abandons = "" if stats.abandon_count is None else f", abbandoni: {stats.abandon_count}"
         lines.append(
-            f"- {stats.rank}. variante {label}: media {stats.mean_score:.2f} su 5 "
-            f"({len(stats.responses)} risposte), obiezioni: {objections}"
+            f"- {stats.rank}. {label(stats.stimulus)}: media {stats.mean_score:.2f} su 5 "
+            f"({len(stats.responses)} risposte{abandons}), obiezioni: {objections}"
         )
     return "\n".join(lines)
 
@@ -107,9 +119,8 @@ class LlmSummarizer:
     async def _variant(self, stats: StimulusStats) -> dict[str, str]:
         key = stats.stimulus.id
         if key not in self._variants:
-            label = stats.stimulus.variant_label or stats.stimulus.id
             prompt = load_prompt("report_summary.md").format(
-                label=label, responses=_responses_json(stats)
+                label=label(stats.stimulus), responses=_responses_json(stats)
             )
             data = await self._ask(prompt, _VARIANT_SCHEMA, "report_summary")
             if not _VARIANT_VALIDATOR.is_valid(data):

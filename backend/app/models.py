@@ -83,6 +83,8 @@ class ReportItem(BaseModel):
     thought_summary: str
     responses: list[Response]
     divergent_persona_ids: list[str]
+    abandon_count: int | None = Field(default=None, ge=0)
+    misunderstood: list[str] | None = None
 
 
 class Fidelity(BaseModel):

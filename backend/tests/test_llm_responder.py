@@ -167,3 +167,23 @@ async def test_pdf_attachment_is_sent_as_file_block(monkeypatch, tmp_path) -> No
     block = sent[0]["messages"][0]["content"][1]
     assert block["type"] == "file"
     assert block["file"]["file_data"].startswith("data:application/pdf;base64,")
+
+
+async def test_prototype_screen_is_framed_as_a_step_of_an_app(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(settings, "upload_dir", tmp_path)
+    (tmp_path / "schermata.png").write_bytes(PNG_BYTES)
+    screen = Stimulus(
+        id="p-s1-2",
+        kind="prototype_screen",
+        flow_id="p:s1",
+        screen_index=2,
+        image_url="/files/schermata.png",
+        page_structure="Scelta del piano",
+    )
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, screen)
+
+    text = _user_content(sent[0])[0]["text"]
+    assert "Scelta del piano" in text
+    assert "schermata 3" in text
+    assert "{name}" not in text and "{step}" not in text

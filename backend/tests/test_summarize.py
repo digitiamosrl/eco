@@ -82,7 +82,7 @@ async def test_said_and_thought_come_from_one_call(monkeypatch) -> None:
     assert len(sent) == 1
     assert sent[0]["model"] == "modello/report"
     prompt = sent[0]["messages"][0]["content"][0]["text"]
-    assert "Variante: A" in prompt
+    assert "Contenuto: variante A" in prompt
     assert '"score": 5' in prompt
 
 
@@ -111,7 +111,7 @@ async def test_report_summaries_run_in_parallel() -> None:
     import asyncio
 
     from app.models import Response, Stimulus
-    from app.report.builder import build_post_report
+    from app.report.builder import build_report
 
     stimuli = [Stimulus(id=f"v{i}", kind="post", text="t") for i in range(2)]
     responses = [
@@ -133,6 +133,59 @@ async def test_report_summaries_run_in_parallel() -> None:
             await asyncio.wait_for(barrier.wait(), timeout=2)
             return "riepilogo"
 
-    report = await build_post_report("t1", stimuli, responses, BarrierSummarizer())
+    report = await build_report("t1", stimuli, responses, BarrierSummarizer())
     assert report.summary == "riepilogo"
     assert len(report.items) == 2
+
+
+def _screen_stats() -> StimulusStats:
+    screen = Stimulus(
+        id="p-s1-1",
+        kind="prototype_screen",
+        flow_id="p:s1",
+        screen_index=1,
+        page_structure="Scelta del piano",
+    )
+    response = Response(
+        persona_id="p1",
+        stimulus_id=screen.id,
+        thought="x",
+        said="x",
+        score=2,
+        objections=[],
+        misunderstood=["Il prezzo è mensile?"],
+        would_abandon=True,
+    )
+    return StimulusStats(
+        stimulus=screen,
+        rank=1,
+        mean_score=2.0,
+        score_distribution={"1": 0, "2": 1, "3": 0, "4": 0, "5": 0},
+        objections=(),
+        responses=(response,),
+        abandon_count=1,
+        misunderstood=("Il prezzo è mensile?",),
+    )
+
+
+async def test_screen_summary_names_the_screen_and_sends_abandons() -> None:
+    sent: list[dict] = []
+    summarizer = _llm({"said_summary": "a", "thought_summary": "b"}, sent)
+    await summarizer.said_summary(_screen_stats())
+    prompt = sent[0]["messages"][0]["content"][0]["text"]
+    assert "Contenuto: schermata 2 «Scelta del piano»" in prompt
+    assert '"would_abandon": true' in prompt
+    assert "Il prezzo è mensile?" in prompt
+
+
+async def test_screen_overview_reports_abandons() -> None:
+    sent: list[dict] = []
+    await _llm({"summary": "x"}, sent).summary([_screen_stats()])
+    prompt = sent[0]["messages"][0]["content"][0]["text"]
+    assert "schermata 2 «Scelta del piano»" in prompt
+    assert "abbandoni: 1" in prompt
+
+
+async def test_fake_overview_names_the_critical_screen() -> None:
+    text = await FakeSummarizer().summary([_screen_stats()])
+    assert "schermata 2 «Scelta del piano»" in text
