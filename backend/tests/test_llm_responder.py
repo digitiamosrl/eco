@@ -189,6 +189,26 @@ async def test_unreadable_pdf_raises_llm_error(monkeypatch, tmp_path) -> None:
         await LlmResponder(_recording_client(VALID_OUTPUT, [])).respond(PERSONA, stimulus)
 
 
+async def test_prototype_screen_is_framed_as_a_step_of_an_app(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(settings, "upload_dir", tmp_path)
+    (tmp_path / "schermata.png").write_bytes(PNG_BYTES)
+    screen = Stimulus(
+        id="p-s1-2",
+        kind="prototype_screen",
+        flow_id="p:s1",
+        screen_index=2,
+        image_url="/files/schermata.png",
+        page_structure="Scelta del piano",
+    )
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, screen)
+
+    text = _user_content(sent[0])[0]["text"]
+    assert "Scelta del piano" in text
+    assert "schermata 3" in text
+    assert "{name}" not in text and "{step}" not in text
+
+
 async def test_model_decides_the_action_before_writing_what_it_says() -> None:
     sent: list[dict] = []
     await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, POST)
@@ -215,6 +235,22 @@ async def test_required_fields_depend_on_the_stimulus() -> None:
     assert "action" in post_required and "would_abandon" not in post_required
     assert {"would_abandon", "misunderstood"} <= set(screen_required)
     assert "action" not in screen_required
+
+
+async def test_prototype_screen_tells_the_persona_what_it_is_trying_to_do() -> None:
+    screen = Stimulus(
+        id="s",
+        kind="prototype_screen",
+        flow_id="f",
+        screen_index=0,
+        page_structure="Home",
+        task="Chiedere un preventivo per il gestionale",
+    )
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, screen)
+    text = _user_content(sent[0])[0]["text"]
+    assert "Chiedere un preventivo per il gestionale" in text
+    assert "{task}" not in text
 
 
 async def test_post_always_names_the_reaction_and_code_drops_the_placeholder() -> None:

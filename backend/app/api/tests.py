@@ -58,7 +58,7 @@ def _flow_stimuli(flow_ids: list[str]) -> list[Stimulus]:
     ]
 
 
-def _imported_stimuli(prototype_id: str, paths: list[PrototypePath]) -> list[Stimulus]:
+def _imported_stimuli(prototype_id: str, paths: list[PrototypePath], task: str) -> list[Stimulus]:
     prototype = store.get_prototype(prototype_id)
     if prototype is None:
         raise HTTPException(status_code=422, detail="Prototipo non trovato")
@@ -77,6 +77,7 @@ def _imported_stimuli(prototype_id: str, paths: list[PrototypePath]) -> list[Sti
                 screen_index=i,
                 image_url=screens[i].image_url,
                 page_structure=screens[i].name,
+                task=task,
             )
             for i in dict.fromkeys(path.screen_indexes)
         ]
@@ -86,7 +87,7 @@ def _imported_stimuli(prototype_id: str, paths: list[PrototypePath]) -> list[Sti
 def _prototype_stimuli(body: PrototypeTestRequest) -> list[Stimulus]:
     if body.flow_ids is not None:
         return _flow_stimuli(body.flow_ids)
-    return _imported_stimuli(body.prototype_id or "", body.paths or [])
+    return _imported_stimuli(body.prototype_id or "", body.paths or [], (body.task or "").strip())
 
 
 def _build_test(body: CreateTestRequest, uploads: tuple[Upload | None, ...]) -> Test:

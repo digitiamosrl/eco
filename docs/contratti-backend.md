@@ -11,7 +11,7 @@ Frontend e design system sono su `main` e sono pronti per tutti i punti qui sott
 | 3 | ✅ Import del prototipo da Figma o da artifact | [handoff](handoff-post-singolo-e-import-prototipo.md) §2 | L'import riceve un 404 e il test di prototipo non parte |
 | 4 | ✅ Divergenza calcolata dal report | sotto | Il frontend confronta i testi di detto e pensato |
 | 5 | ✅ Fidelity score nel report (manca il dato) | sotto | Compare "calibrazione non ancora disponibile" |
-| 6 | Report del prototipo | TBD, da pensare insieme | Compare "non ancora disponibile" |
+| 6 | ✅ Report del prototipo | sotto | Compare "non ancora disponibile" |
 | 7 | ✅ Personas: attributi come campi, biografia, ripiego | [contratto-personas.md](contratto-personas.md) | Panel e risposte funzionano come oggi |
 
 Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. Poi 1–2, che riusano la pipeline dei post. Il 3 è il più grosso.
@@ -52,3 +52,25 @@ Deciso: il segmento è il pubblico della pagina LinkedIn di Digitiamo, PMI e gra
 - **Artifact:** serve Chromium (`playwright install chromium`). Per ogni percorso si preme l'i-esimo pulsante della prima schermata e poi il primo che cambia la pagina, fino a 6 schermate. Al massimo 3 percorsi.
 - **Test:** `POST /tests` con `prototype_id` e `paths` passa dalle personas come i post. `flow_ids` resta valido per i flussi già catturati. Il report del prototipo risponde ancora 501 (punto 6).
 - Limite noto: un percorso è una catena, non esplora i rami. Si sceglie il primo collegamento non visitato.
+
+## 6. Report del prototipo
+
+Stesso endpoint e stesso schema dei post (`GET /tests/{id}/report`, `report.schema.json`): niente schema separato. Due campi facoltativi in più per ogni item, presenti solo se lo stimolo è una schermata (`kind: "prototype_screen"`):
+
+| Campo | Tipo | Significato |
+| --- | --- | --- |
+| `abandon_count` | intero ≥ 0 | Quante personas lascerebbero perdere a questa schermata (`would_abandon`). Ogni schermata è valutata a freddo, quindi i conteggi non sono un imbuto |
+| `misunderstood` | `string[]` | I passaggi fraintesi più frequenti, al massimo 5 |
+
+- Con le schermate, `rank` 1 è il **punto più critico**: più abbandoni e, a parità, punteggio medio più basso. L'ordine del flusso resta quello di `test.stimuli` (`flow_id`, `screen_index`, `image_url`, `page_structure` come nome).
+- `summary`, `said_summary` e `thought_summary` parlano di schermate, abbandoni e passaggi fraintesi.
+- `fidelity` è sempre assente: la calibrazione è sui post pubblicati e per i prototipi non c'è. Il frontend mostra lo stato "non disponibile".
+- I test di prototipo sui flussi a fixture (`flow_ids`) non passano dal panel: il loro report ha item senza risposte.
+
+## 8. Compito nel test di prototipo
+
+`POST /tests` per un prototipo importato richiede `task` (stringa, massimo 300 caratteri): cosa sta cercando di fare chi usa il prototipo, per esempio «chiedere un preventivo per il gestionale». Senza `task`, o con solo spazi, risponde 422. Ogni schermata lo riceve in `Stimulus.task` (campo nuovo e facoltativo in `stimulus.schema.json`) e il prompt della persona lo usa per giudicare la schermata.
+
+- Motivo: nella prova del 18 novembre, senza compito, 30 personas su 30 abbandonavano alla prima schermata dicendo «non è un tool che uso». Giudicavano se l'app le riguarda, non se è usabile.
+- Le personas sanno cosa vogliono fare, non cosa misura il test: il principio del CLAUDE.md resta valido.
+- I flussi a fixture (`flow_ids`) non lo richiedono.
