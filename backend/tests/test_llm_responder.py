@@ -156,17 +156,37 @@ async def test_model_can_be_overridden_per_responder() -> None:
     assert [body["model"] for body in sent] == ["altro/modello", "modello/persona"]
 
 
-async def test_pdf_attachment_is_sent_as_file_block(monkeypatch, tmp_path) -> None:
+def _pdf(pages: int) -> bytes:
+    import io
+
+    import pypdfium2 as pdfium
+
+    document = pdfium.PdfDocument.new()
+    for _ in range(pages):
+        document.new_page(200, 280)
+    buffer = io.BytesIO()
+    document.save(buffer)
+    return buffer.getvalue()
+
+
+async def test_pdf_pages_are_sent_as_images(monkeypatch, tmp_path) -> None:
+    # Ollama non legge i PDF: le prime pagine arrivano come immagini, come un carosello.
     monkeypatch.setattr(settings, "upload_dir", tmp_path)
-    (tmp_path / "doc.pdf").write_bytes(b"%PDF-1.7 dati")
+    (tmp_path / "doc.pdf").write_bytes(_pdf(6))
     stimulus = POST.model_copy(update={"image_url": "/files/doc.pdf", "attachment_kind": "pdf"})
     sent: list[dict] = []
-    client = _recording_client({**VALID_OUTPUT, "action": "react", "reaction": "adoro"}, sent)
-    response = await LlmResponder(client=client).respond(PERSONA, stimulus)
-    assert (response.action, response.reaction) == ("react", "adoro")
-    block = sent[0]["messages"][0]["content"][1]
-    assert block["type"] == "file"
-    assert block["file"]["file_data"].startswith("data:application/pdf;base64,")
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, stimulus)
+    blocks = sent[0]["messages"][0]["content"][1:]
+    assert len(blocks) == 4
+    assert all(b["image_url"]["url"].startswith("data:image/png;base64,") for b in blocks)
+
+
+async def test_unreadable_pdf_raises_llm_error(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr(settings, "upload_dir", tmp_path)
+    (tmp_path / "doc.pdf").write_bytes(b"%PDF-1.7 rotto")
+    stimulus = POST.model_copy(update={"image_url": "/files/doc.pdf", "attachment_kind": "pdf"})
+    with pytest.raises(LlmError):
+        await LlmResponder(_recording_client(VALID_OUTPUT, [])).respond(PERSONA, stimulus)
 
 
 async def test_model_decides_the_action_before_writing_what_it_says() -> None:
