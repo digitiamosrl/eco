@@ -51,3 +51,10 @@ Deciso: il segmento è il pubblico della pagina LinkedIn di Digitiamo, PMI e gra
 - **Artifact:** serve Chromium (`playwright install chromium`). Per ogni percorso si preme l'i-esimo pulsante della prima schermata e poi il primo che cambia la pagina, fino a 6 schermate. Al massimo 3 percorsi.
 - **Test:** `POST /tests` con `prototype_id` e `paths` passa dalle personas come i post. `flow_ids` resta valido per i flussi già catturati. Il report del prototipo risponde ancora 501 (punto 6).
 - Limite noto: un percorso è una catena, non esplora i rami. Si sceglie il primo collegamento non visitato.
+
+## 7. Risposte live
+
+`GET /tests/{id}/responses` restituisce le risposte salvate fino a quel momento (`Response[]`, `response.schema.json`, campi assenti omessi), anche mentre il test è `running`. 404 se il test non esiste. Nessuno schema nuovo.
+
+- La schermata Test la rilegge ogni volta che `done_count` cambia e mostra media e distribuzione provvisorie per stimolo, più detto e pensato con la risposta più recente in alto (`LiveResults`).
+- Sintesi, divergenza e ranking restano nel report, che si chiede a test finito.

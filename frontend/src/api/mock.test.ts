@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { Test } from "../types/test";
-import { IMPORT_MS, RUN_MS, getReport, importPrototype, progress, startPostTest } from "./mock";
+import { IMPORT_MS, RUN_MS, getReport, getResponses, getTest, importPrototype, progress, startPostTest } from "./mock";
 import { withApiUrls } from "./index";
 
 const test: Test = {
@@ -74,5 +74,17 @@ describe("withApiUrls", () => {
       starts: [{ id: "s", name: "s", screens: [{ index: 0, name: "a", image_url: "/files/a.png" }, { index: 1, name: "b", image_url: "data:image/svg+xml,x" }] }],
     });
     expect(p.starts[0].screens.map((s) => s.image_url)).toEqual(["/api/files/a.png", "data:image/svg+xml,x"]);
+  });
+});
+
+describe("getResponses", () => {
+  it("returns as many answers as the test has done so far", async () => {
+    vi.useFakeTimers();
+    const created = await startPostTest([{ id: "v", label: "A", text: "Testo", attachment: null }]);
+    expect(await getResponses(created.id)).toEqual([]);
+    vi.advanceTimersByTime(RUN_MS / 2);
+    const halfway = await getTest(created.id);
+    expect(await getResponses(created.id)).toHaveLength(halfway.done_count);
+    vi.useRealTimers();
   });
 });
