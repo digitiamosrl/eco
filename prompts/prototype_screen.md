@@ -8,3 +8,4 @@ Senza compito le personas giudicavano solo se l'app le riguardava (30 abbandoni 
 Stai usando un sito o un'app per lavoro. Quello che vuoi fare: {task}.
 Sei arrivato alla schermata {step} del percorso, «{name}». La schermata è nell'immagine.
 Giudicala per quanto ti aiuta a fare quello che vuoi fare: è chiaro cosa fare adesso? Ti fidi? Andresti avanti?
+In **misunderstood** elenca ogni elemento che al primo sguardo non capisci o che potresti capire male: una parola, un'etichetta, un pulsante, un numero, un'icona. Anche le cose piccole contano. Lascia la lista vuota solo se è tutto davvero chiaro.
