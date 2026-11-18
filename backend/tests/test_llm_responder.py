@@ -215,3 +215,19 @@ async def test_required_fields_depend_on_the_stimulus() -> None:
     assert "action" in post_required and "would_abandon" not in post_required
     assert {"would_abandon", "misunderstood"} <= set(screen_required)
     assert "action" not in screen_required
+
+
+async def test_prototype_screen_tells_the_persona_what_it_is_trying_to_do() -> None:
+    screen = Stimulus(
+        id="s",
+        kind="prototype_screen",
+        flow_id="f",
+        screen_index=0,
+        page_structure="Home",
+        task="Chiedere un preventivo per il gestionale",
+    )
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, screen)
+    text = _user_content(sent[0])[0]["text"]
+    assert "Chiedere un preventivo per il gestionale" in text
+    assert "{task}" not in text

@@ -66,3 +66,11 @@ Stesso endpoint e stesso schema dei post (`GET /tests/{id}/report`, `report.sche
 - `summary`, `said_summary` e `thought_summary` parlano di schermate, abbandoni e passaggi fraintesi.
 - `fidelity` è sempre assente: la calibrazione è sui post pubblicati e per i prototipi non c'è. Il frontend mostra lo stato "non disponibile".
 - I test di prototipo sui flussi a fixture (`flow_ids`) non passano dal panel: il loro report ha item senza risposte.
+
+## 8. Compito nel test di prototipo
+
+`POST /tests` per un prototipo importato richiede `task` (stringa, massimo 300 caratteri): cosa sta cercando di fare chi usa il prototipo, per esempio «chiedere un preventivo per il gestionale». Senza `task`, o con solo spazi, risponde 422. Ogni schermata lo riceve in `Stimulus.task` (campo nuovo e facoltativo in `stimulus.schema.json`) e il prompt della persona lo usa per giudicare la schermata.
+
+- Motivo: nella prova del 18 novembre, senza compito, 30 personas su 30 abbandonavano alla prima schermata dicendo «non è un tool che uso». Giudicavano se l'app le riguarda, non se è usabile.
+- Le personas sanno cosa vogliono fare, non cosa misura il test: il principio del CLAUDE.md resta valido.
+- I flussi a fixture (`flow_ids`) non lo richiedono.

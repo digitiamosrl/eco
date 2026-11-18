@@ -30,6 +30,8 @@ class Stimulus(BaseModel):
     screen_index: int | None = Field(default=None, ge=0)
     page_structure: str | None = None
     attachment_kind: Literal["image", "pdf"] | None = None
+    # Solo per le schermate: cosa sta cercando di fare chi usa il prototipo.
+    task: str | None = None
 
 
 class Response(BaseModel):
@@ -168,12 +170,15 @@ class PrototypeTestRequest(BaseModel):
     prototype_id: str | None = None
     paths: list[PrototypePath] | None = Field(default=None, min_length=1, max_length=3)
     flow_ids: list[str] | None = Field(default=None, min_length=1)
+    task: str | None = Field(default=None, max_length=300)
 
     @model_validator(mode="after")
     def one_source(self) -> "PrototypeTestRequest":
         imported = self.prototype_id is not None and self.paths is not None
         if imported == (self.flow_ids is not None):
             raise ValueError("indica prototype_id e paths, oppure flow_ids")
+        if imported and not (self.task or "").strip():
+            raise ValueError("indica il compito: cosa sta cercando di fare chi usa il prototipo")
         if self.paths is not None:
             starts = [p.start_id for p in self.paths]
             if len(set(starts)) != len(starts):

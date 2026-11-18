@@ -9,12 +9,13 @@ const SAMPLE_FIGMA = "https://www.figma.com/proto/k2Q8xR/Onboarding-cliente-v3";
 
 const importedOn = (iso: string) => new Date(iso).toLocaleDateString("it-IT", { day: "numeric", month: "long" });
 
+const TASK_MAX = 300; // come il limite del backend
 const paths = (n: number) => (n === 1 ? "1 percorso" : `${n} percorsi`);
 
 type Props = {
   personas: number;
   loading: boolean;
-  onStart: (prototypeId: string, paths: PrototypePath[]) => void;
+  onStart: (prototypeId: string, paths: PrototypePath[], task: string) => void;
 };
 
 export default function PrototypeImport({ personas, loading, onStart }: Props) {
@@ -27,6 +28,7 @@ export default function PrototypeImport({ personas, loading, onStart }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [focus, setFocus] = useState<string | null>(null);
   const [removed, setRemoved] = useState<Set<string>>(new Set());
+  const [task, setTask] = useState("");
   const abort = useRef<AbortController | null>(null);
   useEffect(() => () => abort.current?.abort(), []);
 
@@ -308,11 +310,31 @@ export default function PrototypeImport({ personas, loading, onStart }: Props) {
   return (
     <>
       {body}
+      {prototype && (
+        <Card pad="lg" style={{ marginTop: 20 }}>
+          <label className="scr-pt-h2" htmlFor="proto-task">
+            Cosa vuole fare chi usa il prototipo?
+          </label>
+          <p className="eco-sub">
+            Un compito concreto, per esempio «chiedere un preventivo per il gestionale». Le personas lo usano per
+            giudicare se ogni schermata le aiuta; senza, valutano solo se l’app le riguarda.
+          </p>
+          <textarea
+            id="proto-task"
+            className="eco-textarea"
+            rows={2}
+            maxLength={TASK_MAX}
+            value={task}
+            placeholder="Es. Chiedere un preventivo per il gestionale"
+            onChange={(e) => setTask(e.target.value)}
+          />
+        </Card>
+      )}
       <LaunchBar
         personas={personas}
         loading={loading}
-        disabled={!prototype || importing || !built.length || personas === 0}
-        onStart={() => prototype && built.length && onStart(prototype.id, built)}
+        disabled={!prototype || importing || !built.length || personas === 0 || !task.trim()}
+        onStart={() => prototype && built.length && task.trim() && onStart(prototype.id, built, task.trim())}
         eta={eta}
       />
     </>

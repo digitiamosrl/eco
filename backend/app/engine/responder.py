@@ -116,7 +116,9 @@ def _image_block(image_url: str) -> dict[str, Any]:
 def _stimulus_text(stimulus: Stimulus) -> str:
     if stimulus.kind == "prototype_screen":
         return load_prompt("prototype_screen.md").format(
-            step=(stimulus.screen_index or 0) + 1, name=stimulus.page_structure or ""
+            step=(stimulus.screen_index or 0) + 1,
+            name=stimulus.page_structure or "",
+            task=stimulus.task or "",
         )
     return stimulus.text or ""
 

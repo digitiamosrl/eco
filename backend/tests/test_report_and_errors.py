@@ -51,6 +51,7 @@ def _create_done_prototype() -> dict:
         "kind": "prototype",
         "prototype_id": "proto",
         "paths": [{"start_id": "s1", "screen_indexes": [0, 1, 2]}],
+        "task": "Provare il prodotto",
     }
     created = client.post("/tests", json=body).json()
     assert client.get(f"/tests/{created['id']}").json()["status"] == "done"
