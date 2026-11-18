@@ -7,6 +7,7 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from app import store
 from app.api.create_request import read_create_request
 from app.api.personas import PERSONAS
+from app.api.reports import prepare_report
 from app.config import settings
 from app.engine.responder import build_responder
 from app.engine.runner import run_post_test
@@ -133,6 +134,8 @@ async def create_test(request: Request, background_tasks: BackgroundTasks) -> Te
         raise HTTPException(status_code=409, detail="Un test è già in corso")
     if _uses_panel(body):
         background_tasks.add_task(run_post_test, test.id, build_responder(), PERSONAS)
+        # I task in background girano in fila: il report parte appena il panel ha finito.
+        background_tasks.add_task(prepare_report, test.id)
     else:
         background_tasks.add_task(run_test, test.id)
     return test

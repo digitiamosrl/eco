@@ -63,7 +63,7 @@ Confronto con `scripts/compare_models.py`: 10 personas reali, 4 post di calibraz
 
 ## Limiti noti
 
-- **Allegati PDF:** il blocco `file` di OpenRouter non è supportato da Ollama. Un post con PDF fallisce; le immagini funzionano.
+- **Allegati PDF:** Ollama non legge i PDF, quindi le prime 4 pagine si convertono in immagini (`pypdfium2`) e arrivano al modello come un carosello. Dalla quinta pagina in poi le personas non le vedono.
 - **Qualità, prova reale del 17 novembre con gemma 3** (30 personas: caso cliente concreto contro post generico sulla digitalizzazione): ranking corretto (2,73 contro 1,60), riassunti coerenti con le risposte e che dichiarano la simulazione. Da sistemare nei prompt e nel report:
   - `action`: 23 commenti su 30 e nessuna reazione. Su LinkedIn commentare è raro, quindi il prompt va ricalibrato.
   - Divergenza: 30 su 30, perché la regola confronta i testi e detto e pensato non coincidono mai alla lettera. Non distingue nessuno.
