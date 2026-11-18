@@ -61,3 +61,4 @@ button.scr-pt-remove{border:0;background:transparent;cursor:pointer;padding:4px 
 @media (max-width:760px){.scr-pt-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.scr-pt-row{flex-direction:column}}
 .scr-pt-change{margin-left:auto}
 .eco-flows+.scr-pt-review-head{margin-top:36px}
+.scr-live{display:grid;gap:20px;margin-top:28px}.scr-live__stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}.scr-live__stats .eco-eyebrow{margin-bottom:12px}

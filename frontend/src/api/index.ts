@@ -3,6 +3,7 @@ import type { VariantDraft } from "../lib/variants";
 import type { Persona } from "../types/persona";
 import type { Prototype } from "../types/prototype";
 import type { Report } from "../types/report";
+import type { Response as PanelResponse } from "../types/response";
 import type { Test } from "../types/test";
 import * as mock from "./mock";
 
@@ -34,6 +35,9 @@ export const getPersonas = () => (useMocks ? mock.getPersonas() : getJson<Person
 export const getTests = () => (useMocks ? mock.getTests() : getJson<Test[]>("/tests"));
 
 export const getTest = (id: string) => (useMocks ? mock.getTest(id) : getJson<Test>(`/tests/${id}`));
+
+export const getResponses = (id: string) =>
+  useMocks ? mock.getResponses(id) : getJson<PanelResponse[]>(`/tests/${id}/responses`);
 
 export const getReport = (id: string) =>
   useMocks ? mock.getReport(id) : getJson<Report>(`/tests/${id}/report`);
