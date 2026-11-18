@@ -1,9 +1,11 @@
 import base64
+import io
 import json
 import random
 from typing import Any, Protocol
 
 import httpx
+import pypdfium2 as pdfium
 from pydantic import ValidationError
 
 from app.config import REPO_ROOT, settings
@@ -79,6 +81,10 @@ _MODEL_SCHEMA = {
 }
 _IMAGE_TYPES = {".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp"}
 _PDF_SUFFIX = ".pdf"
+# Un carosello LinkedIn si capisce dalle prime pagine; di più allunga solo il prompt.
+MAX_PDF_PAGES = 4
+_PDF_SCALE = 1.5  # circa 108 dpi: testo leggibile, immagini leggere
+_PDF_ERROR = "Il PDF allegato non è leggibile."
 _FILES_PREFIX = "/files/"
 _IMAGE_ERROR = "Immagine dello stimolo non disponibile."
 _INVALID_OUTPUT = "La risposta della persona non è valida."
@@ -91,26 +97,36 @@ def _persona_text(persona: Persona) -> str:
     )
 
 
-def _image_block(image_url: str) -> dict[str, Any]:
+def _data_url_block(mime: str, data: bytes) -> dict[str, Any]:
+    encoded = base64.b64encode(data).decode("ascii")
+    return {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}}
+
+
+def _pdf_pages(data: bytes) -> list[bytes]:
+    """Prime pagine del PDF come PNG: i modelli locali leggono immagini, non documenti."""
+    try:
+        document = pdfium.PdfDocument(data)
+        pages = [document[i] for i in range(min(len(document), MAX_PDF_PAGES))]
+        images = [page.render(scale=_PDF_SCALE).to_pil() for page in pages]
+    except pdfium.PdfiumError as exc:
+        raise LlmError(_PDF_ERROR) from exc
+    encoded = []
+    for image in images:
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG")
+        encoded.append(buffer.getvalue())
+    return encoded
+
+
+def _attachment_blocks(image_url: str) -> list[dict[str, Any]]:
     if not image_url.startswith(_FILES_PREFIX):
         raise LlmError(_IMAGE_ERROR)
     path = find_upload(image_url.removeprefix(_FILES_PREFIX))
     if path is None or path.suffix not in {*_IMAGE_TYPES, _PDF_SUFFIX}:
         raise LlmError(_IMAGE_ERROR)
-    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
     if path.suffix == _PDF_SUFFIX:
-        # Formato OpenRouter per i documenti: il PDF viaggia come blocco "file".
-        return {
-            "type": "file",
-            "file": {
-                "filename": "allegato.pdf",
-                "file_data": f"data:application/pdf;base64,{encoded}",
-            },
-        }
-    return {
-        "type": "image_url",
-        "image_url": {"url": f"data:{_IMAGE_TYPES[path.suffix]};base64,{encoded}"},
-    }
+        return [_data_url_block("image/png", page) for page in _pdf_pages(path.read_bytes())]
+    return [_data_url_block(_IMAGE_TYPES[path.suffix], path.read_bytes())]
 
 
 def _stimulus_text(stimulus: Stimulus) -> str:
@@ -129,7 +145,7 @@ def _messages(persona: Persona, stimulus: Stimulus) -> list[dict[str, Any]]:
     )
     content: list[dict[str, Any]] = [{"type": "text", "text": text}]
     if stimulus.image_url is not None:
-        content.append(_image_block(stimulus.image_url))
+        content.extend(_attachment_blocks(stimulus.image_url))
     return [{"role": "user", "content": content}]
 
 
@@ -138,9 +154,28 @@ def _messages(persona: Persona, stimulus: Stimulus) -> list[dict[str, Any]]:
 _REQUIRED_BY_KIND = {"post": ("action",), "prototype_screen": ("would_abandon", "misunderstood")}
 
 
+# Per i post il modello sceglie sempre una reazione, anche "nessuna": facoltativa la saltava
+# pure quando reagiva. Il segnaposto non esce dal responder.
+_NO_REACTION = "nessuna"
+_POST_REACTION = {
+    **_MODEL_PROPERTIES["reaction"],
+    "enum": [*_MODEL_PROPERTIES["reaction"]["enum"], _NO_REACTION],
+}
+
+
 def _schema_for(stimulus: Stimulus) -> dict[str, Any]:
     extra = _REQUIRED_BY_KIND.get(stimulus.kind, ())
-    return {**_MODEL_SCHEMA, "required": [*_MODEL_SCHEMA["required"], *extra]}
+    schema = {**_MODEL_SCHEMA, "required": [*_MODEL_SCHEMA["required"], *extra]}
+    if stimulus.kind != "post":
+        return schema
+    properties = {**schema["properties"], "reaction": _POST_REACTION}
+    return {**schema, "properties": properties, "required": [*schema["required"], "reaction"]}
+
+
+def _clean(data: dict[str, Any]) -> dict[str, Any]:
+    """Una reazione vale solo con action react; il segnaposto "nessuna" non si salva."""
+    keep = data.get("action") == "react" and data.get("reaction") != _NO_REACTION
+    return {k: v for k, v in data.items() if k not in _IDS and (k != "reaction" or keep)}
 
 
 class LlmResponder:
@@ -156,7 +191,7 @@ class LlmResponder:
             schema_name="persona_response",
             schema=_schema_for(stimulus),
         )
-        fields = {k: v for k, v in data.items() if k not in _IDS}
+        fields = _clean(data)
         try:
             return Response(persona_id=persona.id, stimulus_id=stimulus.id, **fields)
         except ValidationError as exc:

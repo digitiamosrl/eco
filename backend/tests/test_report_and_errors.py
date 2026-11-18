@@ -106,3 +106,21 @@ def test_duplicate_flow_ids_return_422() -> None:
     response = client.post("/tests", json=body)
     assert response.status_code == 422
     assert response.json() == {"detail": "Richiesta non valida: flow_ids"}
+
+
+def test_prototype_report_is_prepared_when_the_test_ends(monkeypatch) -> None:
+    from app.api import reports as reports_api
+    from app.report.summarize import FakeSummarizer
+
+    calls: list[str] = []
+
+    class Counting(FakeSummarizer):
+        async def summary(self, ranking) -> str:
+            calls.append("summary")
+            return await super().summary(ranking)
+
+    monkeypatch.setattr(reports_api, "build_summarizer", Counting)
+    created = _create_done_prototype()
+    assert calls == ["summary"]  # pronto prima che qualcuno apra il report
+    assert client.get(f"/tests/{created['id']}/report").status_code == 200
+    assert calls == ["summary"]

@@ -88,8 +88,8 @@ def test_report_returns_503_when_summarizer_fails(monkeypatch) -> None:
         async def summary(self, ranking):
             raise LlmError("Il servizio di analisi non è disponibile in questo momento.")
 
-    created = _done_post()
     monkeypatch.setattr(reports_api, "build_summarizer", lambda: FailingSummarizer())
+    created = _done_post()  # anche la preparazione a fine test fallisce, senza bloccare niente
     response = client.get(f"/tests/{created['id']}/report")
     assert response.status_code == 503
     assert "non è disponibile" in response.json()["detail"]
@@ -133,7 +133,8 @@ def test_report_is_retried_after_a_failure(monkeypatch) -> None:
     class FlakySummarizer(CountingSummarizer):
         async def said_summary(self, stats) -> str:
             self.calls += 1
-            if self.calls <= 3:
+            # Fallisce la preparazione a fine test e la prima richiesta: la seconda riprova.
+            if self.calls <= 6:
                 raise LlmError("Il servizio di analisi non è disponibile in questo momento.")
             return "detto"
 
@@ -167,3 +168,15 @@ def test_report_has_fidelity_only_when_calibrated(monkeypatch, tmp_path, validat
     report = client.get(f"/tests/{_done_post()['id']}/report").json()
     validate("report.schema.json", report)
     assert report["fidelity"] == {"score": 0.5, "basis": "12 post"}
+
+
+def test_report_is_prepared_as_soon_as_the_test_ends(monkeypatch) -> None:
+    from app.api import reports as reports_api
+
+    summarizer = CountingSummarizer()
+    monkeypatch.setattr(reports_api, "build_summarizer", lambda: summarizer)
+    created = _done_post()
+    prepared = summarizer.calls
+    assert prepared > 0  # pronto prima che qualcuno apra il report
+    assert client.get(f"/tests/{created['id']}/report").status_code == 200
+    assert summarizer.calls == prepared

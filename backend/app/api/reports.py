@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from fastapi import APIRouter, HTTPException
 
@@ -10,6 +11,7 @@ from app.report.calibration import load_fidelity
 from app.report.summarize import build_summarizer
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 # shortcut: cache in memoria senza scadenza, il riavvio la svuota; passare allo store se serve.
 _REPORTS: dict[str, asyncio.Task[Report]] = {}
@@ -36,6 +38,20 @@ async def _report_for(test: Test) -> Report:
         # Un fallimento non resta in cache: la richiesta successiva riprova.
         if task.done() and (task.cancelled() or task.exception() is not None):
             _REPORTS.pop(test.id, None)
+
+
+async def prepare_report(test_id: str) -> None:
+    """Avviata a fine test: con un modello locale la sintesi richiede minuti.
+
+    Così il report è pronto quando lo si apre; se fallisce, si riprova alla prima richiesta.
+    """
+    test = store.get(test_id)
+    if test is None or test.status != "done":
+        return
+    try:
+        await _report_for(test)
+    except Exception:
+        logger.exception("Preparazione del report %s fallita", test_id)
 
 
 @router.get(
