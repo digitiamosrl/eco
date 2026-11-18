@@ -129,3 +129,16 @@ async def test_api_key_never_appears_in_errors() -> None:
         await _call(_client(handler))
     assert API_KEY not in str(info.value)
     assert API_KEY not in repr(info.value)
+
+
+async def test_provider_error_is_logged_with_status_and_message(caplog) -> None:
+    def handler(_request: httpx.Request) -> httpx.Response:
+        return httpx.Response(
+            404, json={"error": {"message": "The `:free` variant has been retired"}}
+        )
+
+    with pytest.raises(LlmError, match="non è disponibile"):
+        await _call(_client(handler))
+    assert "404" in caplog.text
+    assert "retired" in caplog.text
+    assert "sk-or" not in caplog.text

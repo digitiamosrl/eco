@@ -1,11 +1,14 @@
 import asyncio
 import json
+import logging
 import re
 from typing import Any
 
 import httpx
 
 from app.config import REPO_ROOT, settings
+
+logger = logging.getLogger(__name__)
 
 # Module-level perché i test lo azzerano; un solo retry, quindi l'attesa è breve.
 RETRY_DELAY_SECONDS = 1.0
@@ -71,6 +74,13 @@ async def _post(client: httpx.AsyncClient, payload: dict[str, Any]) -> httpx.Res
             raise LlmError(_UNAVAILABLE) from exc
         if response.status_code == 200:
             return response
+        # All'utente arriva un messaggio generico: il motivo vero resta nei log del server.
+        logger.warning(
+            "OpenRouter %s su %s: %s",
+            response.status_code,
+            payload.get("model"),
+            response.text[:500],
+        )
         if response.status_code in (401, 403):
             raise LlmError(_AUTH)
         retryable = response.status_code == 429 or response.status_code >= 500
