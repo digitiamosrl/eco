@@ -61,9 +61,16 @@ _FULL_SCHEMA = json.loads(
     (REPO_ROOT / "shared" / "schemas" / "response.schema.json").read_text("utf-8")
 )
 # Lo schema inviato al modello non chiede gli id: li aggiunge il codice.
+# Ordine di generazione: il gesto d'istinto viene deciso prima di formulare cosa si dice,
+# altrimenti said ("cosa scriveresti") trascina action verso il commento.
+_FIELD_ORDER = ("thought", "action", "reaction", "said", "score", "objections")
+_MODEL_PROPERTIES = {k: v for k, v in _FULL_SCHEMA["properties"].items() if k not in _IDS}
 _MODEL_SCHEMA = {
     **_FULL_SCHEMA,
-    "properties": {k: v for k, v in _FULL_SCHEMA["properties"].items() if k not in _IDS},
+    "properties": {
+        **{k: _MODEL_PROPERTIES[k] for k in _FIELD_ORDER},
+        **{k: v for k, v in _MODEL_PROPERTIES.items() if k not in _FIELD_ORDER},
+    },
     "required": [r for r in _FULL_SCHEMA["required"] if r not in _IDS],
 }
 _IMAGE_TYPES = {".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp"}
@@ -113,6 +120,16 @@ def _messages(persona: Persona, stimulus: Stimulus) -> list[dict[str, Any]]:
     return [{"role": "user", "content": content}]
 
 
+# Facoltativi nello schema condiviso perché valgono solo per un tipo di stimolo: al modello
+# si impongono per il tipo giusto, altrimenti un modello locale li omette sempre.
+_REQUIRED_BY_KIND = {"post": ("action",), "prototype_screen": ("would_abandon", "misunderstood")}
+
+
+def _schema_for(stimulus: Stimulus) -> dict[str, Any]:
+    extra = _REQUIRED_BY_KIND.get(stimulus.kind, ())
+    return {**_MODEL_SCHEMA, "required": [*_MODEL_SCHEMA["required"], *extra]}
+
+
 class LlmResponder:
     def __init__(self, client: httpx.AsyncClient | None = None, model: str | None = None) -> None:
         self._client = client
@@ -124,7 +141,7 @@ class LlmResponder:
             model=self._model or settings.persona_model,
             messages=_messages(persona, stimulus),
             schema_name="persona_response",
-            schema=_MODEL_SCHEMA,
+            schema=_schema_for(stimulus),
         )
         fields = {k: v for k, v in data.items() if k not in _IDS}
         try:

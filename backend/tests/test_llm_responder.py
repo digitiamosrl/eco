@@ -167,3 +167,31 @@ async def test_pdf_attachment_is_sent_as_file_block(monkeypatch, tmp_path) -> No
     block = sent[0]["messages"][0]["content"][1]
     assert block["type"] == "file"
     assert block["file"]["file_data"].startswith("data:application/pdf;base64,")
+
+
+async def test_model_decides_the_action_before_writing_what_it_says() -> None:
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, POST)
+    order = list(sent[0]["response_format"]["json_schema"]["schema"]["properties"])
+    assert order[:4] == ["thought", "action", "reaction", "said"]
+
+
+async def test_persona_calls_keep_the_model_temperature() -> None:
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, POST)
+    assert "temperature" not in sent[0]  # la varietà tra personas viene anche da qui
+
+
+async def test_required_fields_depend_on_the_stimulus() -> None:
+    screen = Stimulus(id="s", kind="prototype_screen", flow_id="f", screen_index=0, text="x")
+    sent: list[dict] = []
+    client = _recording_client(VALID_OUTPUT, sent)
+    await LlmResponder(client).respond(PERSONA, POST)
+    await LlmResponder(client).respond(PERSONA, screen)
+    post_required, screen_required = (
+        body["response_format"]["json_schema"]["schema"]["required"] for body in sent
+    )
+    # Facoltativi nello schema condiviso, ma un modello locale li salta se non li impone.
+    assert "action" in post_required and "would_abandon" not in post_required
+    assert {"would_abandon", "misunderstood"} <= set(screen_required)
+    assert "action" not in screen_required

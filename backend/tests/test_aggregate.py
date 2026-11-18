@@ -59,3 +59,16 @@ def test_mean_is_rounded_to_two_decimals() -> None:
     three = [_response(A, f"p{i}", s, []) for i, s in enumerate([5, 4, 4])]
     (only,) = aggregate([A], three)
     assert only.mean_score == 4.33
+
+
+def test_near_identical_objections_count_as_one() -> None:
+    responses = [
+        _response(A, "p1", 2, ["Troppo generico."]),
+        _response(A, "p2", 2, ["troppo generico"]),
+        _response(A, "p3", 2, ["  Troppo  generico! "]),
+        _response(A, "p4", 2, ["Manca un esempio"]),
+        _response(A, "p5", 2, ["Manca un esempio."]),
+        _response(A, "p6", 2, ["Prezzo alto"]),
+    ]
+    [stats] = aggregate([A], responses)
+    assert stats.objections == ("Troppo generico.", "Manca un esempio", "Prezzo alto")

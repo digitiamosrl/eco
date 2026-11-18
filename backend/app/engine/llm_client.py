@@ -97,6 +97,7 @@ async def chat_json(
     messages: list[dict[str, Any]],
     schema_name: str,
     schema: dict[str, Any],
+    temperature: float | None = None,
 ) -> dict[str, Any]:
     payload = {
         "model": model,
@@ -105,6 +106,8 @@ async def chat_json(
             "type": "json_schema",
             "json_schema": {"name": schema_name, "strict": True, "schema": schema},
         },
+        # None: resta la temperatura di default del modello.
+        **({} if temperature is None else {"temperature": temperature}),
     }
     response = await _post(client, payload)
     return _parse_content(_message_content(response))
