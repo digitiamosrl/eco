@@ -3,12 +3,14 @@
 Ogni modello risponde, per più run, con tutte le personas a 4 post di calibrazione scritti
 apposta (forte, buono, debole, scadente). Uso, da backend/ con OPENROUTER_API_KEY nel .env:
     python -m scripts.compare_models --models id1,id2 --repeats 3
+Con modelli locali (Ollama) lanciane uno alla volta e usa --personas per un sottoinsieme.
 """
 
 import argparse
 import asyncio
 import json
 import time
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from statistics import mean, quantiles
 from typing import Any
@@ -90,7 +92,9 @@ async def _ask(
     return None, None, None
 
 
-async def _run_model(model: str, repeats: int, concurrency: int) -> ModelResult:
+async def _run_model(
+    model: str, repeats: int, concurrency: int, personas: Sequence[Any]
+) -> ModelResult:
     result = ModelResult(runs=[[] for _ in range(repeats)])
 
     async def record_usage(response: httpx.Response) -> None:
@@ -110,7 +114,7 @@ async def _run_model(model: str, repeats: int, concurrency: int) -> ModelResult:
         jobs = [
             (run, _ask(responder, persona, post, semaphore))
             for run in range(repeats)
-            for persona in PERSONAS
+            for persona in personas
             for post in POSTS
         ]
         outcomes = await asyncio.gather(*(job for _, job in jobs))
@@ -180,13 +184,20 @@ async def main() -> int:
     parser.add_argument("--models", default=",".join(DEFAULT_MODELS))
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--concurrency", type=int, default=settings.panel_concurrency)
+    # Con un modello locale ogni chiamata costa ~20 s: un sottoinsieme rende il confronto fattibile.
+    parser.add_argument("--personas", type=int, default=len(PERSONAS), help="Quante personas usare")
     parser.add_argument("--out", help="File JSON opzionale con le risposte; di default non salva")
     args = parser.parse_args()
     if not settings.openrouter_api_key:
         print("Serve OPENROUTER_API_KEY nel file .env.")
         return 1
     models = [m.strip() for m in args.models.split(",") if m.strip()]
-    results = await asyncio.gather(*(_run_model(m, args.repeats, args.concurrency) for m in models))
+    # Una persona ogni `step`: il sottoinsieme copre tutto il pool, non solo l'inizio.
+    step = max(1, len(PERSONAS) // args.personas)
+    personas = PERSONAS[::step][: args.personas]
+    results = await asyncio.gather(
+        *(_run_model(m, args.repeats, args.concurrency, personas) for m in models)
+    )
     _print_table([_row(m, r) for m, r in zip(models, results, strict=True)])
     if args.out:
         dump = {
