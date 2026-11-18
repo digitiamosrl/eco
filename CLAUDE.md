@@ -44,7 +44,7 @@ cd frontend && npm run lint && npm run typecheck && npm test
 - I prompt stanno in `prompts/`, un file per prompt, mai inline nel codice.
 - Modelli e parametri da variabili d'ambiente (`PERSONA_MODEL`, `REPORT_MODEL`), mai hardcoded.
 - Le personas rispondono sempre in JSON validato contro `shared/schemas/response.schema.json`. Se la validazione fallisce, un solo retry, poi errore esplicito.
-- Modelli via OpenRouter (`OPENROUTER_API_KEY`, chiamate `httpx` a `/chat/completions`). Gli id dei modelli sono quelli di OpenRouter, da `PERSONA_MODEL` e `REPORT_MODEL`.
+- Modelli via endpoint compatibile OpenAI (chiamate `httpx` a `{OPENROUTER_BASE_URL}/chat/completions`). Per la POC si usa **Ollama in locale** (gratuito, senza limiti, i dati non escono dal computer); OpenRouter resta possibile cambiando solo `.env`. Configurazione in `docs/provider-ollama.md`.
 - Niente prompt caching per ora: post brevi e una chiamata per coppia. Vedi `docs/piano-provider-openrouter.md`.
 - Non introdurre cache semantica: renderebbe le personas omogenee.
 - Le personas non devono conoscere l'obiettivo del test. Le prime reazioni si chiedono a freddo.
