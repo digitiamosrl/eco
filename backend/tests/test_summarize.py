@@ -73,7 +73,11 @@ async def test_llm_summarizer_empty_ranking_makes_no_call(monkeypatch) -> None:
 async def test_said_and_thought_come_from_one_call(monkeypatch) -> None:
     monkeypatch.setattr(settings, "report_model", "modello/report")
     sent: list[dict] = []
-    output = {"said_summary": "Dicono no.", "thought_summary": "Pensano sì."}
+    output = {
+        "said_summary": "Dicono no.",
+        "thought_summary": "Pensano sì.",
+        "tones": [],
+    }
     summarizer = _llm(output, sent)
     stats = _stats("A", [5, 2], ("Prezzo alto",))
 
@@ -133,6 +137,9 @@ async def test_report_summaries_run_in_parallel() -> None:
             await asyncio.wait_for(barrier.wait(), timeout=2)
             return "riepilogo"
 
+        async def divergent_ids(self, stats) -> list[str]:
+            return []
+
     report = await build_report("t1", stimuli, responses, BarrierSummarizer())
     assert report.summary == "riepilogo"
     assert len(report.items) == 2
@@ -170,7 +177,7 @@ def _screen_stats() -> StimulusStats:
 
 async def test_screen_summary_names_the_screen_and_sends_abandons() -> None:
     sent: list[dict] = []
-    summarizer = _llm({"said_summary": "a", "thought_summary": "b"}, sent)
+    summarizer = _llm({"said_summary": "a", "thought_summary": "b", "tones": []}, sent)
     await summarizer.said_summary(_screen_stats())
     prompt = sent[0]["messages"][0]["content"][0]["text"]
     assert "Contenuto: schermata 2 «Scelta del piano»" in prompt
@@ -189,3 +196,52 @@ async def test_screen_overview_reports_abandons() -> None:
 async def test_fake_overview_names_the_critical_screen() -> None:
     text = await FakeSummarizer().summary([_screen_stats()])
     assert "schermata 2 «Scelta del piano»" in text
+
+
+async def test_divergence_comes_from_the_same_call_and_keeps_only_known_ids() -> None:
+    sent: list[dict] = []
+    output = {
+        "said_summary": "a",
+        "thought_summary": "b",
+        "tones": [
+            {"persona_id": "p1", "thought_tone": "negativo", "said_tone": "positivo"},
+            {"persona_id": "inventato", "thought_tone": "negativo", "said_tone": "neutro"},
+            {"persona_id": "p2", "thought_tone": "neutro", "said_tone": "positivo"},
+            {"persona_id": "p0", "thought_tone": "positivo", "said_tone": "negativo"},
+        ],
+    }
+    summarizer = _llm(output, sent)
+    stats = _stats("A", [5, 2, 3], ())
+
+    assert await summarizer.divergent_ids(stats) == ["p0", "p1"]  # ordine delle risposte
+    await summarizer.said_summary(stats)
+    assert len(sent) == 1
+    prompt = sent[0]["messages"][0]["content"][0]["text"]
+    assert '"persona_id": "p0"' in prompt
+
+
+async def test_fake_divergence_compares_the_texts() -> None:
+    stats = _stats("A", [3, 3], ())
+    assert await FakeSummarizer().divergent_ids(stats) == []
+
+
+async def test_report_calls_use_the_report_temperature(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "report_temperature", 0.2)
+    sent: list[dict] = []
+    await _llm({"summary": "x"}, sent).summary([_stats("A", [3], ())])
+    assert sent[0]["temperature"] == 0.2
+
+
+async def test_polite_silence_and_empty_said_are_not_divergence() -> None:
+    stats = _stats("A", [2, 2], ())
+    silent = stats.responses[1].model_copy(update={"said": "  "})
+    stats = StimulusStats(**{**stats.__dict__, "responses": (stats.responses[0], silent)})
+    output = {
+        "said_summary": "a",
+        "thought_summary": "b",
+        "tones": [
+            {"persona_id": "p0", "thought_tone": "negativo", "said_tone": "neutro"},
+            {"persona_id": "p1", "thought_tone": "negativo", "said_tone": "positivo"},
+        ],
+    }
+    assert await _llm(output, []).divergent_ids(stats) == []

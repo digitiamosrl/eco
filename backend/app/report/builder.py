@@ -6,22 +6,12 @@ from app.report.aggregate import StimulusStats, aggregate
 from app.report.summarize import Summarizer
 
 
-def _norm(text: str) -> str:
-    return " ".join(text.lower().split())
-
-
-def divergent_persona_ids(responses: Sequence[Response]) -> list[str]:
-    """Personas che in pubblico dicono (said) cosa diversa da ciò che pensano (thought).
-
-    shortcut: confronto dei testi normalizzati, non del significato; passare al modello
-    del report se la regola risulta troppo larga.
-    """
-    return [r.persona_id for r in responses if _norm(r.said) != _norm(r.thought)]
-
-
-async def _summarize_variant(stats: StimulusStats, summarizer: Summarizer) -> tuple[str, str]:
-    # said prima di thought: il summarizer riusa la stessa chiamata al modello.
-    return await summarizer.said_summary(stats), await summarizer.thought_summary(stats)
+async def _summarize_variant(
+    stats: StimulusStats, summarizer: Summarizer
+) -> tuple[str, str, list[str]]:
+    # In sequenza: il summarizer riusa la stessa chiamata al modello per tutti e tre.
+    said = await summarizer.said_summary(stats)
+    return said, await summarizer.thought_summary(stats), await summarizer.divergent_ids(stats)
 
 
 async def build_report(
@@ -46,10 +36,10 @@ async def build_report(
             said_summary=said,
             thought_summary=thought,
             responses=list(stats.responses),
-            divergent_persona_ids=divergent_persona_ids(stats.responses),
+            divergent_persona_ids=divergent,
             abandon_count=stats.abandon_count,
             misunderstood=None if stats.misunderstood is None else list(stats.misunderstood),
         )
-        for stats, (said, thought) in zip(ranking, variant_texts, strict=True)
+        for stats, (said, thought, divergent) in zip(ranking, variant_texts, strict=True)
     ]
     return Report(test_id=test_id, simulated=True, summary=summary, items=items, fidelity=fidelity)

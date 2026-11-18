@@ -106,3 +106,16 @@ def test_screens_collect_misunderstood_by_frequency() -> None:
 
 def test_posts_have_no_abandon_count() -> None:
     assert all(stats.abandon_count is None for stats in aggregate([A, B, C], RESPONSES))
+
+
+def test_near_identical_objections_count_as_one() -> None:
+    responses = [
+        _response(A, "p1", 2, ["Troppo generico."]),
+        _response(A, "p2", 2, ["troppo generico"]),
+        _response(A, "p3", 2, ["  Troppo  generico! "]),
+        _response(A, "p4", 2, ["Manca un esempio"]),
+        _response(A, "p5", 2, ["Manca un esempio."]),
+        _response(A, "p6", 2, ["Prezzo alto"]),
+    ]
+    [stats] = aggregate([A], responses)
+    assert stats.objections == ("Troppo generico.", "Manca un esempio", "Prezzo alto")

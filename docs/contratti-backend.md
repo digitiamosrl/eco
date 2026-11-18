@@ -38,6 +38,7 @@ Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. P
 - Se la calibrazione non c'è ancora, il campo si omette e il frontend mostra lo stato "non disponibile".
 - Va calcolato una volta, in `backend/app/report/calibration.py`, e riusato in ogni report. Non va ricalcolato per ogni test.
 - Il report legge `data/processed/calibration.json` (`{score, basis}`). Finché il file non esiste, il campo si omette. Per produrlo servono l'engagement reale dei post pubblicati e un run del panel su quegli stessi post.
+- Lo produce `python -m scripts.calibrate` (da `backend/`), leggendo `data/processed/published_posts.json`, versionato: solo testi pubblici e conteggi aggregati. Formato in `PublishedPost` dentro `backend/scripts/calibrate.py`.
 
 ## Da decidere insieme
 

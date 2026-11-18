@@ -1,3 +1,4 @@
+import re
 from collections import Counter
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
@@ -25,8 +26,16 @@ def _mean(scores: Sequence[int]) -> float:
     return round(sum(scores) / len(scores), 2) if scores else 0.0
 
 
+def _key(text: str) -> str:
+    """Stesso testo anche con maiuscole, spazi o punteggiatura diversi."""
+    return " ".join(re.sub(r"[^\w\s]", " ", text.lower()).split())
+
+
 def _most_common(items: Iterable[str]) -> tuple[str, ...]:
-    return tuple(item for item, _ in Counter(items).most_common(MAX_OBJECTIONS))
+    texts = [t.strip() for t in items if _key(t)]
+    first_seen = {_key(t): t for t in reversed(texts)}  # vince la prima forma incontrata
+    counts = Counter(_key(t) for t in texts)
+    return tuple(first_seen[key] for key, _ in counts.most_common(MAX_OBJECTIONS))
 
 
 def _top_objections(responses: Sequence[Response]) -> tuple[str, ...]:
