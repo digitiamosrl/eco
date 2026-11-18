@@ -215,3 +215,23 @@ async def test_required_fields_depend_on_the_stimulus() -> None:
     assert "action" in post_required and "would_abandon" not in post_required
     assert {"would_abandon", "misunderstood"} <= set(screen_required)
     assert "action" not in screen_required
+
+
+async def test_post_always_names_the_reaction_and_code_drops_the_placeholder() -> None:
+    sent: list[dict] = []
+    output = {**VALID_OUTPUT, "action": "scroll", "reaction": "nessuna"}
+    response = await LlmResponder(_recording_client(output, sent)).respond(PERSONA, POST)
+    schema = sent[0]["response_format"]["json_schema"]["schema"]
+    # Facoltativa, il modello la saltava anche quando reagiva: ora la sceglie sempre.
+    assert "reaction" in schema["required"]
+    assert "nessuna" in schema["properties"]["reaction"]["enum"]
+    assert response.reaction is None
+
+
+async def test_reaction_is_kept_only_with_react() -> None:
+    reacted = {**VALID_OUTPUT, "action": "react", "reaction": "perspicace"}
+    response = await LlmResponder(_recording_client(reacted, [])).respond(PERSONA, POST)
+    assert response.reaction == "perspicace"
+    scrolled = {**VALID_OUTPUT, "action": "scroll", "reaction": "adoro"}
+    response = await LlmResponder(_recording_client(scrolled, [])).respond(PERSONA, POST)
+    assert response.reaction is None

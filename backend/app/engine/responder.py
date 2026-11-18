@@ -141,9 +141,28 @@ def _messages(persona: Persona, stimulus: Stimulus) -> list[dict[str, Any]]:
 _REQUIRED_BY_KIND = {"post": ("action",), "prototype_screen": ("would_abandon", "misunderstood")}
 
 
+# Per i post il modello sceglie sempre una reazione, anche "nessuna": facoltativa la saltava
+# pure quando reagiva. Il segnaposto non esce dal responder.
+_NO_REACTION = "nessuna"
+_POST_REACTION = {
+    **_MODEL_PROPERTIES["reaction"],
+    "enum": [*_MODEL_PROPERTIES["reaction"]["enum"], _NO_REACTION],
+}
+
+
 def _schema_for(stimulus: Stimulus) -> dict[str, Any]:
     extra = _REQUIRED_BY_KIND.get(stimulus.kind, ())
-    return {**_MODEL_SCHEMA, "required": [*_MODEL_SCHEMA["required"], *extra]}
+    schema = {**_MODEL_SCHEMA, "required": [*_MODEL_SCHEMA["required"], *extra]}
+    if stimulus.kind != "post":
+        return schema
+    properties = {**schema["properties"], "reaction": _POST_REACTION}
+    return {**schema, "properties": properties, "required": [*schema["required"], "reaction"]}
+
+
+def _clean(data: dict[str, Any]) -> dict[str, Any]:
+    """Una reazione vale solo con action react; il segnaposto "nessuna" non si salva."""
+    keep = data.get("action") == "react" and data.get("reaction") != _NO_REACTION
+    return {k: v for k, v in data.items() if k not in _IDS and (k != "reaction" or keep)}
 
 
 class LlmResponder:
@@ -159,7 +178,7 @@ class LlmResponder:
             schema_name="persona_response",
             schema=_schema_for(stimulus),
         )
-        fields = {k: v for k, v in data.items() if k not in _IDS}
+        fields = _clean(data)
         try:
             return Response(persona_id=persona.id, stimulus_id=stimulus.id, **fields)
         except ValidationError as exc:
