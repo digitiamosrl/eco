@@ -40,6 +40,9 @@ ALLOWED_HOSTS = (
     "fonts.gstatic.com",
 )
 _LOCAL_SCHEMES = ("about:", "data:", "blob:")
+# Un file HTML si serve da un'origine finta: con set_content la pagina resta su about:blank,
+# senza origine, e localStorage (usato dagli artifact di Claude Design) solleva SecurityError.
+_LOCAL_ORIGIN = "http://artifact.localhost/"
 
 
 def is_allowed(url: str) -> bool:
@@ -128,12 +131,14 @@ async def _capture(url: str | None, html: str | None) -> RawPrototype:
             page = await browser.new_page(viewport=VIEWPORT)
             page.set_default_timeout(TIMEOUT_MS)
             await page.route("**/*", _guard)
+            if html is not None:
+                # Registrata dopo il guard, quindi vince lei: la richiesta non esce mai dal browser.
+                await page.route(
+                    _LOCAL_ORIGIN, lambda route: route.fulfill(body=html, content_type="text/html")
+                )
 
             async def load() -> None:
-                if url is not None:
-                    await page.goto(url, wait_until="networkidle")
-                else:
-                    await page.set_content(html or "", wait_until="networkidle")
+                await page.goto(url or _LOCAL_ORIGIN, wait_until="networkidle")
 
             await load()
             title = (await page.title()).strip() or "Artifact"

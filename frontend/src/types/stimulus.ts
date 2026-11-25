@@ -12,10 +12,17 @@ export interface Stimulus {
   text?: string;
   image_url?: string;
   flow_id?: string;
+  /**
+   * Solo per prototype_screen: posizione della schermata nel percorso testato, da 0. Non è l'indice nel prototipo: se si tolgono schermate in import, i passi restano consecutivi.
+   */
   screen_index?: number;
   page_structure?: string;
   /**
    * Tipo dell'allegato del post in image_url: immagine o documento PDF (carosello).
    */
   attachment_kind?: "image" | "pdf";
+  /**
+   * Solo per prototype_screen: cosa sta cercando di fare chi usa il prototipo. Scritto da chi lancia il test, entra nel prompt della persona.
+   */
+  task?: string;
 }

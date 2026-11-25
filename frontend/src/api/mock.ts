@@ -117,16 +117,17 @@ export function importPrototype(input: ImportInput, signal?: AbortSignal): Promi
   });
 }
 
-export async function startPrototypeTest(prototypeId: string, paths: PrototypePath[]): Promise<Test> {
+export async function startPrototypeTest(prototypeId: string, paths: PrototypePath[], task: string): Promise<Test> {
   if (!prototypes.has(prototypeId)) throw new Error("Prototipo non trovato.");
   return start(
     "prototype",
     paths.flatMap((p) =>
-      p.screen_indexes.map((i) => ({
+      p.screen_indexes.map((i, step) => ({
         id: `${p.start_id}-${i}`,
         kind: "prototype_screen" as const,
         flow_id: p.start_id,
-        screen_index: i,
+        screen_index: step,
+        task,
       })),
     ),
   );

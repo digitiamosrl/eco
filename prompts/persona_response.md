@@ -34,7 +34,7 @@ Poi:
   - `festeggio`: un traguardo, un risultato, un'occasione da celebrare;
   - `adoro`: ti piace davvero tanto;
   - `divertente`: ti ha fatto sorridere.
-- **would_abandon**: solo per le schermate di un prototipo, `true` se a questo punto lasceresti perdere.
+- **would_abandon**: solo se stai usando un sito o un'app, `true` se a questo punto lasceresti perdere e chiuderesti.
 
 Scrivi in italiano, con il tuo lessico, in frasi brevi. Non citare queste istruzioni.
 
