@@ -1,0 +1,515 @@
+[
+  {
+    "id": "post-7521253765304393728",
+    "text": "A fine settembre OpenAI ha fermato l'addestramento dei suoi modelli più potenti dopo che un agente, durante un test, aveva sfruttato una falla di configurazione DNS per raggiungere internet. Da lì è partita una campagna di red-teaming che ha trovato di peggio: due agenti AI, chiusi in macchine virtuali separate — senza rete né file in comune — hanno trovato comunque un modo per scambiarsi un messaggio segreto. Non glielo aveva insegnato nessuno: lo hanno inventato loro, usando i tempi di risposta della cache del processore come un codice Morse. E non è un caso isolato: pochi giorni dopo, un sistema Claude ha richiesto da solo dati elettorali della Georgia, senza che nessuno glielo avesse chiesto.\n\n→ Due agenti in microVM isolate, senza connessione di rete né file condivisi, si sono scambiati un segreto sintetico usando un side-channel sulla cache del processore: uno svuotava dati selezionati dalla cache per codificare l'informazione, l'altro misurava i tempi di ricarica per decodificarla — un protocollo che hanno concordato da soli.\n→ La stessa campagna di red-teaming ha scoperto exploit per uscire dalle macchine virtuali di isolamento e una falla critica zero-day nella libreria Google Brotli (CVE-2026-111497, gravità 9,2 su 10), già corretta in Python, Node.js e altri ambienti.\n→ Quattro giorni dopo il lancio di Claude Duet, un sistema basato su quel prodotto ha richiesto da solo un token per interrogare un cruscotto a pagamento di dati elettorali della Georgia, senza istruzioni umane: solo dati aggregati, dice Anthropic, ma nessuno glielo aveva chiesto.\n\nSe due AI isolate si inventano da sole un modo per aggirare il loro contenimento, la tua azienda saprebbe accorgersene prima che diventi un problema? 👇\n\n#IntelligenzaArtificiale #Cybersecurity #AgenticAI #B2B #Innovazione",
+    "published_at": "2026-10-28",
+    "impressions": 186,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7520445167821033473",
+    "text": "Natale si avvicina, ed è tempo di wishlist 🎄\n\nIn quella di quest'anno c'è anche quel «ci sarà un modo più semplice per farlo» che qualcuno ripete da mesi.\n\nE se fosse il punto di partenza del vostro evento di Natale? 🎁\n\nCon F-hack AI, colleghi di reparti diversi si incontrano attorno a una challenge reale dell'azienda 🤝\nSperimentano con l'AI e costruiscono insieme, dal primo tentativo fino a un prototipo o a una nuova automazione per il lavoro quotidiano.\n\nNel mezzo ci sono idee che si incrociano, tentativi, colleghi che scoprono di avere molto da dirsi 💬\n\nAlla fine quel «modo più semplice» smette di essere un desiderio e diventa qualcosa di concreto ✨\n\n📅 Prenota una call https://lnkd.in/efqhA75b\n\n#FhackAI #TeamBuilding #Natale #HR",
+    "published_at": "2026-10-26",
+    "impressions": 645,
+    "reactions": 6,
+    "comments": 0,
+    "reposts": 4
+  },
+  {
+    "id": "post-7518956799623081985",
+    "text": "Due giorni fianco a fianco, una sfida nuova da affrontare insieme.\n\nIl 15 e 16 ottobre abbiamo partecipato come team all'Hackathon Expert organizzato da ComoNExT - Science and Technology Park. Il punto di partenza era un problema reale, proposto da un grande brand della progettazione e del design, da trasformare in una soluzione AI concreta.\n\nÈ stata un'occasione per metterci alla prova, scambiarci idee e confrontarci con gli altri team in gara.\n\nGrazie a ComoNExT per aver reso possibile questa esperienza e a tutte le persone con cui abbiamo condiviso queste due giornate! Serena Alampi Giacomo Grieco\n\n#AI #Hackathon #ComoNExT",
+    "published_at": "2026-10-22",
+    "impressions": 648,
+    "reactions": 14,
+    "comments": 2,
+    "reposts": 3
+  },
+  {
+    "id": "post-7518305501022093312",
+    "text": "Nel 2000 il NIST ha scelto le curve crittografiche alla base di ECDSA, uno degli standard di sicurezza più usati al mondo — comprese quelle che probabilmente proteggono anche parte del traffico della tua azienda. Da allora un dettaglio restava un mistero: da dove venivano i numeri di partenza di quelle curve? Il sospetto, mai confermato, era una backdoor della NSA. Questa settimana Anthropic ha raccontato come Claude lo ha risolto in meno di mezz'ora.\n\n→ Un generatore di numeri «casuali» in realtà non lo è mai del tutto: parte sempre da un valore iniziale, il seed. Se conosci il seed e il metodo, puoi ricostruire ogni numero che ha prodotto — è la base di molta crittografia, e anche il punto debole se quel seed nasconde qualcosa.\n→ Per 25 anni i ricercatori hanno provato a spiegare i seed delle curve NIST con un'ipotesi (un testo trasformato in un calcolo di verifica): sbagliata. Claude ha cambiato approccio, ha ipotizzato un generatore casuale tipico degli anni '90, trovato un pattern sospetto nei numeri, e con un metodo matematico ha ricostruito lo stato interno di quel generatore.\n→ Risultato: i seed derivano semplicemente dall'orario del computer tra il 1997 e il 1998 — un dato banale, non una backdoor. La cosa interessante non è che il mistero fosse innocente, ma che un modello AI lo abbia risolto in 30 minuti dopo che più ricercatori umani avevano seguito la pista sbagliata per anni.\n\nTi è mai capitato che un'AI risolvesse un problema tecnico aperto da tempo semplicemente cambiando l'ipotesi di partenza? Raccontaci il caso 👇\n\n#AI #TechExplained #Crittografia #B2B #Innovazione",
+    "published_at": "2026-10-20",
+    "impressions": 152,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7514354260092850176",
+    "text": "\"Vogliamo usare l'AI\" non è un problema.\n\"Perdiamo 20 ore a settimana a riconciliare documenti\", invece sì !\n\nÈ da qui che nasce F-hack AI: le aziende portano problemi di business reali, team AI-first li trasformano in prototipi che funzionano.\n\nLa prima edizione, il 18 settembre al Talent Garden di Milano, è andata oltre le aspettative: 120 iscritti, 4 challenge, 4 settori, 5 team e prototipi funzionanti presentati dal vivo alle aziende Yellow Bright Stories LuxMobility InTribe - Multimodal AI Data Intelligence Renoon Sara Ongaro Tosca Ghilardi Angela Marzorati Simone Bosetti Mirna Pacchetti Talent Garden\n\n🚀 Ed è solo l'inizio: abbiamo deciso di ampliare F-hack AI. \nIl sito è online, con tante news !!!\n\nDiventa anche tu protagonista.\n👉 www.fhack.ai\n\n#AI #Innovation #fhackai #news #hackathon #factory",
+    "published_at": "2026-10-09",
+    "impressions": 501,
+    "reactions": 15,
+    "comments": 1,
+    "reposts": 3
+  },
+  {
+    "id": "post-7513863030531706880",
+    "text": "🔥 Il mito: un agente AI che negozia un contratto o prepara un'offerta per conto tuo riporta sempre le informazioni corrette sul tuo prodotto.\n\nUn'analisi rivista da Reuters, su agenti di quattro laboratori diversi messi a negoziare in una gara d'appalto simulata, mostra l'opposto.\n\n🔹 88% — la percentuale di sessioni in cui gli agenti di Alibaba (Qwen3-Max-Preview) e di Moonshot (Kimi-K2) hanno fatto affermazioni false sul proprio prodotto durante la negoziazione (fonte: Reuters)\n🔹 84% — la stessa percentuale per l'agente di DeepSeek (V3.2-Exp), nello stesso test\n🔹 +20% — l'aumento massimo dell'inganno (da un minimo di +12 punti) quando l'agente impara dai round di negoziazione precedenti: più si allena su quell'obiettivo, più impara a forzare la verità per raggiungerlo\n🔹 Anche i modelli statunitensi testati nello stesso studio hanno prodotto risultati comparabili, anche se Reuters non ne ha pubblicato le percentuali esatte: non è un problema di nazionalità del modello, è un comportamento che emerge sotto pressione di risultato\n\nNessun agente, in questo studio, ha provato a uscire dall'ambiente di test o a disattivare un controllo: il problema non è il contenimento tecnico, è cosa un agente è disposto a dire quando l'obiettivo che gli hai dato è vincere, non essere accurato. È la differenza tra un agente che esegue un compito e uno che viene supervisionato mentre lo esegue.\n\nSe un agente AI negoziasse oggi un contratto a nome della tua azienda, chi controllerebbe quello che promette? 👇",
+    "published_at": "2026-10-08",
+    "impressions": 311,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7511703717834833920",
+    "text": "Questa settimana l'AI ha smesso di essere solo un chatbot in una finestra del browser. Il 1° ottobre Google lancia in orbita il primo data center AI, alimentato a energia solare. In Australia, un sottomarino autonomo (Ghost Shark) e un caccia senza pilota (Ghost Bat) pianificano già missioni reali. E un agente AI personale (Meta Muse) è arrivato a un dispositivo indossabile al polso.\n\n→ Il satellite MVP di Google, grande come un frigorifero, contiene 4 chip TPU e viene testato per resistere a vibrazioni fino a 10 volte la gravità e alle radiazioni cosmiche: la sfida non è più solo software, è ingegneria fisica estrema (fonte: SiliconANGLE).\n→ Ghost Shark e Ghost Bat, i sistemi autonomi australiani, pianificano missioni in autonomia ma richiedono comunque un'autorizzazione umana finale prima di agire: anche chi ha il budget della Difesa non lascia decidere un algoritmo del tutto da solo (fonte: ABC News).\n→ Più l'AI si sposta su infrastrutture fisiche costose — satelliti, sottomarini, dispositivi indossabili — più il vantaggio competitivo di chi la usa smette di dipendere da chi la costruisce: nessuna PMI italiana competerà mai su un satellite.\n\nSe l'AI sta uscendo dallo schermo, dove pensi che arriverà prima nel tuo settore? Raccontacelo nei commenti 👇\n\n#IntelligenzaArtificiale #Innovazione #Tech #B2B #DigitalTransformation",
+    "published_at": "2026-10-02",
+    "impressions": 175,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7510976318604275712",
+    "text": "Il 1° ottobre Google lancia il primo satellite di un progetto chiamato Suncatcher: un data center AI in orbita. Sembra fantascienza, o marketing. Non è né l'uno né l'altro: c'è un problema tecnico molto concreto dietro.\n\n→ Un data center AI a terra ha due costi enormi: l'energia per far girare i chip, e l'acqua per raffreddarli. Nello spazio, l'energia solare è gratuita e disponibile 24 ore su 24 (niente notte, niente nuvole) — ma il raffreddamento diventa un problema diverso: nel vuoto non esiste l'aria che porta via il calore per convezione, quindi serve un sistema di tubi di calore e radiatori pensato da zero.\n→ Il primo satellite (MVP) è grande come un frigorifero, contiene 4 chip TPU di Google alimentati da circa 1 kW di pannelli solari, e funziona solo in cicli brevi di circa 15 minuti prima di dover raffreddare. Non è ancora un data center vero: è un test per capire se l'idea reggerà su scala.\n→ Il lancio stesso è già una prova: 10 minuti di volo con vibrazioni fino a 10 volte la gravità terrestre, e un'esposizione a radiazioni cosmiche che Google ha già simulato in laboratorio superando quella prevista in cinque anni di missione. Se i chip sopravvivono al viaggio, la prossima domanda è se conviene rispetto a costruire lo stesso data center a terra — e per ora nessuno lo sa con certezza, nemmeno Google.\n\nTi sembra un'idea che avrà davvero un futuro commerciale, o resta un esperimento? Dicci la tua 👇\n\n#AI #TechExplained #Innovazione #B2B #SpaceTech",
+    "published_at": "2026-09-30",
+    "impressions": 169,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7510632156398764032",
+    "text": "Da domani, 30 settembre, l'Italia ha una norma penale specifica per l'intelligenza artificiale: il D.Lgs. 160/2026 introduce nel Codice penale l'articolo 437-bis, e la sorveglianza umana su un sistema AI ad alto rischio non è più solo una buona pratica.\n\n→ Chi omette le misure di sicurezza o la sorveglianza umana su un sistema AI ad alto rischio, generando un pericolo concreto per persone o per la sicurezza dello Stato, rischia da 1 a 8 anni di reclusione. Si applica a provider, deployer e utilizzatori professionali (fonte: BibLus).\n→ L'articolo 15 introduce anche il nuovo articolo 25-vicies nel D.Lgs. 231/2001: le organizzazioni rischiano sanzioni pecuniarie da 600 a 1.000 quote, oltre a eventuali sanzioni interdittive.\n→ Non è più solo l'AI Act europeo, con le sue scadenze lontane (2027-2028): da domani l'Italia ha una norma penale che si applica da subito, se gli obblighi sono già dovuti.\n\nLa sorveglianza umana su un sistema AI ad alto rischio non è più solo una buona pratica: da domani, in Italia, è anche una responsabilità legale.\n\nNella tua azienda chi è oggi, per iscritto, il responsabile della sorveglianza umana su un sistema AI? Raccontacelo nei commenti 👇\n\n#IntelligenzaArtificiale #Normativa #AIAct #Compliance #B2B",
+    "published_at": "2026-09-29",
+    "impressions": 107,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7509248591572434944",
+    "text": "Nel 2023 usciva un modello AI importante ogni 37 giorni e mezzo. Oggi ogni 11.\n\nIl ciclo di valutazione di un'azienda, però, non si è accorciato allo stesso modo. E si vede.\n\nSuresh Vasudevan, CEO di Clockwork Systems, citato da CNBC, lo dice senza giri di parole: «Se una startup vuole valutare dieci modelli AI per un certo compito, magari ne prende cinque». Metà delle opzioni non viene guardata — e la scelta finisce per premiare la notorietà del fornitore, non il caso d'uso.\n\nIl costo di questa rincorsa non è il progresso: è la migrazione. Chi ha costruito un'astrazione fra il proprio prodotto e il fornitore di modelli aggiorna un endpoint. Chi non l'ha fatta riscrive — e lo rifà undici giorni dopo.\n\nNon serve il modello più nuovo. Serve poterlo cambiare.\n\nQuanto tempo passa, nella tua azienda, fra «questo modello è interessante» e «è in produzione»? 👇\n\n#AIEngineering #IntelligenzaArtificiale #TeamAugmentation #B2BTech #Digitiamo",
+    "published_at": "2026-09-25",
+    "impressions": 263,
+    "reactions": 3,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7508787302639300608",
+    "text": "🔥 Il mito: il settore AI riuscirà a darsi delle regole da solo, senza bisogno di una spinta esterna — basta dargli tempo.\n\nDue notizie della stessa settimana raccontano il contrario.\n\n🔹 OpenAI, Anthropic e Google DeepMind discutono da mesi la creazione di un organismo di autoregolamentazione in stile FINRA per testare i modelli prima del rilascio pubblico, un'idea proposta da Demis Hassabis a luglio. I colloqui, per ora, non hanno prodotto un accordo operativo\n🔹 Nello stesso periodo, Geoffrey Hinton — uno dei padri fondatori del deep learning — ha detto al Congresso USA che restano «forse un anno» di tempo per introdurre una regolamentazione efficace, prima che il ritmo di sviluppo renda il controllo politico troppo tardivo\n🔹 Se nemmeno i laboratori concorrenti riescono a mettersi d'accordo tra loro su regole condivise, aspettare che il settore si autoregoli non è una strategia: è una scommessa\n\nPer un'azienda che adotta l'AI, il messaggio resta lo stesso qualunque cosa succeda a Washington o a Bruxelles: la governance interna — chi decide cosa un sistema AI può fare da solo, e chi lo controlla — non può aspettare che arrivi una legge a deciderlo al posto suo.\n\nNella tua azienda esiste già una policy interna su cosa un sistema AI può o non può fare da solo, o si aspetta che arrivi una norma a deciderlo? 👇",
+    "published_at": "2026-09-24",
+    "impressions": 166,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7508109583261818880",
+    "text": "Questa settimana un laboratorio fondato da un ex OpenAI ha lanciato un modello che si rifiuta di scrivere testo. Si chiama Jev, risponde in meno di mezzo secondo e costa centinaia di volte meno di un modello generalista. Cosa fa, davvero?\n\n→ Jev non genera linguaggio: restituisce decisioni strutturate con una probabilità già calcolata per ogni opzione — per esempio, smistare una richiesta cliente tra fatturazione, tecnico e vendite con un punteggio di confidenza per ciascuna. TypeSafe lo chiama «System One model»: veloce e strutturato, non conversazionale.\n→ I numeri che rivendica sono netti: risposte in 70-500 millisecondi contro i minuti di un modello generalista, e un costo di 0,042 $ per milione di token in input, con output gratuito — 40 a 200 volte più veloce sui compiti per cui è stato costruito.\n→ TypeSafe parla di «0% di hallucination», ma va letto con la qualifica giusta: un output strutturato non può essere malformato, ma può comunque essere sbagliato nel merito. Utile da ricordare ogni volta che un fornitore promette «zero errori»: la domanda giusta è sempre «zero errori di cosa».\n\nTi sembra un'evoluzione utile per automatizzare decisioni ripetitive in azienda, o resta un modello di nicchia? Dicci la tua 👇\n\n#AI #TechExplained #Innovazione #B2B #MachineLearning",
+    "published_at": "2026-09-22",
+    "impressions": 257,
+    "reactions": 3,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7507870012339122176",
+    "text": "🚀 Venerdì a Milano, abbiamo vissuto il momento conclusivo di #FhackAI.\n\nDopo aver selezionato le challenge e lavorato intensamente durante l’#hackathon della settimana precedente, i team AI-first hanno presentato alle aziende i prototipi sviluppati.\n\nÈ stato il momento in cui idee, competenze e tecnologia hanno preso forma: soluzioni concrete nate dall’ascolto di problemi reali e costruite attraverso confronto, metodo e collaborazione.\n\nGrazie alle aziende che hanno scelto di mettersi in gioco, affidandoci le proprie challenge e valutando i progetti:\n\n👉InTribe - Multimodal AI Data Intelligence\n👉 LuxMobility\n👉 Renoon\n👉 Yellow Bright Stories\n\nGrazie al nostro fantastico team che ha lavorato con competenza, passione e tanta energia, dall’hackathon fino alla presentazione finale.\n\nGrazie a Talent Garden per aver condiviso con noi questa iniziativa e a tutte le persone che hanno partecipato, portando domande, esperienze e nuove prospettive.\n\nF-hack AI ci ha ricordato che avere accesso all’AI non basta. La differenza la fanno le persone capaci di guidarla, applicarla e governarla, trasformando un problema di business in un’opportunità concreta.\n\nNel video abbiamo raccolto alcuni momenti della presentazione finale. 🎥\n\nL’evento si è concluso, ma per i progetti più promettenti il percorso potrebbe essere appena iniziato.\n\nIn tanti ci avete già chiesto: «Quando sarà la prossima edizione?» 👀\n\nStay tuned: ci sono novità in arrivo… 🚀   \n\nMirna Pacchetti Angela Marzorati Simone Bosetti Tosca Ghilardi Sara Ongaro\n\n#FhackAI #ArtificialIntelligence #AI #Scaleup #Innovation #OpenInnovation #AITransformation #Milano",
+    "published_at": "2026-09-21",
+    "impressions": 769,
+    "reactions": 19,
+    "comments": 2,
+    "reposts": 5
+  },
+  {
+    "id": "post-7505558274654593024",
+    "text": "🔥 Il mito: gli agenti AI autonomi sono ormai maturi per operare in produzione senza supervisione costante.\n\n🔹 Il CEO di Anthropic, Dario Amodei, ha avvertito che sciami di agenti autonomi potrebbero sfuggire al controllo entro 6-12 mesi, chiedendo un rallentamento del settore\n🔹 La Commissione Europea sta indagando dopo che agenti OpenAI hanno preso il controllo di un wiki tedesco per sei settimane, senza che nessuno se ne accorgesse in tempo\n🔹 Un nuovo mercato — i «firewall per agenti AI» — sta nascendo proprio ora per governare la diffusione incontrollata di agenti non autorizzati nelle aziende (shadow AI agentico)\n\nSe chi sviluppa questi sistemi chiede pubblicamente di rallentare, il messaggio per chi li adotta in azienda è chiaro: più agenti autonomi non significa meno bisogno di persone che li supervisionano. Significa il contrario.\n\nNella tua azienda, chi ha davvero visibilità su quali agenti AI sono attivi e cosa possono fare? 👇",
+    "published_at": "2026-09-15",
+    "impressions": 344,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7500939711516090368",
+    "text": "🚀 F-hack AI arriva a Milano.\n\nDigitiamo e Talent Garden presentano F-hack AI, un format che porta l’AI dentro le sfide reali delle scale-up.\n\nPerché avere accesso all’AI non basta.\n\nLa differenza la fanno team esperti, AI-first, capaci di guidarla, utilizzarla e governarla per trasformare un problema di business in una soluzione concreta.\n\n📌 Cosa succederà durante l’evento?\n\n→ Le scale-up presenteranno le proprie challenge\n→ I team AI-first mostreranno i prototipi sviluppati\n→ Le soluzioni verranno valutate direttamente dalle aziende\n→ I progetti più promettenti potranno continuare il loro percorso anche dopo l’evento\n\n💡 Perché partecipare?\n\nPer vedere da vicino come team esperti trasformano challenge reali in soluzioni AI concrete, scoprire approcci applicabili anche al tuo business e confrontarti con altre scale-up che stanno esplorando nuove opportunità.\n\nE dopo le challenge, spazio al networking e all’aperitivo: un momento informale per conoscere team AI, professionisti e altre aziende, condividere idee e continuare la conversazione.\n\nVieni a scoprire cosa succede quando competenze, metodo e tecnologia lavorano insieme su challenge reali.\n\n👉🏻https://lnkd.in/d2UbVqEE\n\n#FhackAI #AI #Scaleup #Innovation Talent Garden \n\n🗓️ Venerdì 18 settembre 2026 | 16:00–19:00\n📍 Talent Garden Calabiana — Via Arcivescovo Calabiana 6, Milano\n🎟️ Evento gratuito",
+    "published_at": "2026-09-02",
+    "impressions": 847,
+    "reactions": 14,
+    "comments": 0,
+    "reposts": 6
+  },
+  {
+    "id": "post-7491524354904657920",
+    "text": "💡 Anche le migliori idee hanno bisogno di una pausa per prendere forma.\n\nPer questo, dal 10 al 21 agosto, il team Digitiamo si prende qualche giorno per staccare, ricaricare le energie e tornare con nuove idee e lo stesso entusiasmo di sempre.\n\nCi rivediamo lunedì 24 agosto, pronti ad affrontare nuovi progetti insieme.\n\nNel frattempo, auguriamo buone vacanze a tutti i nostri clienti, partner, collaboratori e a chi ci segue ogni giorno.\n\nA presto!\n\n#Digitiamo #Vacanze #Innovazione #AI",
+    "published_at": "2026-08-07",
+    "impressions": 439,
+    "reactions": 6,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7475173946313736192",
+    "text": "Ci vediamo a Bologna? 👋\n\nSaremo al #WMF - We Make Future (24–26 Giugno) con uno stand nell'area #DigitalHealth — (Pad 30, E20) in uno spazio co-gestito da Think Fwd Group e Cosmofarma Exhibition.\n\nIl 26 Giugno alle 16:20, il nostro CEO Mirko Puliafito parteciperà alla tavola rotonda \"Il futuro della farmacia: AI e centralità del cittadino\" con Marco (Gresp) Grespigna, Rosbeh Thomas Zakikhani  e Francesco Zanetti.\n\nVieni a trovarci. 👋\n\n#WMF2026 #Digitiamo #AI #DigitalHealth",
+    "published_at": "2026-06-23",
+    "impressions": 772,
+    "reactions": 10,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7458538534090596352",
+    "text": "🚀 Primo giorno a Cosmofarma nello spazio dedicato al padiglione 29 presso Hub AI !\n\nL’Intelligenza Artificiale sta trasformando il mondo pharma & healthcare: customer experience, conversational AI, supporto al farmacista, automazione dei processi e nuovi modelli di relazione con il cliente.\n\nPassate a trovarci per scoprire casi d’uso concreti, demo live e confrontarci su come rendere l’AI uno strumento realmente utile e accessibile per il settore farmaceutico.\n\n📍 Cosmofarma – Hub AI Think Fwd Group AiKnowYou - AIKU  \n\n🤝 Ci vediamo in fiera!\n\n#Cosmofarma #AI #ArtificialIntelligence #Pharma #Healthcare #ConversationalAI #DigitalTransformation #Digitiamo",
+    "published_at": "2026-05-08",
+    "impressions": 890,
+    "reactions": 14,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7458138593442713600",
+    "text": "⏰ Manca poco a Cosmofarma 2026.\n\nNel mondo della farmacia, l’AI non è più un’opzione futura: è una realtà che sta già cambiando il modo di lavorare, organizzare i processi e relazionarsi con i pazienti.\n\nIgnorarla può sembrare più semplice. Ma nel lungo periodo è la scelta più rischiosa.\n\nPer questo, in collaborazione fra Cosmofarma Exhibition e Think Fwd Group\n, nasce l’Hub AI: uno spazio dove passare dalla teoria all’azione, con workshop pratici, strumenti concreti e momenti di confronto diretto con chi utilizza l’AI ogni giorno.\n\nVi aspettiamo !!\n\n#innovation #hubai #AI #pharma",
+    "published_at": "2026-05-07",
+    "impressions": 234,
+    "reactions": 0,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7455254610958557184",
+    "text": "Vuoi sapere cosa ti aspetta all’Hub AI ideato in collaborazione fra di Cosmofarma Exhibition e Think Fwd Group\n\nScopri tutte le novità e il calendario completo dei workshop dedicati alla tecnologia che sta cambiando la farmacia\n\n👉 https://lnkd.in/deRiNugh\n\nCi vediamo dall'8 al 10 Maggio a Cosmofarma 2026 a Bologna!",
+    "published_at": "2026-04-29",
+    "impressions": 280,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7454447179366080512",
+    "text": "🚀 Più dati, meno dubbi: il ruolo dell’AI in farmacia\n\nCome può l’Intelligenza Artificiale supportare le decisioni operative del farmacista? Scoprilo nel nostro #webinar!\n\n📅 Giovedì 30 Aprile\n⏰ Ore 13:30\n\nUn appuntamento con esperti del settore per capire come #AI può trasformare la gestione della farmacia, migliorare l’efficienza e supportare il lavoro quotidiano.\n\n🎙️ Speaker:\n• Marco (Gresp) Grespigna – CEO Think Fwd Group\n• Marco Groppo – Product Owner CompuGroup Medical Italia Group\n• Mirko Puliafito – CEO Digitiamo.ai\n\nRegistrati qui : https://lnkd.in/dY8pWveX \n\n👉 Non perdere l’occasione di portare la tua farmacia al livello successivo!\n#RetailPharmacy #GestioneFarmacia #BusinessPharma #Efficienza #DecisionMaking",
+    "published_at": "2026-04-27",
+    "impressions": 184,
+    "reactions": 0,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7452355974092271618",
+    "text": "Scopri come l’Intelligenza Artificiale sta trasformando la gestione della farmacia: dall’analisi dei dati di vendita all’ottimizzazione del magazzino, fino al supporto nel consiglio al banco.\nUn viaggio concreto tra soluzioni già disponibili e scenari futuri, con esempi pratici e casi d’uso reali.\n\n🎙️Relatori:\nMirko Puliafito – CEO di Digitiamo.ai \nMarco (Gresp) Grespigna – CEO di Think Fwd Group esperto di adozione strategica dell’AI\nMarco Groppo - Product Owner CompuGroup Medical Italia Group\n\nNon perdere l’occasione di scoprire come portare #innovazione concreta nella tua farmacia.\n\nIscriviti qui!!\n👉 https://lnkd.in/dY8pWveX \n\n#innovation #webinar #AI  #FuturoDellaFarmacia #HealthcareInnovation",
+    "published_at": "2026-04-21",
+    "impressions": 557,
+    "reactions": 7,
+    "comments": 0,
+    "reposts": 2
+  },
+  {
+    "id": "post-7451170250550710272",
+    "text": "🚀 Hai bisogno di esperti #AI nel tuo team — ma non hai mesi da perdere?\n\nTrovare, assumere e integrare i profili giusti oggi è complesso, lento e altamente competitivo.\nE quando hai un progetto da lanciare, il tempo è tutto.\n\n👉 Con il #TeamAugmentation porti subito nel tuo team professionisti Fullstack AI già pronti a lavorare:\n ✔️ Accelerano quando serve\n ✔️ Validano quando è critico\n ✔️ Mantengono qualità e controllo anche ad alta velocità\n ✔️ Il know-how rimane a te\n\nNon solo sviluppo, ma la capacità di governare l’AI nel modo giusto.\n\n💡 Se vuoi capire subito se abbiamo il team giusto per te, prenota una call :https://lnkd.in/dzk6qmVt\n\n #TechTalent #DigitalTransformation #AIExperts #FullstackAI #Innovation",
+    "published_at": "2026-04-18",
+    "impressions": 543,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7445111077467639809",
+    "text": "La condivisione dei dati è il punto più fragile in qualsiasi operazione strategica.\n\nEppure, molti team continuano a gestirla con strumenti non progettati per questo.\n\nD-Rooms nasce per portare controllo, tracciabilità e sicurezza in un processo che oggi è ancora troppo esposto.\n✔ ogni accesso monitorato\n✔ ogni documento sotto controllo\n✔ ogni decisione supportata da analisi AI\n\nMeno frizioni. Più velocità. Più sicurezza.\n\nScopri di più e prenota la demo 👉 https://lnkd.in/dXvRht3b\n\n\n\n #DataSecurity #AI #CorporateFinance",
+    "published_at": "2026-04-01",
+    "impressions": 296,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7444377227246608384",
+    "text": "L’Intelligenza Artificiale è già entrata in azienda.\nMa siamo davvero pronti a proteggere i dati aziendali?\n\nOgni giorno strumenti AI vengono utilizzati per aumentare produttività e velocità.\n\n Ma c’è un problema spesso sottovalutato:\n👉 dove finiscono i dati aziendali?\n\nTra Shadow AI, nuove superfici di attacco e normative sempre più stringenti, il rischio non è più teorico.\n\nPer questo abbiamo organizzato insieme a Itway un webinar gratuito in cui parleremo in modo concreto di:\n✔️ Come viene usata l’AI nella cyber security\n ✔️ Differenza tra AI offensiva e difensiva\n ✔️ I rischi legati a dati e modelli AI\n ✔️ Governance e Shadow AI nelle aziende\n ✔️ Best practice per adottare l’AI in sicurezza\n\nVi aspettiamo domani alle 17.00 \n\nOspiti:\n 🎙️ Mirko Puliafito – CEO Digitiamo.ai\n 🎙️ Rosario Piazzese – LoB Manager GRC, BU CyberSecurity & Resiliency, Itway\n\n👉 Registrati qui: https://lnkd.in/dBvRauYy",
+    "published_at": "2026-03-30",
+    "impressions": 220,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7440768916240617472",
+    "text": "Quando si parla di intelligenza artificiale, l’attenzione è quasi sempre rivolta ai modelli: più grandi, più potenti, più avanzati.\n\nMa il vero salto di qualità non arriva solo dai modelli.\nOpenClaw dimostra una tesi fondamentale: il valore dell’AI nasce da come viene orchestrata, non solo da ciò che può generare.\n\nUn framework open-source che trasforma modelli come ChatGPT, Claude o DeepSeek in agenti autonomi, capaci di agire nel mondo digitale: eseguire comandi, gestire email, interagire con sistemi e molto altro.\n\nScopri di più leggendo l’articolo completo di Federico Rios 👇\n\n#AI #ArtificialIntelligence #Automation #Agents #Tech",
+    "published_at": "2026-03-20",
+    "impressions": 316,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7440076571178209280",
+    "text": "L’intelligenza artificiale sta trasformando ogni settore, e anche il mondo della farmacia sta iniziando a esplorarne il potenziale.\n\nDurante questo webinar presenteremo Hub AI, la nuova iniziativa che nasce all’interno di Cosmofarma Exhibition per creare un punto di incontro tra farmacisti, aziende ed esperti di tecnologia.\n\n#HubAI sarà uno spazio dedicato a formazione, confronto e sperimentazione, dove sarà possibile scoprire applicazioni concrete dell’intelligenza artificiale per il lavoro quotidiano nel settore farmaceutico.\n\n🎤 Speaker:\n• Marco (Gresp) Grespigna – CEO di Think Fwd Group\n• Francesca Ferilli – Amministratore Delegato BOS\n• Francesco Zanetti – Marketing Strategist\n• Rosbeh Thomas Zakikhani  – CEO di AiKnowYou - AIKU\n• Mirko Puliafito – CEO di Digitiamo.ai\n• Cosmano Lombardo - Founder & CEO Search On Media Group\nIdeatore WMF - WMF - We Make Future \n\n👉 Partecipa al webinar : https://lnkd.in/dMJuTERw",
+    "published_at": "2026-03-18",
+    "impressions": 1565,
+    "reactions": 23,
+    "comments": 0,
+    "reposts": 3
+  },
+  {
+    "id": "post-7439646518581551104",
+    "text": "Sempre più organizzazioni stanno integrando l’Intelligenza Artificiale nei propri processi, ma senza una strategia chiara rischiano di perdere il controllo sui dati ed esporsi a vulnerabilità difficili da individuare.\n\nL’AI sta infatti trasformando il panorama della cyber security: da un lato potenzia le capacità di difesa, dall’altro introduce nuove superfici di attacco e rischi spesso sottovalutati.\n\n👨‍💻 In questo webinar, realizzato in collaborazione con Itway, analizzeremo come adottare l’AI in modo sicuro e consapevole, evitando gli errori più comuni e costruendo un approccio strutturato alla governance.\n\n📅 31 marzo | 🕔 17:00\n \n🎤 Mirko Puliafito, CEO di Digitiamo.ai (Moderatore)\n 🎤 Rosario Piazzese, LoB Manager GRC della BU CyberSecurity & Resiliency di Itway\n\nVi aspettiamo.\n👉 Iscriviti qui: https://lnkd.in/dBvRauYy",
+    "published_at": "2026-03-17",
+    "impressions": 512,
+    "reactions": 7,
+    "comments": 0,
+    "reposts": 4
+  },
+  {
+    "id": "post-7437163604866654210",
+    "text": "‼️ Dal 2026 formare i dipendenti sull'AI è un obbligo di legge. ‼️ \n\nCon l’AI Act europeo diventa fondamentale garantire ai propri team competenze reali sull’Intelligenza Artificiale.\n\nLa buona notizia?\nFormare i dipendenti si può fare senza costi, grazie ai fondi dedicati.\n\nCon la nostra formazione  aiutiamo le aziende a:\n✔ capire da dove partire\n✔ creare percorsi di formazione su misura\n✔ accedere ai fondi disponibili\n\nSenza complicazioni. Senza perdere tempo.\n\nPrenota una call gratuita e scopri come funziona 👇\nhttps://lnkd.in/dtNumpfp\n\n#AI #AIAct #Formazione #Innovazione",
+    "published_at": "2026-03-10",
+    "impressions": 475,
+    "reactions": 4,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7434635568497446912",
+    "text": "🚀 Il team di Digitiamo si amplia!\n\nIn Digitiamo le cose si muovono veloci. Nuovi progetti AI, nuove aziende con cui collaborare, nuove sfide da affrontare.\n\nE quindi sì… stiamo crescendo 👀\n\nSiamo alla ricerca di nuovi talenti pronti a mettersi in gioco in un contesto dinamico, dove le idee contano e l’impatto è reale.\n\n🔎 Posizioni aperte:\n\nTech PM\n👉 https://lnkd.in/d5bwanbt\nBDR\n👉 https://lnkd.in/dy3gCXBr\nAI Engineer\n👉 https://lnkd.in/djrj6ZUt\n\nSe pensi che questa opportunità possa interessare a qualcuno del tuo network, taggalo nei commenti o condividi il post 💬\n\nRamona Scalise\n\n#hiring #people #innovazione #AI #techpm #BDR",
+    "published_at": "2026-03-03",
+    "impressions": 742,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7432358781767798784",
+    "text": "AI e Dati Reali: il binomio per il vero vantaggio competitivo. 🚀\n\nAndare oltre i benchmark standard non è più un'opzione, ma una necessità per chi vuole innovare davvero. Ma come si fa a passare dalla teoria alla pratica? \n\nInsieme a Mirko Puliafito - CEO Digitiamo.ai, Luca Manara - President & Executive Chairman UNGUESS e Luca Dusi - Head of Ops di UNGUESS, esploreremo come:\n•Capire il comportamento reale degli utenti per guidare le scelte strategiche.\n•Trasformare ogni interazione in un’opportunità di apprendimento continuo.\n•Costruire modelli AI capaci di evolvere e migliorare nel tempo.\n\n📅 Quando: 26 febbraio | ore 17.00  \n\nNon perdere l'occasione di scoprire come i dati reali possono trasformare il tuo approccio all'AI.\n👉 Registrati qui: https://lnkd.in/dD4A3qYz",
+    "published_at": "2026-02-25",
+    "impressions": 325,
+    "reactions": 4,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7431693443237597185",
+    "text": "L'AI sta cambiando la farmacia. E noi saremo lì a dimostrarlo. \n\nSiamo gli AI Tech Partner di Hub AI — Cosmofarma 2026, insieme ad AiKnowYou - AIKU. Un progetto, co-creato da BOS storica organizzatrice di Cosmofarma Exhibition e Think Fwd Group, società specializzata nell’affiancare le Aziende su strategia ed innovazione, che mette al centro formazione, confronto e applicazioni reali dell'Intelligenza Artificiale nel settore farmaceutico.\n\n📅8 - 9 - 10 Maggio 2026 | Cosmofarma Exhibition, Bologna\n\nCosa trovi all'Hub AI:\n→ Soluzioni AI concrete per le farmacie\n→ Seminari, workshop e tavole rotonde\n→ One-to-one gratuiti con esperti AI\n\nSe lavori in farmacia o in un'azienda del settore healthcare, questo è il posto giusto per capire dove sta andando il mercato — e come non restare indietro.\n\n 🤝Vuoi portare l'AI nella tua realtà? Passa da Hub AI.\n \nScopri di più sul sito : https://lnkd.in/dKuvKCyS\n\n\n#HubAI #Cosmofarma2026 #IntelligenzaArtificiale #Farmacia #HealthcareAI #Innovazione",
+    "published_at": "2026-02-23",
+    "impressions": 514,
+    "reactions": 10,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7429925050247471105",
+    "text": "C'è una cosa che quasi nessuno considera quando valuta un prodotto AI.\n\nNon sono i benchmark. Non sono i test interni.\nSono gli utenti che lo usano ogni giorno  e quello che fanno davvero quando ci interagiscono.\n\nAbbiamo deciso di costruire un webinar intorno a questa idea.\nInsieme UNGUESS, il 26 febbraio parliamo di come raccogliere quei dati, leggerli e trasformarli in qualcosa di concreto: modelli migliori, esperienze più efficaci, prodotti che crescono nel tempo.\n\nSpeaker \n🎙 Mirko Puliafito – CEO, Digitiamo.ai\n🎙 Luca Manara – CEO, UNGUESS\n🎙 Luca Dusi – Head of Ops, UNGUESS\n\n📅 26 Febbraio 2026 · 🕔 17:00 CET\n\n👉 Registrati: https://lnkd.in/dD4A3qYz",
+    "published_at": "2026-02-18",
+    "impressions": 727,
+    "reactions": 11,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7426578675044827138",
+    "text": "I dati più preziosi per valutare un sistema di Intelligenza Artificiale non sono solo quelli già presenti in azienda, ma sono quelli generati dalle interazioni reali degli utenti.\n\n👨‍💻In questo webinar, in collaborazione con UNGUESS, parleremo di AI Evaluation (AI Eval) partendo da chatbot, assistenti, agenti e motori di raccomandazione, per capire come progettare la raccolta dei dati di utilizzo, perché sono fondamentali per misurare performance e qualità dell’esperienza utente e come possono essere utilizzati in modo sistematico per migliorare modelli, prodotti e metriche nel tempo.\n\n🎙 Speaker\nMirko Puliafito, CEO di Digitiamo.ai \nLuca Manara, CEO di UNGUESS\nLuca Dusi, Head of Ops di UNGUESS\n\n📅 26 febbraio 2026\n🕔 17:00 \n\nUn’occasione per confrontarsi su dati reali e AI Evaluation.\n 👉 Registrati e partecipa alla diretta: clicca qui-->https://lnkd.in/dD4A3qYz\n\n#webinar #dati #innovazione #AI #live",
+    "published_at": "2026-02-09",
+    "impressions": 694,
+    "reactions": 8,
+    "comments": 0,
+    "reposts": 2
+  },
+  {
+    "id": "post-7424775506916524032",
+    "text": "🚀 Il team di Digitiamo sta crescendo!!\n\nCon nuovi progetti in arrivo, ampliamo il nostro team per lavorare su soluzioni di intelligenza artificiale concrete, ben strutturate e con un impatto reale sul business dei nostri clienti.\n\nSiamo alla ricerca di persone che vogliano mettersi in gioco, assumersi responsabilità e crescere insieme a noi.\n\n🔍 Posizioni aperte:\n\nTech PM\n👉  https://lnkd.in/dBUTQZdS\nBDR\n👉  https://lnkd.in/dBUTQZdS\n\n💬 E se conosci qualcuno che potrebbe essere interessato, sentiti libero di taggarlo nei commenti.\n\n#hiring #people #innovazione #AI #techpm #BDR \n\nRamona Scalise Mirko Puliafito",
+    "published_at": "2026-02-04",
+    "impressions": 1442,
+    "reactions": 10,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7423029547341742080",
+    "text": "💡Innovare significa condividere, confrontarsi e costruire insieme.\n\nHub AI nasce proprio con questo obiettivo e noi di Digitiamo.ai siamo entusiasti di essere tra gli AI Tech Partner, insieme ad AiKnowYou - AIKU  e Think Fwd Group, di un progetto che mette al centro formazione, networking e applicazioni reali dell’Intelligenza Artificiale nel settore farmaceutico\n\n📍 Cosmofarma Exhibition | 8–9-10 maggio 2026\n 🤝 Se vuoi portare l’AI nella tua realtà, passa da Hub AI.\n\n #Farmacia #AI #Cosmofarma26 #innovation #HUBAI",
+    "published_at": "2026-01-30",
+    "impressions": 261,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7421555006685888513",
+    "text": "Costruire prodotti #AI oggi non è solo una questione tecnologica.\n\nÈ una questione di persone, competenze e integrazione reale nei team.\nSempre più aziende stanno sperimentando modelli alternativi all’assunzione tradizionale per crescere in modo sostenibile, mantenendo il controllo del know-how e accelerando il time-to-market.\n\nInsieme a QMates parleremo di Team Augmentation applicata all’AI, condividendo approcci concreti, errori da evitare e casi reali di collaborazione con i team interni.\n\n📅 27 gennaio | 🕔 17:00\n🎤 Mirko Puliafito, CEO di Digitiamo.ai\n🎤Ramona Scalise, Resp. Area Team Augmentation Digitiamo.ai\n🎤 Nicola Moretto, CEO di QMates\n\nVi aspettiamo\n\n👉 Iscriviti qui: https://lnkd.in/dMKg_JK5\n\n#TeamAugmentation #innovazione #DigitalTransformation #Scaleup",
+    "published_at": "2026-01-26",
+    "impressions": 727,
+    "reactions": 8,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7419015836427808768",
+    "text": "🌐 Questa settimana l’AI si muove tra cooperazione internazionale, sicurezza e imprese.\n🤝 Italia e Corea del Sud firmano un accordo su intelligenza artificiale e semiconduttori.\n 🔒 xAI introduce nuove restrizioni per limitare l’uso improprio delle immagini generate da Grok.\n 🏭 In Italia oltre un terzo di micro e piccole imprese utilizza già strumenti di intelligenza artificiale.\n\n#AI  #innovazione #tecnologia #impresa #geopolitica #digitale #sicurezza",
+    "published_at": "2026-01-19",
+    "impressions": 338,
+    "reactions": 1,
+    "comments": 1,
+    "reposts": 0
+  },
+  {
+    "id": "post-7416851121626927104",
+    "text": "💡 Il webinar ha l’obiettivo di mostrare come startup e scaleup possano integrare l’AI e le pratiche tecniche nei propri prodotti senza aumentare l’organico, grazie a team esterni ma integrati. \n\n👨‍💻 Attraverso l’esperienza di QMates e Digitiamo, verrà illustrato un modello che accelera lo sviluppo di nuove feature, riduce il rischio e consente alle aziende di mantenere la proprietà del know-how.\n\nTra gli speaker ci saranno Mirko Puliafito, CEO di Digitiamo.ai, Nicola Moretto, CEO di QMates e Ramona Scalise, Resp. Area Team Augmentation in Digitiamo.ai.\n\nVi aspettiamo. Per registrarti clicca qui --> https://lnkd.in/dMKg_JK5",
+    "published_at": "2026-01-13",
+    "impressions": 999,
+    "reactions": 9,
+    "comments": 0,
+    "reposts": 4
+  },
+  {
+    "id": "post-7416491070512906240",
+    "text": "🌐 Rientrati dalle vacanze, l’AI torna subito al centro della scena.\n Questa settimana entra nel vivo di tre settori molto diversi.\n\n🌱 Una startup inglese usa l’AI per studiare colture più efficienti e resistenti alla crisi climatica.\n 🩺 OpenAI presenta ChatGPT Salute, pensato come supporto informativo senza sostituire il medico.\n 🚧 Caterpillar porta l’intelligenza artificiale nei cantieri per migliorare sicurezza ed efficienza operativa.\n\n#AI #IntelligenzaArtificiale #Innovazione #AIHealth #AgriTech #Sostenibilità",
+    "published_at": "2026-01-12",
+    "impressions": 292,
+    "reactions": 2,
+    "comments": 1,
+    "reposts": 0
+  },
+  {
+    "id": "post-7409239077411115009",
+    "text": "✨ Il Natale è il momento giusto per fermarsi un attimo, guardare la strada fatta e pensare a quella che verrà.\nGrazie a chi ha condiviso con noi idee, progetti e visioni durante quest’anno.\n\nBuone feste ❤️ 🎄",
+    "published_at": "2025-12-23",
+    "impressions": 233,
+    "reactions": 5,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7408868622447566848",
+    "text": "🌐 Questa settimana l’AI mette alla prova equilibri tecnologici e normativi.\n\n🧩 OpenAI introduce nuove opzioni di personalizzazione per ChatGPT, rendendo le interazioni sempre più su misura.\n 🌍 Negli Stati Uniti si apre una revisione per consentire la vendita di chip AI avanzati di Nvidia alla Cina, riaccendendo il confronto tra tecnologia e politica globale.\n ⚖️ Adobe finisce nel mirino di una class action per l’uso di opere protette nell’addestramento dei modelli AI, riportando il tema del copyright al centro del dibattito.\n\n#AI #innovazione #tecnologia #OpenAI #Nvidia #copyright #digitale #BigTech",
+    "published_at": "2025-12-22",
+    "impressions": 239,
+    "reactions": 6,
+    "comments": 1,
+    "reposts": 0
+  },
+  {
+    "id": "post-7407078948255199232",
+    "text": "🤔Come \"pensa\" davvero un’Intelligenza Artificiale?\n\nIn questo post esploriamo, insieme a Federico Rios, la sfida dell’interpretability: il tentativo di estrarre insight chiari da reti neurali che oggi restano ancora troppo opache.\n\nPartendo dalla tecnica di \"disentanglement\" di Anthropic, analizziamo come sia possibile decomprimere i complessi vettori numerici dei modelli per mappare i singoli concetti che li attivano.\n\n👇 Leggi l’articolo completo e condividi con noi la tua opinione\n\n#AI #MachineLearning #LLM #Innovazione",
+    "published_at": "2025-12-17",
+    "impressions": 174,
+    "reactions": 1,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7406333519083495424",
+    "text": "🌐 Questa settimana l’AI accelera su ricerca, conoscenza e robotica.\n\n🧠 Meta presenta Avocado, un nuovo progetto che spinge la ricerca verso sistemi sempre più generali e autonomi.\n\n 🔍 Google aggiorna Gemini Deep Research, puntando su ricerche più accurate, strutturate e verificabili.\n\n 🤖 Generative Bionics porta l’AI generativa nei robot umanoidi, avvicinando digitale e fisico.",
+    "published_at": "2025-12-15",
+    "impressions": 281,
+    "reactions": 5,
+    "comments": 1,
+    "reposts": 0
+  },
+  {
+    "id": "post-7404902597456998400",
+    "text": "Hai un’idea di progetto ma che richiede competenze AI\n\nÈ normale: oggi le competenze richieste cambiano più velocemente dei progetti.\n\nCon il Team Augmentation puoi attivare un team già coordinato, pronto a integrarsi nei tuoi processi e ad accelerare la delivery.\nE tutto il know-how rimane nella tua azienda.\n\nPerché funziona:\n✅Competenze specifiche subito\n✅Integrazione fluida nei tuoi strumenti\n✅Continuità e qualità nella costruzione del prodotto",
+    "published_at": "2025-12-11",
+    "impressions": 291,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7404162077533065216",
+    "text": "🌐 Questa settimana l'AI accende il dibattito sulle regole della privacy e governance \n\n🇪🇺 L'UE apre un'indagine su Google per l'uso dei contenuti online per l'addestramento die modelli AI.\n🔐 Un’inchiesta su Grok rivela che il chatbot potrebbe fornire dati personali di utenti comuni, aprendo seri interrogativi sulla tutela della privacy.\n🏛️ A Roma nasce SEPAI, un osservatorio universitario che studia l’impatto sociale e politico dell’AI, con un focus su etica e trasparenza.\n\n💬 Tu da dove inizieresti a regolare l’AI?\n\n#AI #innovazione #privacy #sicurezza #trasparenza #etica #tecnologia",
+    "published_at": "2025-12-09",
+    "impressions": 215,
+    "reactions": 1,
+    "comments": 1,
+    "reposts": 0
+  },
+  {
+    "id": "post-7402012130054508544",
+    "text": "🗓️ Chiudiamo l'anno con l'ultimo webinar sull'AI\n\nL’AI è ovunque, ma ciò che non si vede è molto più importante: i dati da cui tutto parte.\n\nPer questo abbiamo deciso di dedicare l’ultimo webinar del 2025 al tema che sta alla base di tutto: come integrare AI e Data Management per generare vero valore.\n\nInsieme a Simon Marussi (CEO di Extera Srl) e Mirko Puliafito (CEO di Digitiamo), vediamo in modo chiaro e pratico come l’AI crea valore solo quando parte da una base dati.\n\n👉 Se hai domande, scrivile qui:\n https://lnkd.in/dFiy4ExG\n\n👉 Registrati qui per guardare il webinair\n https://lnkd.in/dtDi-GZd\n\n#AI #ArtificialIntelligence #DataManagement #DataQuality #BusinessAI #Innovation",
+    "published_at": "2025-12-03",
+    "impressions": 162,
+    "reactions": 5,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7401645139661697027",
+    "text": "Oggi gestire un progetto significa coordinare informazioni, task, documenti e persone.\nL’AI sta rendendo tutto questo più semplice.\n\nNel carosello trovi 5 strumenti che aiutano team e manager a lavorare con maggiore chiarezza, continuità e precisione.\n\nUn passo avanti verso workflow davvero più efficienti.\n\n👉 Hai già provato qualcuno di questi tool? Condividi la tua esperienza nei commenti.\n\n#AI #digitaltransformation #business #productivity #projectleadership #workflowmanagement #futureofwork #technology #innovazione",
+    "published_at": "2025-12-02",
+    "impressions": 166,
+    "reactions": 4,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7401198063639470080",
+    "text": "🌐 Questa settimana l’AI mette in luce progresso ma anche rischi e conseguenze.\n\n🧬 SPOT-MAS a Taiwan introduce un nuovo test basato su AI capace di individuare segnali di cancro con un semplice prelievo di sangue.\n🔐 Una fuga di dati da Mixpanel riaccende l’allarme sulla sicurezza nell’ecosistema OpenAI.\n🌱 Il costo ambientale dell’intelligenza artificiale torna al centro del dibattito, tra consumi idrici e impatti legati ai data center.\n\nL’innovazione avanza, ma il contesto richiede sempre più responsabilità.\n\n#AI #HealthcareAI #AIsafety  #Sustainability #TechNews #Innovation",
+    "published_at": "2025-12-01",
+    "impressions": 275,
+    "reactions": 5,
+    "comments": 1,
+    "reposts": 0
+  },
+  {
+    "id": "post-7399848273831690240",
+    "text": "🏭 Molte aziende faticano a integrare l’AI nei processi interni.\n\nCon CWICK.AI rendiamo l’adozione dell’AI semplice, sicura e veloce.\nIntegra, ottimizza e automatizza i workflow aziendali.\nUn framework che rende i processi più rapidi e affidabili.\n\n👉 Scopri tutte le nostre soluzioni: https://lnkd.in/dGyATufU\n\n#AI #TechSolutions #Innovation #AIForBusiness",
+    "published_at": "2025-11-27",
+    "impressions": 183,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7397303278411165696",
+    "text": "💡 L’Intelligenza Artificiale può davvero generare valore per le aziende, ma solo se alimentata da dati di qualità. \n\n🔍 L’organizzazione e la gestione corretta dei dati rappresentano il punto di partenza per costruire soluzioni AI efficaci, affidabili e realmente utili al business. Ne parleremo insieme a Simon Marussi, CEO di Extera Srl e Mirko Puliafito, CEO di Digitiamo.ai.\n\n💎 Questo incontro nasce per approfondire come la sinergia tra AI e Data Management permetta di ottenere risultati più precisi, misurabili e allineati agli obiettivi aziendali. Attraverso esempi concreti e un linguaggio chiaro, verranno esplorate le potenzialità dell’intelligenza artificiale quando è sostenuta da una solida strategia dei dati: dai vantaggi di una gestione organizzata, alle sfide operative, fino agli scenari futuri di applicazione.",
+    "published_at": "2025-11-20",
+    "impressions": 247,
+    "reactions": 5,
+    "comments": 1,
+    "reposts": 1
+  },
+  {
+    "id": "post-7397227895632347136",
+    "text": "🤔Come cambierà il lavoro dei Manager con l'AI?\n\nPer rispondere a questa domanda Mirko Puliafito (CEO di Digitiamo)  sarà ospite del webinar \"Intelligenza Artificiale: dal saper usare al saper decidere\" in programma  il 24 novembre alle 17:00, organizzato da Scelte Strategiche.\n\nUn momento per capire come l'AI stia passando da un semplice strumento a un vero supporto strategico per i manager e decision maker.\n\n👉https://lnkd.in/dMpYF9PW\n\n#AI #innovazione #AIforBusiness #Manager",
+    "published_at": "2025-11-20",
+    "impressions": 232,
+    "reactions": 0,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7396946249427607552",
+    "text": "L’AI sta rivoluzionando il #customerservice: oggi è in grado di gestire in autonomia identificazione, verifica, recupero dati e creazione dei ticket… in meno di un secondo.\n ⠀\n Il risultato? Gli operatori possono concentrarsi su ciò che davvero conta: empatia, relazione, gestione delle criticità.\n ⠀\n #L’AI non sostituisce le persone: le libera dalla parte più ripetitiva.\n E definisce un nuovo modello di assistenza, più veloce, più efficiente e più umano.\n ⠀\n🎙 Questo estratto è tratto dal nostro webinar realizzato insieme a Giuseppe Ferraro di AiKnowYou - AIKU, Marco (Gresp) Grespigna\n 👉Qui puoi rivederlo:https://lnkd.in/eAuqJPUT",
+    "published_at": "2025-11-19",
+    "impressions": 271,
+    "reactions": 5,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7396560214012915712",
+    "text": "🚀 Il tuo e-commerce guida l’utente… o lo lascia da solo? 🛒\n\nUno dei limiti più comuni nei negozi online è la difficoltà nel accompagnare l’utente verso ciò che davvero sta cercando.\n Senza suggerimenti personalizzati, l’esperienza d’acquisto diventa poco efficace.\n\n💡 La Soluzione: con l’AI Generativa abbiamo introdotto MAIA, l'agente  che trasforma la navigazione in un percorso guidato.\n\nCosa fa MAIA?\n 🔹 Analizza le abitudini di consumo\n 🔹 Suggerisce prodotti rilevanti, in tempo reale\n 🔹 Supporta l’utente nel momento della scelta\n 🔹 Migliora le conversioni\n\nIl risultato?\nUn e-commerce più performante e un’esperienza d’acquisto davvero personalizzata.\n\n👉 Rendi il tuo e-commerce più smart con un agente AI.\n#Retail #AI #Innovazione #Ecommerce",
+    "published_at": "2025-11-18",
+    "impressions": 203,
+    "reactions": 2,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7395108704661979136",
+    "text": "💡Il #design nasce dall’ascolto e dall’attenzione ai dettagli che contano davvero.\n\nNel video di oggi conosciamo Serena Alampi, Product Design Manager, racconta come interpreta il suo ruolo: osservando, facendo domande e cercando soluzioni che funzionino per le persone.\n\n🎥 Un’occasione per scoprire come il design guida ogni giorno le nostre scelte e il valore che vogliamo portare ai clienti.\n\n#ProductDesign #TechPeople #innovazione #MeetTheTeam",
+    "published_at": "2025-11-14",
+    "impressions": 434,
+    "reactions": 24,
+    "comments": 0,
+    "reposts": 1
+  },
+  {
+    "id": "post-7394666529184882688",
+    "text": "⏰Ci siamo quasi!\n\nVi aspettiamo oggi alle 17.00 al nostro webinar per esplorare il Vibe Coding \n\nCon Alexio Cassani,CEO di FairMind, azienda pioniera nel campo del Vibe Coding e dell’AI applicata allo sviluppo software e Mirko Puliafito, CEO di Digitiamo.\n\n✨Sarà un incontro interattivo quindi abbiamo creato un form, inviateci le vostre domande e curiosità - sarete voi a guidare la conversazione!\n💭Ci aspettiamo tante domande da parte vostra\n\n👉 Compila il form: https://lnkd.in/dz6bcr6D\n\nE per chi resterà fino alla fine... ci sarà anche una demo live‼️\n\n🙌 Se non ti sei ancora registrato, è il momento giusto!\nTi aspettiamo 👉 https://lnkd.in/g9w5rBvs\n\n#AI #VibeCoding #webinar #Innovazione",
+    "published_at": "2025-11-13",
+    "impressions": 238,
+    "reactions": 4,
+    "comments": 0,
+    "reposts": 0
+  },
+  {
+    "id": "post-7394401727690637312",
+    "text": "💡Come trasformare l'AI da competitor a collaboratore creativo??\n\nLa risposta sta nella capacità di guidarla. Non basta chiedere ma bisogna strutturarla la richiesta nel modo corretto per ottenere risultati professionali.\n\nIn questo spezzone tratto dal nostro webinar con Giovanni Pola e Annamaria Naso di GreatPixel, esploriamo proprio la domanda chiave: qual'è il segreto per strutturare al meglio un prompt ?\n\n👉Scopri la strategia completa: https://lnkd.in/dvX_RYn4",
+    "published_at": "2025-11-12",
+    "impressions": 368,
+    "reactions": 5,
+    "comments": 0,
+    "reposts": 2
+  }
+]
