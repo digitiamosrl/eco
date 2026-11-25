@@ -18,10 +18,6 @@ export interface Test {
    * Per la dashboard: nome del prototipo o inizio del primo post. Lo calcola il backend.
    */
   title?: string;
-  /**
-   * Nome locale di chi ha lanciato il test. Non è un account.
-   */
-  created_by?: string;
 }
 export interface Stimulus {
   id: string;

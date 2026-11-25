@@ -1,6 +1,6 @@
 # Dashboard dei test e report per test
 
-Per: Fabio e Salvo · 25 novembre 2026 · Stato: approvato da Fabio, da implementare prima della demo del 9 dicembre
+Per: Fabio e Salvo · 25 novembre 2026 · Stato: approvato da Fabio. Aggiornamento del 25 novembre: il nome locale è stato tolto, non serviva, da implementare prima della demo del 9 dicembre
 
 ## Perché
 

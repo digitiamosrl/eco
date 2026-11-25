@@ -21,10 +21,10 @@ def _test(**extra) -> TestModel:
     )
 
 
-def test_title_and_author_survive_the_store(validate) -> None:
-    assert store.add_if_idle(_test(title="Ciao", created_by="Fabio"))
+def test_title_survives_the_store(validate) -> None:
+    assert store.add_if_idle(_test(title="Ciao"))
     saved = store.get("t1")
-    assert (saved.title, saved.created_by) == ("Ciao", "Fabio")
+    assert saved.title == "Ciao"
     validate("test.schema.json", saved.model_dump(mode="json", exclude_none=True))
 
 
@@ -50,26 +50,11 @@ def test_post_title_is_the_first_line_cut_at_80() -> None:
     body = {
         "kind": "post",
         "variants": [{"label": "A", "text": "x" * 100 + "\nseconda riga"}],
-        "created_by": "  Fabio  ",
     }
     created = client.post("/tests", json=body).json()
     assert created["title"] == "x" * 80 + "…"
-    assert created["created_by"] == "Fabio"
 
 
-def test_blank_author_is_omitted() -> None:
-    body = {"kind": "post", "variants": [{"label": "A", "text": "Breve"}], "created_by": " "}
-    created = client.post("/tests", json=body).json()
-    assert created["title"] == "Breve"
-    assert "created_by" not in created
-
-
-def test_author_arrives_with_the_form_too() -> None:
-    form = {
-        "kind": (None, "post"),
-        "variants[0][label]": (None, "A"),
-        "variants[0][text]": (None, "Ciao"),
-        "created_by": (None, "Salvo"),
-    }
-    created = client.post("/tests", files=form).json()
-    assert created["created_by"] == "Salvo"
+def test_short_post_title_is_kept_whole() -> None:
+    body = {"kind": "post", "variants": [{"label": "A", "text": "Breve"}]}
+    assert client.post("/tests", json=body).json()["title"] == "Breve"

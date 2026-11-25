@@ -13,7 +13,7 @@ Frontend e design system sono su `main` e sono pronti per tutti i punti qui sott
 | 5 | ✅ Fidelity score nel report (manca il dato) | sotto | Compare "calibrazione non ancora disponibile" |
 | 6 | ✅ Report del prototipo | sotto | Compare "non ancora disponibile" |
 | 7 | ✅ Personas: attributi come campi, biografia, ripiego | [contratto-personas.md](contratto-personas.md) | Panel e risposte funzionano come oggi |
-| 9 | ✅ Dashboard: titolo e autore del test, report salvati | sotto | La dashboard mostra «Senza titolo» e nessun autore |
+| 9 | ✅ Dashboard: titolo del test, report salvati | sotto | La dashboard mostra «Senza titolo» |
 
 Priorità consigliata: 4 e 5 sono piccoli e chiudono i principi del CLAUDE.md. Poi 1–2, che riusano la pipeline dei post. Il 3 è il più grosso.
 
@@ -90,8 +90,6 @@ Stesso endpoint e stesso schema dei post (`GET /tests/{id}/report`, `report.sche
 
 Progetto in `docs/superpowers/specs/2026-11-25-dashboard-design.md`.
 
-- `test.schema.json` ha due campi facoltativi:
-  - `title`: lo calcola il backend alla creazione. Per un prototipo è il nome; per un post è la prima riga del primo testo, al massimo 80 caratteri più «…».
-  - `created_by`: il nome locale di chi lancia il test. Arriva in `POST /tests` come campo JSON o del form; vuoto si omette. Non è un account.
-- I test salvati prima hanno le colonne nuove vuote: `init_db` le aggiunge senza perdere niente.
+- `test.schema.json` ha il campo facoltativo `title`: lo calcola il backend alla creazione. Per un prototipo è il nome; per un post è la prima riga del primo testo, al massimo 80 caratteri più «…».
+- I test salvati prima hanno la colonna nuova vuota: `init_db` la aggiunge senza perdere niente.
 - Ogni report si salva nella tabella `reports` appena generato e si rilegge da lì, anche dopo un riavvio. `fidelity` non si salva: si aggiunge a ogni lettura, così i report vecchi mostrano la calibrazione appena esiste.

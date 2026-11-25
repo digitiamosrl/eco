@@ -63,7 +63,6 @@ class Test(BaseModel):
     stimuli: list[Stimulus]
     error: str | None = None
     title: str | None = Field(default=None, max_length=81)
-    created_by: str | None = Field(default=None, max_length=60)
 
 
 class Flow(BaseModel):
@@ -146,7 +145,6 @@ class PostTestRequest(BaseModel):
 
     kind: Literal["post"]
     variants: list[Variant] = Field(min_length=1, max_length=5)
-    created_by: str | None = Field(default=None, max_length=60)
 
     @field_validator("variants")
     @classmethod
@@ -174,7 +172,6 @@ class PrototypeTestRequest(BaseModel):
     paths: list[PrototypePath] | None = Field(default=None, min_length=1, max_length=3)
     flow_ids: list[str] | None = Field(default=None, min_length=1)
     task: str | None = Field(default=None, max_length=300)
-    created_by: str | None = Field(default=None, max_length=60)
 
     @model_validator(mode="after")
     def one_source(self) -> "PrototypeTestRequest":

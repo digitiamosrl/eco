@@ -5,11 +5,9 @@ export type SidebarItem = { key: string; label: string; href: string };
 export type SidebarProps = {
   items: SidebarItem[];
   current?: string;
-  user?: string;
-  onChangeUser?: () => void;
 };
 
-export function Sidebar({ items, current, user, onChangeUser }: SidebarProps) {
+export function Sidebar({ items, current }: SidebarProps) {
   return (
     <nav className="eco-side" aria-label="Navigazione eco">
       <div className="eco-brand">
@@ -26,16 +24,6 @@ export function Sidebar({ items, current, user, onChangeUser }: SidebarProps) {
           </li>
         ))}
       </ul>
-      {user && (
-        <div className="eco-side__user">
-          <span>{user}</span>
-          {onChangeUser && (
-            <button type="button" className="eco-side__change" onClick={onChangeUser}>
-              Cambia
-            </button>
-          )}
-        </div>
-      )}
     </nav>
   );
 }

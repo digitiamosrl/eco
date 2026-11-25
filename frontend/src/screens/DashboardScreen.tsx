@@ -61,7 +61,6 @@ export default function DashboardScreen() {
                 title={testTitle(t)}
                 detail={detail(t)}
                 when={formatWhen(t.created_at)}
-                by={t.created_by}
                 status={t.status === "done" || t.status === "error" ? t.status : "running"}
                 percent={t.total_count ? Math.round((t.done_count / t.total_count) * 100) : 0}
               />

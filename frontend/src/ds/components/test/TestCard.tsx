@@ -7,14 +7,13 @@ export type TestCardProps = {
   /** "2 varianti", "5 schermate" */
   detail: string;
   when: string;
-  by?: string;
   status: "running" | "done" | "error";
   percent?: number;
 };
 
 const STATUS = { done: "Completato", error: "Interrotto" } as const;
 
-export function TestCard({ href, kind, title, detail, when, by, status, percent = 0 }: TestCardProps) {
+export function TestCard({ href, kind, title, detail, when, status, percent = 0 }: TestCardProps) {
   return (
     <a className="eco-testcard" href={href}>
       <span className="eco-testcard__top">
@@ -27,7 +26,7 @@ export function TestCard({ href, kind, title, detail, when, by, status, percent 
       </span>
       <b className="eco-testcard__title">{title}</b>
       <span className="eco-testcard__meta">{detail}</span>
-      <span className="eco-testcard__meta">{[when, by].filter(Boolean).join(" · ")}</span>
+      <span className="eco-testcard__meta">{when}</span>
     </a>
   );
 }

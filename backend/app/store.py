@@ -21,8 +21,7 @@ CREATE TABLE IF NOT EXISTS tests (
     total_count INTEGER NOT NULL,
     stimuli TEXT NOT NULL,
     error TEXT,
-    title TEXT,
-    created_by TEXT
+    title TEXT
 );
 CREATE TABLE IF NOT EXISTS prototypes (
     id TEXT PRIMARY KEY,
@@ -55,7 +54,7 @@ def _connect() -> Iterator[sqlite3.Connection]:
 
 
 # Database creati prima della dashboard: le colonne nuove si aggiungono senza perdere i test.
-_ADDED_COLUMNS = ("title", "created_by")
+_ADDED_COLUMNS = ("title",)
 
 
 def init_db() -> None:
@@ -71,7 +70,7 @@ def _insert(conn: sqlite3.Connection, test: Test) -> None:
     stimuli = json.dumps([s.model_dump(mode="json") for s in test.stimuli])
     conn.execute(
         "INSERT INTO tests (id, kind, status, created_at, done_count, total_count, stimuli, error,"
-        " title, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        " title) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             test.id,
             test.kind,
@@ -82,7 +81,6 @@ def _insert(conn: sqlite3.Connection, test: Test) -> None:
             stimuli,
             test.error,
             test.title,
-            test.created_by,
         ),
     )
 

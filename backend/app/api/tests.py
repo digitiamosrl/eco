@@ -123,7 +123,6 @@ def _build_test(body: CreateTestRequest, uploads: tuple[Upload | None, ...]) -> 
         total_count=len(PERSONAS) * len(stimuli),
         stimuli=stimuli,
         title=_title(body, stimuli),
-        created_by=(body.created_by or "").strip() or None,
     )
 
 

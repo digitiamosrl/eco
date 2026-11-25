@@ -1,6 +1,5 @@
 // In-memory fake backend. Simulates a test that takes RUN_MS to complete.
 import type { PrototypePath, Source } from "../lib/prototype";
-import { getUserName } from "../lib/userName";
 import type { VariantDraft } from "../lib/variants";
 import { mockPersonas, mockProtoImport, mockPrototypeReport, mockReport, mockSingleItem, mockSingleSummary, mockStimuli } from "../mocks";
 import type { Persona } from "../types/persona";
@@ -38,7 +37,6 @@ const started = new Map<string, { test: Test; startedAt: number }>([
         total_count: protoScreens.length * mockPersonas.length,
         stimuli: protoScreens,
         title: "Onboarding cliente v3",
-        created_by: "Salvo",
       },
       startedAt: 0,
     },
@@ -55,7 +53,6 @@ const started = new Map<string, { test: Test; startedAt: number }>([
         total_count: 6,
         stimuli: mockStimuli,
         title: "Tre settimane per un preventivo: come le abbiamo ridotte a due giorni",
-        created_by: "Fabio",
       },
       startedAt: 0,
     },
@@ -86,7 +83,6 @@ function start(kind: Test["kind"], stimuli: Stimulus[], title?: string): Test {
     total_count: stimuli.length * mockPersonas.length,
     stimuli,
     title: title || undefined,
-    created_by: getUserName() || undefined,
   };
   started.set(id, { test, startedAt: Date.now() });
   return test;
