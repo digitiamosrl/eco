@@ -317,7 +317,8 @@ export default function PrototypeImport({ personas, loading, onStart }: Props) {
           </label>
           <p className="eco-sub">
             Un compito concreto, per esempio «chiedere un preventivo per il gestionale». Le personas lo usano per
-            giudicare se ogni schermata le aiuta; senza, valutano solo se l’app le riguarda.
+            giudicare se ogni schermata le aiuta; senza, valutano solo se l’app le riguarda. Non scrivere nomi di clienti
+            o dati personali: il testo finisce nelle istruzioni del modello.
           </p>
           <textarea
             id="proto-task"

@@ -60,8 +60,11 @@ Stesso endpoint e stesso schema dei post (`GET /tests/{id}/report`, `report.sche
 | Campo | Tipo | Significato |
 | --- | --- | --- |
 | `abandon_count` | intero ≥ 0 | Quante personas lascerebbero perdere a questa schermata (`would_abandon`). Ogni schermata è valutata a freddo, quindi i conteggi non sono un imbuto |
-| `misunderstood` | `string[]` | I passaggi fraintesi più frequenti, al massimo 5 |
+| `misunderstood` | `string[]` | Al massimo 5 passaggi fraintesi. Si raggruppano solo testi uguali a meno di maiuscole, spazi e punteggiatura: con il testo libero del modello, in pratica sono i primi 5 diversi, non un conteggio per significato |
 
+- `screen_index` è il passo nel percorso testato (da 0), non l'indice nel prototipo: se in import si tolgono schermate, i passi restano consecutivi e la persona legge «schermata 2» al secondo passo.
+- `would_abandon` e `misunderstood` sono obbligatori nello schema mandato al modello per le schermate, quindi non mancano mai. Se mancassero, una risposta senza `would_abandon` conterebbe come «non abbandona».
+- Una stessa schermata presente in più percorsi si valuta e si classifica una volta per percorso: il contesto del percorso cambia, e quindi anche il giudizio.
 - Con le schermate, `rank` 1 è il **punto più critico**: più abbandoni e, a parità, punteggio medio più basso. L'ordine del flusso resta quello di `test.stimuli` (`flow_id`, `screen_index`, `image_url`, `page_structure` come nome).
 - `summary`, `said_summary` e `thought_summary` parlano di schermate, abbandoni e passaggi fraintesi.
 - `fidelity` è sempre assente: la calibrazione è sui post pubblicati e per i prototipi non c'è. Il frontend mostra lo stato "non disponibile".

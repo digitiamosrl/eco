@@ -74,12 +74,13 @@ def _imported_stimuli(prototype_id: str, paths: list[PrototypePath], task: str) 
                 id=f"{prototype_id}-{start.id}-{i}",
                 kind="prototype_screen",
                 flow_id=f"{prototype_id}:{start.id}",
-                screen_index=i,
+                screen_index=step,
                 image_url=screens[i].image_url,
                 page_structure=screens[i].name,
                 task=task,
             )
-            for i in dict.fromkeys(path.screen_indexes)
+            # Il passo nel percorso testato: la persona e il report contano le schermate che vedono.
+            for step, i in enumerate(dict.fromkeys(path.screen_indexes))
         ]
     return stimuli
 

@@ -122,11 +122,11 @@ export async function startPrototypeTest(prototypeId: string, paths: PrototypePa
   return start(
     "prototype",
     paths.flatMap((p) =>
-      p.screen_indexes.map((i) => ({
+      p.screen_indexes.map((i, step) => ({
         id: `${p.start_id}-${i}`,
         kind: "prototype_screen" as const,
         flow_id: p.start_id,
-        screen_index: i,
+        screen_index: step,
         task,
       })),
     ),

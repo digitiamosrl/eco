@@ -12,6 +12,9 @@ export interface Stimulus {
   text?: string;
   image_url?: string;
   flow_id?: string;
+  /**
+   * Solo per prototype_screen: posizione della schermata nel percorso testato, da 0. Non è l'indice nel prototipo: se si tolgono schermate in import, i passi restano consecutivi.
+   */
   screen_index?: number;
   page_structure?: string;
   /**

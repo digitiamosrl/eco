@@ -33,7 +33,8 @@
     },
     "screen_index": {
       "type": "integer",
-      "minimum": 0
+      "minimum": 0,
+      "description": "Solo per prototype_screen: posizione della schermata nel percorso testato, da 0. Non è l'indice nel prototipo: se si tolgono schermate in import, i passi restano consecutivi."
     },
     "page_structure": {
       "type": "string"

@@ -210,7 +210,10 @@ def test_prototype_test_uses_the_chosen_screens_and_runs_on_the_panel(fake_artif
     created = client.post("/tests", json=body)
     assert created.status_code == 201
     stimuli = created.json()["stimuli"]
-    assert [s["screen_index"] for s in stimuli] == [0, 2]
+    # screen_index è il passo nel percorso testato, non l'indice nel prototipo: tolta la
+    # schermata 1, la persona deve leggere «schermata 2», non «schermata 3».
+    assert [s["screen_index"] for s in stimuli] == [0, 1]
+    assert [s["id"].rsplit("-", 1)[1] for s in stimuli] == ["0", "2"]
     assert {s["task"] for s in stimuli} == {"Chiedere un preventivo per il gestionale"}
     assert all(s["kind"] == "prototype_screen" and s["image_url"] for s in stimuli)
     done = client.get(f"/tests/{created.json()['id']}").json()
