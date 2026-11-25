@@ -1,4 +1,6 @@
 import type { Prototype } from "../types/prototype";
+import type { Report } from "../types/report";
+import type { Stimulus } from "../types/stimulus";
 
 export type Source = Prototype["source"];
 export type PrototypePath = { start_id: string; screen_indexes: number[] };
@@ -30,4 +32,21 @@ export function buildPaths(prototype: Prototype, selected: string[], removed: Se
     }))
     .filter((p) => p.screen_indexes.length > 0)
     .slice(0, MAX_PATHS);
+}
+
+type ReportItem = Report["items"][number];
+export type ReportPath = { flowId: string; screens: { stimulus: Stimulus; item?: ReportItem }[] };
+
+// Screens of a prototype report grouped by tested path, in the order they were shown.
+export function reportPaths(stimuli: Stimulus[], items: ReportItem[]): ReportPath[] {
+  const byId = new Map(items.map((it) => [it.stimulus_id, it]));
+  const paths = new Map<string, ReportPath>();
+  for (const s of stimuli) {
+    if (s.kind !== "prototype_screen") continue;
+    const flowId = s.flow_id ?? "";
+    if (!paths.has(flowId)) paths.set(flowId, { flowId, screens: [] });
+    paths.get(flowId)!.screens.push({ stimulus: s, item: byId.get(s.id) });
+  }
+  for (const p of paths.values()) p.screens.sort((a, b) => (a.stimulus.screen_index ?? 0) - (b.stimulus.screen_index ?? 0));
+  return [...paths.values()];
 }

@@ -200,3 +200,42 @@ export const mockProtoImport = {
     starts: [{ id: "a1", name: "Dalla prima schermata", screens: ["Benvenuto", "Profilo azienda", "Obiettivi", "Riepilogo"] }],
   },
 };
+
+// Report of a prototype test: one item per screen, the third screen of each path is the critical one.
+export function mockPrototypeReport(testId: string, stimuli: Stimulus[]): Report {
+  const items = stimuli.map((s, i): Report["items"][number] => {
+    const critical = s.screen_index === 2;
+    const abandon = critical ? 2 : (s.screen_index ?? 0) % 2;
+    return {
+      stimulus_id: s.id,
+      rank: 0,
+      mean_score: critical ? 2.3 : 3.7 - (i % 3) * 0.3,
+      score_distribution: critical ? { "1": 1, "2": 0, "3": 2, "4": 0, "5": 0 } : { "1": 0, "2": 0, "3": 1, "4": 2, "5": 0 },
+      objections: critical ? ["Chiede dati prima di mostrare il prezzo"] : [],
+      misunderstood: critical ? ["Non è chiaro se il pulsante salva o invia"] : [],
+      said_summary: critical ? "Chiedono perché servano subito questi dati." : "La trovano chiara e vanno avanti.",
+      thought_summary: critical ? "Prima vogliono vedere cosa ottengono: qui chiuderebbero." : "Nessun dubbio, ma niente entusiasmo.",
+      abandon_count: abandon,
+      divergent_persona_ids: critical ? ["p1"] : [],
+      responses: ["p1", "p2", "p3"].map((p, j) => ({
+        persona_id: p,
+        stimulus_id: s.id,
+        thought: critical && j < abandon ? "Troppi dati richiesti, chiudo." : "Va bene, proseguo.",
+        said: critical && j === 0 ? "Perché vi serve già la partita IVA?" : "Chiaro.",
+        score: critical ? [1, 3, 3][j] : [4, 4, 3][j],
+        objections: [],
+        would_abandon: j < abandon,
+      })),
+    };
+  });
+  // rank 1 = most abandons, ties broken by the lower mean score (as the backend does).
+  [...items]
+    .sort((a, b) => (b.abandon_count ?? 0) - (a.abandon_count ?? 0) || a.mean_score - b.mean_score)
+    .forEach((it, i) => (it.rank = i + 1));
+  return {
+    test_id: testId,
+    simulated: true,
+    summary: "Il percorso regge fino alla richiesta dei dati: lì le personas si fermano perché non vedono ancora il prezzo.",
+    items,
+  };
+}

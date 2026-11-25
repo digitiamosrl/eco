@@ -1,7 +1,7 @@
 // In-memory fake backend. Simulates a test that takes RUN_MS to complete.
 import type { PrototypePath, Source } from "../lib/prototype";
 import type { VariantDraft } from "../lib/variants";
-import { mockPersonas, mockProtoImport, mockReport, mockSingleItem, mockSingleSummary, mockStimuli } from "../mocks";
+import { mockPersonas, mockProtoImport, mockPrototypeReport, mockReport, mockSingleItem, mockSingleSummary, mockStimuli } from "../mocks";
 import type { Persona } from "../types/persona";
 import type { Prototype } from "../types/prototype";
 import type { Report } from "../types/report";
@@ -122,15 +122,18 @@ export async function startPrototypeTest(prototypeId: string, paths: PrototypePa
   if (!prototypes.has(prototypeId)) throw new Error("Prototipo non trovato.");
   return start(
     "prototype",
-    paths.flatMap((p) =>
-      p.screen_indexes.map((i, step) => ({
+    paths.flatMap((p) => {
+      const screens = prototypes.get(prototypeId)?.starts.find((s) => s.id === p.start_id)?.screens ?? [];
+      return p.screen_indexes.map((i, step) => ({
         id: `${p.start_id}-${i}`,
         kind: "prototype_screen" as const,
         flow_id: p.start_id,
         screen_index: step,
+        image_url: screens.find((sc) => sc.index === i)?.image_url,
+        page_structure: screens.find((sc) => sc.index === i)?.name,
         task,
-      })),
-    ),
+      }));
+    }),
   );
 }
 
@@ -145,7 +148,9 @@ export async function getTests(): Promise<Test[]> {
 }
 
 export async function getReport(id: string): Promise<Report> {
-  const stimuli = started.get(id)?.test.stimuli ?? [];
+  const test = started.get(id)?.test;
+  const stimuli = test?.stimuli ?? [];
+  if (test?.kind === "prototype") return mockPrototypeReport(id, stimuli);
   if (stimuli.length === 1)
     return { ...mockReport, test_id: id, summary: mockSingleSummary, items: [mockSingleItem(stimuli[0].id)] };
   return { ...mockReport, test_id: id };

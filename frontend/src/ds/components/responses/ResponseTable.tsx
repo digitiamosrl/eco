@@ -11,6 +11,8 @@ export type ResponseRow = {
   said?: string;
   thought?: string;
   diverge?: boolean;
+  /** Prototype screens only: the persona would give up here. */
+  abandon?: boolean;
 };
 
 export type ResponseGroup = {
@@ -62,6 +64,7 @@ export function ResponseTable({ groups = [], saidLabel = "Ha detto", thoughtLabe
                 </td>
                 <td>
                   <Vote score={r.score} />
+                  {r.abandon && <span className="eco-abandon">abbandona</span>}
                 </td>
                 <td data-l={saidLabel}>
                   <Said>{r.said ? "«" + r.said + "»" : ""}</Said>

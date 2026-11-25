@@ -56,11 +56,13 @@ export function startPostTest(variants: VariantDraft[]): Promise<Test> {
 }
 
 // The backend serves captures at /files/…, reachable from the browser under /api.
+export const apiUrl = (url: string) => (url.startsWith("/") ? `/api${url}` : url);
+
 export const withApiUrls = (p: Prototype): Prototype => ({
   ...p,
   starts: p.starts.map((s) => ({
     ...s,
-    screens: s.screens.map((sc) => ({ ...sc, image_url: sc.image_url.startsWith("/") ? `/api${sc.image_url}` : sc.image_url })),
+    screens: s.screens.map((sc) => ({ ...sc, image_url: apiUrl(sc.image_url) })),
   })),
 });
 
