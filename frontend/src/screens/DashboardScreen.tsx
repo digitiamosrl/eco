@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getTests } from "../api";
-import { Alert, Button, EmptyState, Icon, Skeleton, TestRow } from "../ds";
+import { Alert, Button, EmptyState, Icon, Skeleton, TestCard } from "../ds";
 import { formatWhen, testTitle } from "../lib/format";
 import { go, routeHref } from "../lib/route";
 import { useLoad } from "../lib/useLoad";
@@ -55,7 +55,7 @@ export default function DashboardScreen() {
         <ul className="eco-testlist">
           {tests.data.map((t) => (
             <li key={t.id}>
-              <TestRow
+              <TestCard
                 href={routeHref({ page: "test", id: t.id })}
                 kind={t.kind}
                 title={testTitle(t)}
