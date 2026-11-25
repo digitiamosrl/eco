@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Screen, Sidebar } from "./ds";
+import { Breadcrumb, Screen, Sidebar } from "./ds";
 import { go, useRoute } from "./lib/route";
 import { getUserName, setUserName } from "./lib/userName";
 import DashboardScreen from "./screens/DashboardScreen";
@@ -42,7 +42,10 @@ export default function App() {
         ) : route.page === "panel" ? (
           <PanelScreen />
         ) : route.page === "new-test" ? (
-          <NewTestScreen onStarted={(id) => go({ page: "test", id })} />
+          <>
+            <Breadcrumb trail={[{ label: "Dashboard", href: "#/" }]} current="Nuovo test" />
+            <NewTestScreen onStarted={(id) => go({ page: "test", id })} />
+          </>
         ) : route.page === "test" ? (
           <TestPage key={route.id} id={route.id} />
         ) : (

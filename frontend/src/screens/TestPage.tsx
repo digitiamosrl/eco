@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getPersonas, getResponses, getTest } from "../api";
-import { Alert, Button, Card, Icon, Skeleton, TestProgress } from "../ds";
+import { Alert, Breadcrumb, Button, Card, Icon, Skeleton, TestProgress } from "../ds";
+import { testTitle } from "../lib/format";
 import { go } from "../lib/route";
 import { useLoad } from "../lib/useLoad";
 import type { Response } from "../types/response";
@@ -13,6 +14,8 @@ const message = (e: unknown) => (e instanceof Error && e.message ? e.message : "
 
 // "A, B e C"
 const joinLabels = (labels: string[]) => labels.join(", ").replace(/, ([^,]*)$/, " e $1");
+
+const HOME = [{ label: "Dashboard", href: "#/" }];
 
 /** One test: progress and live answers while it runs, its report when done. */
 export default function TestPage({ id }: { id: string }) {
@@ -60,19 +63,32 @@ export default function TestPage({ id }: { id: string }) {
     </Button>
   );
 
+  const crumbs = <Breadcrumb trail={HOME} current={test ? testTitle(test) : "Test"} />;
+
   if (!test)
-    return error ? (
-      <Alert tone="offline" title="Non riusciamo a caricare il test." action={retry}>
-        {error}
-      </Alert>
-    ) : (
-      <div role="status" aria-label="Caricamento del test" className="scr-stack">
-        <Skeleton shape="title" width={320} height={48} />
-        <Skeleton shape="block" height={160} />
-      </div>
+    return (
+      <>
+        {crumbs}
+        {error ? (
+          <Alert tone="offline" title="Non riusciamo a caricare il test." action={retry}>
+            {error}
+          </Alert>
+        ) : (
+          <div role="status" aria-label="Caricamento del test" className="scr-stack">
+            <Skeleton shape="title" width={320} height={48} />
+            <Skeleton shape="block" height={160} />
+          </div>
+        )}
+      </>
     );
 
-  if (test.status === "done") return <ReportScreen test={test} />;
+  if (test.status === "done")
+    return (
+      <>
+        {crumbs}
+        <ReportScreen test={test} />
+      </>
+    );
 
   const personasInTest = test.stimuli.length ? test.total_count / test.stimuli.length : 0;
   const pathCount = new Set(test.stimuli.map((s) => s.flow_id)).size;
@@ -85,6 +101,7 @@ export default function TestPage({ id }: { id: string }) {
 
   return (
     <>
+      {crumbs}
       <div className="eco-head">
         <div>
           <h1>{test.status === "error" ? "Test interrotto" : "Test in corso"}</h1>

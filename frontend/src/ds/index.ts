@@ -40,3 +40,4 @@ export { PersonaList, type PersonaListProps } from "./components/panel/PersonaLi
 export { QuotaCard, type QuotaCardProps } from "./components/panel/QuotaCard";
 export { Sidebar, type SidebarProps } from "./components/navigation/Sidebar";
 export { TestCard, type TestCardProps } from "./components/test/TestCard";
+export { Breadcrumb, type BreadcrumbProps } from "./components/navigation/Breadcrumb";
