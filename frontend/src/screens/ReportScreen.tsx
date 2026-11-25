@@ -39,7 +39,12 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
   const notices = (
     <div className="eco-notices" style={{ marginBottom: 36 }}>
       <SimulatedNotice />
-      <FidelityStatus value={report.data?.fidelity?.score} basis={report.data?.fidelity?.basis} />
+      <FidelityStatus
+        value={report.data?.fidelity?.score}
+        basis={report.data?.fidelity?.basis}
+        // The calibration compares posts with real engagement, so prototypes never get one.
+        missing={test?.kind === "prototype" ? "non prevista per i prototipi: si calibra sui post" : undefined}
+      />
     </div>
   );
 

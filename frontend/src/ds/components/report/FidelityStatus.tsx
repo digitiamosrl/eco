@@ -1,16 +1,17 @@
 export type FidelityStatusProps = {
   value?: number | null;
   basis?: string;
+  missing?: string;
 };
 
-export function FidelityStatus({ value, basis }: FidelityStatusProps) {
+export function FidelityStatus({ value, basis, missing = "calibrazione non ancora disponibile" }: FidelityStatusProps) {
   if (value == null) {
     return (
       <div className="eco-fid">
         <span className="eco-fid__ring" aria-hidden="true" />
         <span>
           <b>Fidelity score</b>
-          <span>calibrazione non ancora disponibile</span>
+          <span>{missing}</span>
         </span>
       </div>
     );
