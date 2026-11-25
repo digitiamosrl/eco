@@ -1,27 +1,42 @@
-import { useState } from "react";
-import { AppNav, Screen, type AppNavProps } from "./ds";
+import { Breadcrumb, Screen, Sidebar } from "./ds";
+import { go, useRoute } from "./lib/route";
+import DashboardScreen from "./screens/DashboardScreen";
+import NewTestScreen from "./screens/NewTestScreen";
 import PanelScreen from "./screens/PanelScreen";
-import ReportScreen from "./screens/ReportScreen";
-import TestScreen from "./screens/TestScreen";
+import TestPage from "./screens/TestPage";
 import "./screens/screens.css";
 
-type ScreenKey = NonNullable<AppNavProps["current"]>;
+const ITEMS = [
+  { key: "dashboard", label: "Dashboard", href: "#/" },
+  { key: "panel", label: "Panel", href: "#/panel" },
+];
 
 export default function App() {
-  const [current, setCurrent] = useState<ScreenKey>("panel");
-  const [reportId, setReportId] = useState<string>();
-
-  const showReport = (testId: string) => {
-    setReportId(testId);
-    setCurrent("report");
-  };
+  const route = useRoute();
 
   return (
     <div className="scr-app">
-      <Screen nav={<AppNav current={current} onNavigate={setCurrent} />}>
-        {current === "panel" && <PanelScreen />}
-        {current === "test" && <TestScreen onShowReport={showReport} />}
-        {current === "report" && <ReportScreen testId={reportId} onGoTest={() => setCurrent("test")} />}
+      <Screen
+        className="eco-screen--side"
+        nav={
+          <Sidebar
+            items={ITEMS}
+            current={route.page === "panel" ? "panel" : "dashboard"}
+          />
+        }
+      >
+        {route.page === "panel" ? (
+          <PanelScreen />
+        ) : route.page === "new-test" ? (
+          <>
+            <Breadcrumb trail={[{ label: "Dashboard", href: "#/" }]} current="Nuovo test" />
+            <NewTestScreen onStarted={(id) => go({ page: "test", id })} />
+          </>
+        ) : route.page === "test" ? (
+          <TestPage key={route.id} id={route.id} />
+        ) : (
+          <DashboardScreen />
+        )}
       </Screen>
     </div>
   );

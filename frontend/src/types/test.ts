@@ -14,6 +14,10 @@ export interface Test {
   total_count: number;
   stimuli: Stimulus[];
   error?: string;
+  /**
+   * Per la dashboard: nome del prototipo o inizio del primo post. Lo calcola il backend.
+   */
+  title?: string;
 }
 export interface Stimulus {
   id: string;

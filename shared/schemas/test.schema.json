@@ -16,6 +16,11 @@
       "type": "array",
       "items": { "$ref": "stimulus.schema.json" }
     },
-    "error": { "type": "string" }
+    "error": { "type": "string" },
+    "title": {
+      "type": "string",
+      "maxLength": 81,
+      "description": "Per la dashboard: nome del prototipo o inizio del primo post. Lo calcola il backend."
+    }
   }
 }

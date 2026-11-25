@@ -63,6 +63,6 @@ cd frontend && npm run lint && npm run typecheck && npm test
 
 ## Frontend
 
-- Tre schermate: Panel, Test, Report. Niente altro senza accordo.
+- Pagine: Dashboard (i test fatti e «Nuovo test»), Panel, Nuovo test e la pagina del singolo test, che a test finito mostra il suo report. Niente altro senza accordo.
 - Finché un endpoint non è pronto, usa mock basati sugli schemi condivisi.
 - Il report mostra sempre che i risultati sono simulati, insieme alla distribuzione delle risposte e non solo alla media.

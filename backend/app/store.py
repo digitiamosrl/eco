@@ -2,9 +2,10 @@ import json
 import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
+from datetime import UTC, datetime
 
 from app.config import settings
-from app.models import Prototype, Response, Stimulus, Test
+from app.models import Prototype, Report, Response, Stimulus, Test
 
 INTERRUPTED_MESSAGE = "Il server è stato riavviato durante il test"
 _ACTIVE_STATUSES = ("queued", "running")
@@ -19,7 +20,8 @@ CREATE TABLE IF NOT EXISTS tests (
     done_count INTEGER NOT NULL,
     total_count INTEGER NOT NULL,
     stimuli TEXT NOT NULL,
-    error TEXT
+    error TEXT,
+    title TEXT
 );
 CREATE TABLE IF NOT EXISTS prototypes (
     id TEXT PRIMARY KEY,
@@ -31,6 +33,11 @@ CREATE TABLE IF NOT EXISTS responses (
     stimulus_id TEXT NOT NULL,
     response TEXT NOT NULL,
     PRIMARY KEY (test_id, persona_id, stimulus_id)
+);
+CREATE TABLE IF NOT EXISTS reports (
+    test_id TEXT PRIMARY KEY,
+    report TEXT NOT NULL,
+    created_at TEXT NOT NULL
 );
 """
 
@@ -46,16 +53,24 @@ def _connect() -> Iterator[sqlite3.Connection]:
         conn.close()
 
 
+# Database creati prima della dashboard: le colonne nuove si aggiungono senza perdere i test.
+_ADDED_COLUMNS = ("title",)
+
+
 def init_db() -> None:
     with _connect() as conn:
         conn.executescript(_SCHEMA)
+        existing = {row["name"] for row in conn.execute("PRAGMA table_info(tests)")}
+        for column in _ADDED_COLUMNS:
+            if column not in existing:
+                conn.execute(f"ALTER TABLE tests ADD COLUMN {column} TEXT")
 
 
 def _insert(conn: sqlite3.Connection, test: Test) -> None:
     stimuli = json.dumps([s.model_dump(mode="json") for s in test.stimuli])
     conn.execute(
-        "INSERT INTO tests (id, kind, status, created_at, done_count, total_count, stimuli, error)"
-        " VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO tests (id, kind, status, created_at, done_count, total_count, stimuli, error,"
+        " title) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             test.id,
             test.kind,
@@ -65,6 +80,7 @@ def _insert(conn: sqlite3.Connection, test: Test) -> None:
             test.total_count,
             stimuli,
             test.error,
+            test.title,
         ),
     )
 
@@ -163,3 +179,19 @@ def get_prototype(prototype_id: str) -> Prototype | None:
     with _connect() as conn:
         row = conn.execute("SELECT data FROM prototypes WHERE id = ?", (prototype_id,)).fetchone()
     return None if row is None else Prototype.model_validate_json(row["data"])
+
+
+def save_report(report: Report) -> None:
+    """Il report senza fidelity: la calibrazione si aggiunge a ogni lettura."""
+    data = report.model_copy(update={"fidelity": None}).model_dump_json(exclude_none=True)
+    with _connect() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO reports (test_id, report, created_at) VALUES (?, ?, ?)",
+            (report.test_id, data, datetime.now(UTC).isoformat()),
+        )
+
+
+def load_report(test_id: str) -> Report | None:
+    with _connect() as conn:
+        row = conn.execute("SELECT report FROM reports WHERE test_id = ?", (test_id,)).fetchone()
+    return None if row is None else Report.model_validate_json(row["report"])

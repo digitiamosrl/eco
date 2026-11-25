@@ -14,7 +14,33 @@ export const IMPORT_MS = 1500;
 const PRIVATE_FIGMA =
   "Non possiamo aprire il file: è privato. In Figma imposta la condivisione su «chiunque abbia il link» e riprova.";
 
+const protoScreens: Stimulus[] = ["Home", "Dati azienda", "Conferma"].map((name, step) => ({
+  id: `s1-${step}`,
+  kind: "prototype_screen",
+  flow_id: "s1",
+  screen_index: step,
+  page_structure: name,
+  task: "Registrarsi e scegliere un piano",
+}));
+
+// Two finished tests, so the dashboard is not empty in mock mode.
 const started = new Map<string, { test: Test; startedAt: number }>([
+  [
+    "t0",
+    {
+      test: {
+        id: "t0",
+        kind: "prototype",
+        status: "done",
+        created_at: "2026-10-10T09:00:00Z",
+        done_count: protoScreens.length * mockPersonas.length,
+        total_count: protoScreens.length * mockPersonas.length,
+        stimuli: protoScreens,
+        title: "Onboarding cliente v3",
+      },
+      startedAt: 0,
+    },
+  ],
   [
     "t1",
     {
@@ -26,6 +52,7 @@ const started = new Map<string, { test: Test; startedAt: number }>([
         done_count: 6,
         total_count: 6,
         stimuli: mockStimuli,
+        title: "Tre settimane per un preventivo: come le abbiamo ridotte a due giorni",
       },
       startedAt: 0,
     },
@@ -45,7 +72,7 @@ export async function getPersonas(): Promise<Persona[]> {
   return mockPersonas;
 }
 
-function start(kind: Test["kind"], stimuli: Stimulus[]): Test {
+function start(kind: Test["kind"], stimuli: Stimulus[], title?: string): Test {
   const id = `t${started.size + 1}`;
   const test: Test = {
     id,
@@ -55,6 +82,7 @@ function start(kind: Test["kind"], stimuli: Stimulus[]): Test {
     done_count: 0,
     total_count: stimuli.length * mockPersonas.length,
     stimuli,
+    title: title || undefined,
   };
   started.set(id, { test, startedAt: Date.now() });
   return test;
@@ -70,6 +98,7 @@ export async function startPostTest(variants: VariantDraft[]): Promise<Test> {
       text: v.text,
       ...(v.attachment ? { image_url: v.attachment.url, attachment_kind: v.attachment.kind } : {}),
     })),
+    variants[0]?.text.trim().split("\n")[0].slice(0, 80),
   );
 }
 
@@ -134,6 +163,7 @@ export async function startPrototypeTest(prototypeId: string, paths: PrototypePa
         task,
       }));
     }),
+    prototypes.get(prototypeId)?.name,
   );
 }
 
