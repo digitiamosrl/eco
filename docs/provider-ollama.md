@@ -59,7 +59,7 @@ Confronto con `scripts/compare_models.py`: 10 personas reali, 4 post di calibraz
 | Una risposta persona (post) | circa 19 s con Qwen3-VL 8B |
 | Una risposta persona (schermata con immagine) | circa 27 s con gemma, da rimisurare con Qwen |
 | Test con 2 varianti × 30 personas | circa 20 minuti più 2 per il report (misurato con gemma; Qwen è più veloce per chiamata) |
-| Calibrazione su 15 post × 30 personas | circa 2 ore e mezza, da lanciare quando il Mac non serve |
+| Calibrazione su 15 post × 30 personas | circa un'ora e mezza: nella prova generale del 25 novembre, con Qwen3-VL 8B e concorrenza 2, circa 12 s a risposta |
 
 ## Limiti noti
 
