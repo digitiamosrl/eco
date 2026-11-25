@@ -1,11 +1,14 @@
 import asyncio
 import json
+import logging
 import re
 from typing import Any
 
 import httpx
 
 from app.config import REPO_ROOT, settings
+
+logger = logging.getLogger(__name__)
 
 # Module-level perché i test lo azzerano; un solo retry, quindi l'attesa è breve.
 RETRY_DELAY_SECONDS = 1.0
@@ -71,6 +74,13 @@ async def _post(client: httpx.AsyncClient, payload: dict[str, Any]) -> httpx.Res
             raise LlmError(_UNAVAILABLE) from exc
         if response.status_code == 200:
             return response
+        # All'utente arriva un messaggio generico: il motivo vero resta nei log del server.
+        logger.warning(
+            "OpenRouter %s su %s: %s",
+            response.status_code,
+            payload.get("model"),
+            response.text[:500],
+        )
         if response.status_code in (401, 403):
             raise LlmError(_AUTH)
         retryable = response.status_code == 429 or response.status_code >= 500
@@ -87,6 +97,7 @@ async def chat_json(
     messages: list[dict[str, Any]],
     schema_name: str,
     schema: dict[str, Any],
+    temperature: float | None = None,
 ) -> dict[str, Any]:
     payload = {
         "model": model,
@@ -95,6 +106,8 @@ async def chat_json(
             "type": "json_schema",
             "json_schema": {"name": schema_name, "strict": True, "schema": schema},
         },
+        # None: resta la temperatura di default del modello.
+        **({} if temperature is None else {"temperature": temperature}),
     }
     response = await _post(client, payload)
     return _parse_content(_message_content(response))

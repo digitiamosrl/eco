@@ -156,14 +156,82 @@ async def test_model_can_be_overridden_per_responder() -> None:
     assert [body["model"] for body in sent] == ["altro/modello", "modello/persona"]
 
 
-async def test_pdf_attachment_is_sent_as_file_block(monkeypatch, tmp_path) -> None:
+def _pdf(pages: int) -> bytes:
+    import io
+
+    import pypdfium2 as pdfium
+
+    document = pdfium.PdfDocument.new()
+    for _ in range(pages):
+        document.new_page(200, 280)
+    buffer = io.BytesIO()
+    document.save(buffer)
+    return buffer.getvalue()
+
+
+async def test_pdf_pages_are_sent_as_images(monkeypatch, tmp_path) -> None:
+    # Ollama non legge i PDF: le prime pagine arrivano come immagini, come un carosello.
     monkeypatch.setattr(settings, "upload_dir", tmp_path)
-    (tmp_path / "doc.pdf").write_bytes(b"%PDF-1.7 dati")
+    (tmp_path / "doc.pdf").write_bytes(_pdf(6))
     stimulus = POST.model_copy(update={"image_url": "/files/doc.pdf", "attachment_kind": "pdf"})
     sent: list[dict] = []
-    client = _recording_client({**VALID_OUTPUT, "action": "react", "reaction": "adoro"}, sent)
-    response = await LlmResponder(client=client).respond(PERSONA, stimulus)
-    assert (response.action, response.reaction) == ("react", "adoro")
-    block = sent[0]["messages"][0]["content"][1]
-    assert block["type"] == "file"
-    assert block["file"]["file_data"].startswith("data:application/pdf;base64,")
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, stimulus)
+    blocks = sent[0]["messages"][0]["content"][1:]
+    assert len(blocks) == 4
+    assert all(b["image_url"]["url"].startswith("data:image/png;base64,") for b in blocks)
+
+
+async def test_unreadable_pdf_raises_llm_error(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr(settings, "upload_dir", tmp_path)
+    (tmp_path / "doc.pdf").write_bytes(b"%PDF-1.7 rotto")
+    stimulus = POST.model_copy(update={"image_url": "/files/doc.pdf", "attachment_kind": "pdf"})
+    with pytest.raises(LlmError):
+        await LlmResponder(_recording_client(VALID_OUTPUT, [])).respond(PERSONA, stimulus)
+
+
+async def test_model_decides_the_action_before_writing_what_it_says() -> None:
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, POST)
+    order = list(sent[0]["response_format"]["json_schema"]["schema"]["properties"])
+    assert order[:4] == ["thought", "action", "reaction", "said"]
+
+
+async def test_persona_calls_keep_the_model_temperature() -> None:
+    sent: list[dict] = []
+    await LlmResponder(_recording_client(VALID_OUTPUT, sent)).respond(PERSONA, POST)
+    assert "temperature" not in sent[0]  # la varietà tra personas viene anche da qui
+
+
+async def test_required_fields_depend_on_the_stimulus() -> None:
+    screen = Stimulus(id="s", kind="prototype_screen", flow_id="f", screen_index=0, text="x")
+    sent: list[dict] = []
+    client = _recording_client(VALID_OUTPUT, sent)
+    await LlmResponder(client).respond(PERSONA, POST)
+    await LlmResponder(client).respond(PERSONA, screen)
+    post_required, screen_required = (
+        body["response_format"]["json_schema"]["schema"]["required"] for body in sent
+    )
+    # Facoltativi nello schema condiviso, ma un modello locale li salta se non li impone.
+    assert "action" in post_required and "would_abandon" not in post_required
+    assert {"would_abandon", "misunderstood"} <= set(screen_required)
+    assert "action" not in screen_required
+
+
+async def test_post_always_names_the_reaction_and_code_drops_the_placeholder() -> None:
+    sent: list[dict] = []
+    output = {**VALID_OUTPUT, "action": "scroll", "reaction": "nessuna"}
+    response = await LlmResponder(_recording_client(output, sent)).respond(PERSONA, POST)
+    schema = sent[0]["response_format"]["json_schema"]["schema"]
+    # Facoltativa, il modello la saltava anche quando reagiva: ora la sceglie sempre.
+    assert "reaction" in schema["required"]
+    assert "nessuna" in schema["properties"]["reaction"]["enum"]
+    assert response.reaction is None
+
+
+async def test_reaction_is_kept_only_with_react() -> None:
+    reacted = {**VALID_OUTPUT, "action": "react", "reaction": "perspicace"}
+    response = await LlmResponder(_recording_client(reacted, [])).respond(PERSONA, POST)
+    assert response.reaction == "perspicace"
+    scrolled = {**VALID_OUTPUT, "action": "scroll", "reaction": "adoro"}
+    response = await LlmResponder(_recording_client(scrolled, [])).respond(PERSONA, POST)
+    assert response.reaction is None

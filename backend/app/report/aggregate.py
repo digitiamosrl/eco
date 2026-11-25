@@ -1,3 +1,4 @@
+import re
 from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -22,9 +23,16 @@ def _mean(scores: Sequence[int]) -> float:
     return round(sum(scores) / len(scores), 2) if scores else 0.0
 
 
+def _key(text: str) -> str:
+    """Stessa obiezione anche con maiuscole, spazi o punteggiatura diversi."""
+    return " ".join(re.sub(r"[^\w\s]", " ", text.lower()).split())
+
+
 def _top_objections(responses: Sequence[Response]) -> tuple[str, ...]:
-    counts = Counter(objection for response in responses for objection in response.objections)
-    return tuple(objection for objection, _ in counts.most_common(MAX_OBJECTIONS))
+    objections = [o.strip() for r in responses for o in r.objections if _key(o)]
+    first_seen = {_key(o): o for o in reversed(objections)}  # vince la prima forma incontrata
+    counts = Counter(_key(o) for o in objections)
+    return tuple(first_seen[key] for key, _ in counts.most_common(MAX_OBJECTIONS))
 
 
 def aggregate(stimuli: Sequence[Stimulus], responses: Sequence[Response]) -> list[StimulusStats]:

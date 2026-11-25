@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     # Id modello di OpenRouter, da impostare nel .env (nessun default).
     persona_model: str = ""
     report_model: str = ""
+    # Bassa: il report riassume e giudica, non deve variare da un run all'altro.
+    report_temperature: float = 0.2
     llm_timeout_seconds: float = 60
     panel_concurrency: int = 5
     database_path: str = "eco.sqlite"

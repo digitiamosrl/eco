@@ -1,0 +1,5 @@
+# Variante di qwen3-vl:8b-instruct per eco: stesso modello, contesto più ampio.
+# Il default di Ollama (4096 token) taglia in silenzio il prompt del report con 30 risposte.
+# Creazione: ollama create eco-qwen3-vl-8b -f backend/ollama/Modelfile
+FROM qwen3-vl:8b-instruct
+PARAMETER num_ctx 16384
