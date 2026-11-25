@@ -52,7 +52,7 @@ L'intera riga è un link a `#/test/<id>`.
 
 Se c'è un test in corso, «Nuovo test» resta attivo: il backend accetta un solo test alla volta e il modulo mostra già l'errore che rimanda. Per i test salvati prima di questa modifica, senza `title`, la riga mostra «Senza titolo».
 
-**Primo avvio:** prima di tutto compare una finestra «Come ti chiami?». Il nome si salva in `localStorage` (chiave `eco.name`) e si cambia dalla sidebar. Se `localStorage` non è disponibile, il nome vale per la sessione.
+**Primo avvio:** al posto della pagina compare la richiesta «Come ti chiami?». Il nome si salva in `localStorage` (chiave `eco.name`) e si cambia dalla sidebar. Se `localStorage` non è disponibile, il nome vale per la sessione.
 
 ## Backend
 
