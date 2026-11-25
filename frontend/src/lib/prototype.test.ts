@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Prototype } from "../types/prototype";
-import { buildPaths, screenKey, sourceError } from "./prototype";
+import { buildPaths, reportPaths, screenKey, sourceError } from "./prototype";
 
 const screens = (n: number) => Array.from({ length: n }, (_, index) => ({ index, name: `S${index}`, image_url: "" }));
 
@@ -59,5 +59,31 @@ describe("sourceError", () => {
     expect(sourceError("artifact", "")).toBe("Incolla il link dell’artifact oppure carica il file HTML.");
     expect(sourceError("artifact", "", true)).toBeNull();
     expect(sourceError("artifact", "https://claude.ai/public/artifacts/x")).toBeNull();
+  });
+});
+
+describe("reportPaths", () => {
+  const screen = (flow: string, step: number) => ({
+    id: `${flow}-${step}`,
+    kind: "prototype_screen" as const,
+    flow_id: flow,
+    screen_index: step,
+  });
+  const item = (id: string) => ({
+    stimulus_id: id,
+    rank: 1,
+    mean_score: 3,
+    score_distribution: {},
+    objections: [],
+    said_summary: "",
+    thought_summary: "",
+    responses: [],
+  });
+
+  it("groups screens by path in step order and joins each with its item", () => {
+    const paths = reportPaths([screen("a", 1), screen("b", 0), screen("a", 0)], [item("a-1"), item("b-0")]);
+    expect(paths.map((p) => p.flowId)).toEqual(["a", "b"]);
+    expect(paths[0].screens.map((s) => s.stimulus.id)).toEqual(["a-0", "a-1"]);
+    expect(paths[0].screens.map((s) => s.item?.stimulus_id)).toEqual([undefined, "a-1"]);
   });
 });

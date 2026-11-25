@@ -216,6 +216,7 @@ a:hover{color:var(--violet-press)}
 .eco-who span{font-size:14px;color:var(--muted);font-weight:600}
 .eco-vote{width:44px;height:44px;border-radius:var(--r-chip);display:grid;place-items:center;font:800 22px/1 var(--font-title);background:var(--mist);color:var(--night);border:2px solid var(--line);box-shadow:var(--shadow-light-sm)}
 .eco-vote--hi{background:var(--violet);color:var(--white);border-color:var(--violet);box-shadow:var(--shadow-violet-sm)}
+.eco-abandon{display:block;margin-top:8px;font:800 12px/1 var(--font-text);letter-spacing:var(--tracking-tag);text-transform:uppercase;color:var(--warm-ink)}
 .eco-vote-cap{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-top:8px}
 .eco-answers-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .eco-answers-head h2{font-size:32px}

@@ -16,6 +16,7 @@ import { isDivergent } from "../lib/diverge";
 import { useLoad } from "../lib/useLoad";
 import { variantName } from "../lib/variants";
 import type { Report } from "../types/report";
+import PrototypeReport from "./PrototypeReport";
 import SinglePostReport from "./SinglePostReport";
 
 type Filter = "all" | "gap" | "vote";
@@ -29,8 +30,7 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
   const personas = useLoad(getPersonas, [attempt]);
   // GET /tests lists the most recent test first.
   const test = tests.data?.find((t) => (testId ? t.id === testId : t.status === "done"));
-  // The backend has no prototype report yet (501), so it is not requested.
-  const selected = test?.kind === "post" ? test.id : undefined;
+  const selected = test?.id;
   const report = useLoad<Report | null>(
     () => (selected ? getReport(selected) : Promise.resolve(null)),
     [selected, attempt],
@@ -78,16 +78,6 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
       </>
     );
 
-  if (test?.kind === "prototype")
-    return (
-      <>
-        {notices}
-        <EmptyState title="Il report del prototipo non è ancora disponibile" action={<Button onClick={onGoTest}>Vai a Test</Button>}>
-          Il test è salvo: il report delle schermate arriverà con una prossima versione.
-        </EmptyState>
-      </>
-    );
-
   if (!test || !report.data || !personas.data)
     return (
       <>
@@ -104,6 +94,13 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
     );
 
   const stimuli = test.stimuli;
+  if (test.kind === "prototype")
+    return (
+      <>
+        {notices}
+        <PrototypeReport report={report.data} stimuli={stimuli} personas={personas.data} />
+      </>
+    );
   if (report.data.items.length === 1) {
     const item = report.data.items[0];
     return (

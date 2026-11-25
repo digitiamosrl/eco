@@ -3,12 +3,13 @@ import type { ReactNode } from "react";
 export type ObjectionProps = {
   children?: ReactNode;
   count?: number | null;
+  label?: string;
 };
 
-export function Objection({ children, count }: ObjectionProps) {
+export function Objection({ children, count, label = "Obiezione" }: ObjectionProps) {
   return (
     <div className="eco-objection">
-      <span>Obiezione</span>
+      <span>{label}</span>
       {children}
       {count != null && (
         <em className="eco-objection__n" style={{ fontStyle: "normal" }}>
