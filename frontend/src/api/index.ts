@@ -1,4 +1,5 @@
 import type { PrototypePath } from "../lib/prototype";
+import { getUserName } from "../lib/userName";
 import type { VariantDraft } from "../lib/variants";
 import type { Persona } from "../types/persona";
 import type { Prototype } from "../types/prototype";
@@ -46,6 +47,7 @@ export function startPostTest(variants: VariantDraft[]): Promise<Test> {
   if (useMocks) return mock.startPostTest(variants);
   const form = new FormData();
   form.append("kind", "post");
+  form.append("created_by", getUserName());
   for (const [i, v] of variants.entries()) {
     form.append(`variants[${i}][label]`, v.label);
     form.append(`variants[${i}][text]`, v.text);
@@ -81,4 +83,4 @@ export function importPrototype(input: mock.ImportInput, signal?: AbortSignal): 
 export const startPrototypeTest = (prototypeId: string, paths: PrototypePath[], task: string) =>
   useMocks
     ? mock.startPrototypeTest(prototypeId, paths, task)
-    : post<Test>("/tests", { kind: "prototype", prototype_id: prototypeId, paths, task });
+    : post<Test>("/tests", { kind: "prototype", prototype_id: prototypeId, paths, task, created_by: getUserName() });
