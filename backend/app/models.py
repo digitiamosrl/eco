@@ -62,6 +62,8 @@ class Test(BaseModel):
     total_count: int = Field(ge=0)
     stimuli: list[Stimulus]
     error: str | None = None
+    title: str | None = Field(default=None, max_length=81)
+    created_by: str | None = Field(default=None, max_length=60)
 
 
 class Flow(BaseModel):

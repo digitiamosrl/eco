@@ -16,6 +16,16 @@
       "type": "array",
       "items": { "$ref": "stimulus.schema.json" }
     },
-    "error": { "type": "string" }
+    "error": { "type": "string" },
+    "title": {
+      "type": "string",
+      "maxLength": 81,
+      "description": "Per la dashboard: nome del prototipo o inizio del primo post. Lo calcola il backend."
+    },
+    "created_by": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "Nome locale di chi ha lanciato il test. Non è un account."
+    }
   }
 }
