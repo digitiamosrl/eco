@@ -38,3 +38,5 @@ export { SimulatedNotice, type SimulatedNoticeProps } from "./components/report/
 export { VariantResult, type VariantResultProps } from "./components/report/VariantResult";
 export { PersonaList, type PersonaListProps } from "./components/panel/PersonaList";
 export { QuotaCard, type QuotaCardProps } from "./components/panel/QuotaCard";
+export { Sidebar, type SidebarProps } from "./components/navigation/Sidebar";
+export { TestRow, type TestRowProps } from "./components/test/TestRow";
