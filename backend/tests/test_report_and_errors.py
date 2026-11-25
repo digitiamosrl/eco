@@ -1,6 +1,8 @@
 from fastapi.testclient import TestClient
 
+from app import store
 from app.main import app
+from app.models import Prototype, PrototypeScreen, PrototypeStart
 
 client = TestClient(app)
 
@@ -32,11 +34,44 @@ def test_report_of_unfinished_test_returns_409(no_background) -> None:
     assert response.json() == {"detail": "Il test non è ancora completato"}
 
 
-def test_report_of_prototype_returns_501() -> None:
-    created = client.post("/tests", json={"kind": "prototype", "flow_ids": ["onboarding"]}).json()
+def _create_done_prototype() -> dict:
+    screens = [
+        PrototypeScreen(index=i, name=f"Passo {i}", image_url="/files/x.png") for i in range(3)
+    ]
+    store.add_prototype(
+        Prototype(
+            id="proto",
+            source="artifact",
+            name="Prova",
+            imported_at="2026-11-17T10:00:00+00:00",
+            starts=[PrototypeStart(id="s1", name="Home", screens=screens)],
+        )
+    )
+    body = {
+        "kind": "prototype",
+        "prototype_id": "proto",
+        "paths": [{"start_id": "s1", "screen_indexes": [0, 1, 2]}],
+        "task": "Provare il prodotto",
+    }
+    created = client.post("/tests", json=body).json()
+    assert client.get(f"/tests/{created['id']}").json()["status"] == "done"
+    return created
+
+
+def test_prototype_report_has_abandons_per_screen(validate) -> None:
+    created = _create_done_prototype()
     response = client.get(f"/tests/{created['id']}/report")
-    assert response.status_code == 501
-    assert response.json() == {"detail": "Report del prototipo non ancora disponibile"}
+    assert response.status_code == 200
+    report = response.json()
+    validate("report.schema.json", report)
+    assert report["simulated"] is True
+    assert "fidelity" not in report  # la calibrazione vale per i post, non per i prototipi
+    assert {item["stimulus_id"] for item in report["items"]} == {
+        s["id"] for s in created["stimuli"]
+    }
+    assert all("abandon_count" in item and "misunderstood" in item for item in report["items"])
+    counts = [item["abandon_count"] for item in report["items"]]
+    assert counts == sorted(counts, reverse=True)
 
 
 def test_post_report_has_one_item_per_stimulus(validate) -> None:
@@ -71,3 +106,21 @@ def test_duplicate_flow_ids_return_422() -> None:
     response = client.post("/tests", json=body)
     assert response.status_code == 422
     assert response.json() == {"detail": "Richiesta non valida: flow_ids"}
+
+
+def test_prototype_report_is_prepared_when_the_test_ends(monkeypatch) -> None:
+    from app.api import reports as reports_api
+    from app.report.summarize import FakeSummarizer
+
+    calls: list[str] = []
+
+    class Counting(FakeSummarizer):
+        async def summary(self, ranking) -> str:
+            calls.append("summary")
+            return await super().summary(ranking)
+
+    monkeypatch.setattr(reports_api, "build_summarizer", Counting)
+    created = _create_done_prototype()
+    assert calls == ["summary"]  # pronto prima che qualcuno apra il report
+    assert client.get(f"/tests/{created['id']}/report").status_code == 200
+    assert calls == ["summary"]

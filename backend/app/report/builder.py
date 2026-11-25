@@ -14,7 +14,7 @@ async def _summarize_variant(
     return said, await summarizer.thought_summary(stats), await summarizer.divergent_ids(stats)
 
 
-async def build_post_report(
+async def build_report(
     test_id: str,
     stimuli: Sequence[Stimulus],
     responses: Sequence[Response],
@@ -37,6 +37,8 @@ async def build_post_report(
             thought_summary=thought,
             responses=list(stats.responses),
             divergent_persona_ids=divergent,
+            abandon_count=stats.abandon_count,
+            misunderstood=None if stats.misunderstood is None else list(stats.misunderstood),
         )
         for stats, (said, thought, divergent) in zip(ranking, variant_texts, strict=True)
     ]

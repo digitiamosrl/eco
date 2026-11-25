@@ -80,6 +80,18 @@
               "type": "string"
             },
             "description": "Personas la cui risposta a questo stimolo diverge tra said e thought. Calcolato dal report (decisione PR #2)."
+          },
+          "abandon_count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Solo per le schermate di un prototipo: quante personas lascerebbero perdere a questa schermata (would_abandon). Con le schermate, rank 1 è il punto più critico."
+          },
+          "misunderstood": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Solo per le schermate di un prototipo: i passaggi fraintesi più frequenti, al massimo 5."
           }
         }
       }

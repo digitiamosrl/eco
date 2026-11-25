@@ -76,7 +76,7 @@ export function importPrototype(input: mock.ImportInput, signal?: AbortSignal): 
   return post<Prototype>("/prototypes/import", { source: input.source, url: input.url }, signal).then(withApiUrls);
 }
 
-export const startPrototypeTest = (prototypeId: string, paths: PrototypePath[]) =>
+export const startPrototypeTest = (prototypeId: string, paths: PrototypePath[], task: string) =>
   useMocks
-    ? mock.startPrototypeTest(prototypeId, paths)
-    : post<Test>("/tests", { kind: "prototype", prototype_id: prototypeId, paths });
+    ? mock.startPrototypeTest(prototypeId, paths, task)
+    : post<Test>("/tests", { kind: "prototype", prototype_id: prototypeId, paths, task });

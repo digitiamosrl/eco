@@ -205,11 +205,16 @@ def test_prototype_test_uses_the_chosen_screens_and_runs_on_the_panel(fake_artif
         "kind": "prototype",
         "prototype_id": proto["id"],
         "paths": [{"start_id": "s1", "screen_indexes": [0, 2]}],
+        "task": "  Chiedere un preventivo per il gestionale  ",
     }
     created = client.post("/tests", json=body)
     assert created.status_code == 201
     stimuli = created.json()["stimuli"]
-    assert [s["screen_index"] for s in stimuli] == [0, 2]
+    # screen_index è il passo nel percorso testato, non l'indice nel prototipo: tolta la
+    # schermata 1, la persona deve leggere «schermata 2», non «schermata 3».
+    assert [s["screen_index"] for s in stimuli] == [0, 1]
+    assert [s["id"].rsplit("-", 1)[1] for s in stimuli] == ["0", "2"]
+    assert {s["task"] for s in stimuli} == {"Chiedere un preventivo per il gestionale"}
     assert all(s["kind"] == "prototype_screen" and s["image_url"] for s in stimuli)
     done = client.get(f"/tests/{created.json()['id']}").json()
     assert done["status"] == "done"
@@ -219,8 +224,12 @@ def test_prototype_test_uses_the_chosen_screens_and_runs_on_the_panel(fake_artif
 def test_prototype_test_rejects_unknown_or_inconsistent_input(fake_artifact) -> None:
     proto = _imported()
     path = {"start_id": "s1", "screen_indexes": [0]}
+    task = "Chiedere un preventivo"
     cases = [
-        {"kind": "prototype", "prototype_id": "nope", "paths": [path]},
+        # Senza compito le personas giudicano solo se l'app le riguarda, non se è usabile.
+        {"kind": "prototype", "prototype_id": proto["id"], "paths": [path]},
+        {"kind": "prototype", "prototype_id": proto["id"], "paths": [path], "task": "  "},
+        {"kind": "prototype", "prototype_id": "nope", "paths": [path], "task": task},
         {
             "kind": "prototype",
             "prototype_id": proto["id"],

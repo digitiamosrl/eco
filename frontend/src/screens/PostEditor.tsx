@@ -59,9 +59,10 @@ export default function PostEditor({ letter, single, text, onTextChange, attachm
             <span className="scr-pe-doc" aria-hidden="true">
               <b>PDF</b>
             </span>
+            {/* 4 = MAX_PDF_PAGES in backend/app/engine/responder.py */}
             <span className="scr-pe-meta">
               <b>{attachment.file.name}</b>
-              <span>Documento · il panel lo legge come carosello · {kb(attachment.file.size)} KB</span>
+              <span>Documento · il panel ne legge le prime 4 pagine come carosello · {kb(attachment.file.size)} KB</span>
             </span>
             <span className="eco-drop__swap">Cambia file</span>
           </>

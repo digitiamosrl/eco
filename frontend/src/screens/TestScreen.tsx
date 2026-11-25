@@ -39,7 +39,7 @@ export default function TestScreen({ onShowReport }: Props) {
   const [responses, setResponses] = useState<Response[]>([]);
   const [readAttempt, setReadAttempt] = useState(0);
   // The last prototype launch, so "Riprova" can repeat it.
-  const lastProto = useRef<{ id: string; paths: PrototypePath[] } | null>(null);
+  const lastProto = useRef<{ id: string; paths: PrototypePath[]; task: string } | null>(null);
   const personas = useLoad(getPersonas, []);
   const panelSize = personas.data?.length ?? 0;
 
@@ -96,7 +96,7 @@ export default function TestScreen({ onShowReport }: Props) {
     setSending(true);
     setStartError(null);
     try {
-      setTest(mode === "post" || !proto ? await startPostTest(variants) : await startPrototypeTest(proto.id, proto.paths));
+      setTest(mode === "post" || !proto ? await startPostTest(variants) : await startPrototypeTest(proto.id, proto.paths, proto.task));
     } catch (e) {
       setTest(null);
       setStartError(message(e));
@@ -285,7 +285,7 @@ export default function TestScreen({ onShowReport }: Props) {
         <PrototypeImport
           personas={panelSize}
           loading={sending}
-          onStart={(id, paths) => start({ id, paths })}
+          onStart={(id, paths, task) => start({ id, paths, task })}
         />
       )}
     </>
