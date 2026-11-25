@@ -19,12 +19,12 @@ export default function NameScreen({ initial = "", onDone }: Props) {
       >
         <h1 style={{ fontSize: 32 }}>Come ti chiami?</h1>
         <p className="eco-sub">Lo salviamo con ogni test che lanci, così nella dashboard si vede chi l'ha fatto.</p>
-        <label className="scr-pt-label" htmlFor="eco-name">
+        <label className="scr-name-label" htmlFor="eco-name">
           Nome
         </label>
         <input
           id="eco-name"
-          className="scr-pt-input"
+          className="scr-pt-input scr-name-input"
           value={name}
           maxLength={60}
           autoFocus
