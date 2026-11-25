@@ -92,6 +92,23 @@ def _prototype_stimuli(body: PrototypeTestRequest) -> list[Stimulus]:
     return _imported_stimuli(body.prototype_id or "", body.paths or [], (body.task or "").strip())
 
 
+_TITLE_MAX = 80
+
+
+def _title(body: CreateTestRequest, stimuli: list[Stimulus]) -> str | None:
+    """Per la dashboard: il nome del prototipo o la prima riga del primo post."""
+    if isinstance(body, PostTestRequest):
+        lines = (stimuli[0].text or "").strip().splitlines()
+        text = lines[0] if lines else ""
+    else:
+        prototype = store.get_prototype(body.prototype_id) if body.prototype_id else None
+        text = prototype.name if prototype else ", ".join(body.flow_ids or [])
+    text = text.strip()
+    if not text:
+        return None
+    return text if len(text) <= _TITLE_MAX else text[:_TITLE_MAX] + "…"
+
+
 def _build_test(body: CreateTestRequest, uploads: tuple[Upload | None, ...]) -> Test:
     if isinstance(body, PostTestRequest):
         stimuli = _post_stimuli(body, uploads)
@@ -105,6 +122,8 @@ def _build_test(body: CreateTestRequest, uploads: tuple[Upload | None, ...]) -> 
         done_count=0,
         total_count=len(PERSONAS) * len(stimuli),
         stimuli=stimuli,
+        title=_title(body, stimuli),
+        created_by=(body.created_by or "").strip() or None,
     )
 
 

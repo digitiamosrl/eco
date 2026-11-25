@@ -1,9 +1,15 @@
+from fastapi.testclient import TestClient
+
 from app import store
-from app.models import Stimulus, Test
+from app.main import app
+from app.models import Stimulus
+from app.models import Test as TestModel
+
+client = TestClient(app)
 
 
-def _test(**extra) -> Test:
-    return Test(
+def _test(**extra) -> TestModel:
+    return TestModel(
         id="t1",
         kind="post",
         status="queued",
@@ -38,3 +44,32 @@ def test_old_database_gains_the_new_columns(tmp_path, monkeypatch) -> None:
     store.init_db()
     assert store.add_if_idle(_test(title="Ciao"))
     assert store.get("t1").title == "Ciao"
+
+
+def test_post_title_is_the_first_line_cut_at_80() -> None:
+    body = {
+        "kind": "post",
+        "variants": [{"label": "A", "text": "x" * 100 + "\nseconda riga"}],
+        "created_by": "  Fabio  ",
+    }
+    created = client.post("/tests", json=body).json()
+    assert created["title"] == "x" * 80 + "…"
+    assert created["created_by"] == "Fabio"
+
+
+def test_blank_author_is_omitted() -> None:
+    body = {"kind": "post", "variants": [{"label": "A", "text": "Breve"}], "created_by": " "}
+    created = client.post("/tests", json=body).json()
+    assert created["title"] == "Breve"
+    assert "created_by" not in created
+
+
+def test_author_arrives_with_the_form_too() -> None:
+    form = {
+        "kind": (None, "post"),
+        "variants[0][label]": (None, "A"),
+        "variants[0][text]": (None, "Ciao"),
+        "created_by": (None, "Salvo"),
+    }
+    created = client.post("/tests", files=form).json()
+    assert created["created_by"] == "Salvo"

@@ -48,6 +48,7 @@ async def read_create_request(
         {
             "kind": form.get("kind"),
             "variants": [{"label": v.get("label"), "text": v.get("text")} for v in variants],
+            "created_by": form.get("created_by"),
         }
     )
     uploads = tuple([await _read_image(v.get("image")) for v in variants])

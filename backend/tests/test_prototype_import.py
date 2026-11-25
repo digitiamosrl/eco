@@ -209,6 +209,7 @@ def test_prototype_test_uses_the_chosen_screens_and_runs_on_the_panel(fake_artif
     }
     created = client.post("/tests", json=body)
     assert created.status_code == 201
+    assert created.json()["title"] == proto["name"]
     stimuli = created.json()["stimuli"]
     # screen_index è il passo nel percorso testato, non l'indice nel prototipo: tolta la
     # schermata 1, la persona deve leggere «schermata 2», non «schermata 3».
