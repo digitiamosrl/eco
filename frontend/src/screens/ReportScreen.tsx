@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { getPersonas, getReport, getTests } from "../api";
+import { getPersonas, getReport } from "../api";
 import {
   Alert,
   Button,
-  EmptyState,
   FidelityStatus,
   FilterChips,
   Icon,
@@ -15,26 +14,20 @@ import {
 import { isDivergent } from "../lib/diverge";
 import { useLoad } from "../lib/useLoad";
 import { variantName } from "../lib/variants";
-import type { Report } from "../types/report";
+import type { Test } from "../types/test";
 import PrototypeReport from "./PrototypeReport";
 import SinglePostReport from "./SinglePostReport";
 
 type Filter = "all" | "gap" | "vote";
 
-type Props = { testId?: string; onGoTest: () => void };
+type Props = { test: Test };
 
-export default function ReportScreen({ testId, onGoTest }: Props) {
+/** The report of one finished test. */
+export default function ReportScreen({ test }: Props) {
   const [attempt, setAttempt] = useState(0);
   const [filter, setFilter] = useState<Filter>("all");
-  const tests = useLoad(getTests, [attempt]);
   const personas = useLoad(getPersonas, [attempt]);
-  // GET /tests lists the most recent test first.
-  const test = tests.data?.find((t) => (testId ? t.id === testId : t.status === "done"));
-  const selected = test?.id;
-  const report = useLoad<Report | null>(
-    () => (selected ? getReport(selected) : Promise.resolve(null)),
-    [selected, attempt],
-  );
+  const report = useLoad(() => getReport(test.id), [test.id, attempt]);
 
   const notices = (
     <div className="eco-notices" style={{ marginBottom: 36 }}>
@@ -43,12 +36,12 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
         value={report.data?.fidelity?.score}
         basis={report.data?.fidelity?.basis}
         // The calibration compares posts with real engagement, so prototypes never get one.
-        missing={test?.kind === "prototype" ? "non prevista per i prototipi: si calibra sui post" : undefined}
+        missing={test.kind === "prototype" ? "non prevista per i prototipi: si calibra sui post" : undefined}
       />
     </div>
   );
 
-  const error = tests.error ?? personas.error ?? report.error;
+  const error = personas.error ?? report.error;
   if (error)
     return (
       <>
@@ -67,18 +60,7 @@ export default function ReportScreen({ testId, onGoTest }: Props) {
       </>
     );
 
-  if (tests.data && !test)
-    return (
-      <>
-        {notices}
-        <EmptyState title="Nessun test ancora" action={<Button onClick={onGoTest}>Vai a Test</Button>}>
-          Il report compare qui quando il primo test è completato. Basta un post, o fino a 5 varianti da confrontare,
-          oppure un prototipo.
-        </EmptyState>
-      </>
-    );
-
-  if (!test || !report.data || !personas.data)
+  if (!report.data || !personas.data)
     return (
       <>
         {notices}
