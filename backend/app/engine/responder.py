@@ -84,6 +84,7 @@ _PDF_SUFFIX = ".pdf"
 # Un carosello LinkedIn si capisce dalle prime pagine; di più allunga solo il prompt.
 MAX_PDF_PAGES = 4
 _PDF_SCALE = 1.5  # circa 108 dpi: testo leggibile, immagini leggere
+_PDF_MAX_SIDE = 2000  # pixel: una pagina enorme non deve diventare una bitmap da GB
 _PDF_ERROR = "Il PDF allegato non è leggibile."
 _FILES_PREFIX = "/files/"
 _IMAGE_ERROR = "Immagine dello stimolo non disponibile."
@@ -106,10 +107,18 @@ def _pdf_pages(data: bytes) -> list[bytes]:
     """Prime pagine del PDF come PNG: i modelli locali leggono immagini, non documenti."""
     try:
         document = pdfium.PdfDocument(data)
-        pages = [document[i] for i in range(min(len(document), MAX_PDF_PAGES))]
-        images = [page.render(scale=_PDF_SCALE).to_pil() for page in pages]
     except pdfium.PdfiumError as exc:
         raise LlmError(_PDF_ERROR) from exc
+    try:
+        images = []
+        for i in range(min(len(document), MAX_PDF_PAGES)):
+            page = document[i]
+            scale = min(_PDF_SCALE, _PDF_MAX_SIDE / max(page.get_size()))
+            images.append(page.render(scale=scale).to_pil())
+    except pdfium.PdfiumError as exc:
+        raise LlmError(_PDF_ERROR) from exc
+    finally:
+        document.close()
     encoded = []
     for image in images:
         buffer = io.BytesIO()
