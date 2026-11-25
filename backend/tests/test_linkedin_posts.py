@@ -63,3 +63,26 @@ def test_unknown_columns_name_what_is_missing(tmp_path: Path) -> None:
     source.write_text("a,b\n1,2\n", "utf-8")
     with pytest.raises(ValueError, match="impressioni"):
         convert(source)
+
+
+def test_xls_cells_become_the_same_text_as_in_a_csv() -> None:
+    from xlrd import XL_CELL_DATE, XL_CELL_NUMBER, XL_CELL_TEXT
+    from xlrd.sheet import Cell
+
+    from scripts.linkedin_posts import _cell_text
+
+    # Nell'xls i conteggi sono float e le date numeri seriali di Excel.
+    assert _cell_text(Cell(XL_CELL_NUMBER, 1840.0), 0) == "1840"
+    assert _cell_text(Cell(XL_CELL_DATE, 46093.0), 0) == "2026-03-12"
+    assert _cell_text(Cell(XL_CELL_TEXT, "Caso cliente"), 0) == "Caso cliente"
+
+
+def test_the_posts_sheet_is_found_among_the_others() -> None:
+    from scripts.linkedin_posts import _posts_sheet
+
+    metrics = [["Data", "Impressioni (organiche)"], ["03/12/2026", "10"]]
+    posts = EN_EXPORT.splitlines()
+    import csv
+
+    start, _, rows = _posts_sheet([metrics, list(csv.reader(posts))])
+    assert rows[start][0] == "Post title"

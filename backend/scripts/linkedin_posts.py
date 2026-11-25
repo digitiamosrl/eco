@@ -1,8 +1,8 @@
-"""Converte l'export dei post della pagina LinkedIn (CSV) nell'input della calibrazione.
+"""Converte l'export dei post della pagina LinkedIn (.xls o CSV) nell'input della calibrazione.
 
-Da LinkedIn: pagina Digitiamo → Analytics → Contenuti → Esporta; salva il foglio dei post
-come CSV, lasciandolo in data/raw/ (non versionato). Poi, da backend/:
-    python -m scripts.linkedin_posts ../data/raw/linkedin_posts.csv
+Da LinkedIn: pagina Digitiamo → Analytics → Contenuti → Esporta; il file .xls va così com'è
+in data/raw/ (non versionato): lo script trova da solo il foglio dei post. Poi, da backend/:
+    python -m scripts.linkedin_posts ../data/raw/linkedin_posts.xls
 
 Scrive data/processed/published_posts.json con solo testo, data e conteggi aggregati:
 autore e link non escono mai. Restano fuori i post sponsorizzati (hanno una campagna,
@@ -16,6 +16,8 @@ import re
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
+
+import xlrd
 
 from app.config import REPO_ROOT
 
@@ -42,10 +44,39 @@ _REQUIRED_IT = {
 }
 
 
-def _rows(source: Path) -> list[list[str]]:
+def _cell_text(cell: xlrd.sheet.Cell, datemode: int) -> str:
+    """Il testo che avrebbe la cella in un CSV: conteggi interi, date in formato ISO."""
+    if cell.ctype == xlrd.XL_CELL_DATE:
+        return xlrd.xldate_as_datetime(cell.value, datemode).date().isoformat()
+    if cell.ctype == xlrd.XL_CELL_NUMBER and float(cell.value).is_integer():
+        return str(int(cell.value))
+    return str(cell.value)
+
+
+def _sheets(source: Path) -> list[list[list[str]]]:
+    """L'export di LinkedIn è un .xls con più fogli; un CSV è un foglio solo."""
+    if source.suffix.lower() == ".xls":
+        book = xlrd.open_workbook(source)
+        return [
+            [[_cell_text(c, book.datemode) for c in sheet.row(r)] for r in range(sheet.nrows)]
+            for sheet in book.sheets()
+        ]
     text = source.read_text("utf-8-sig")
     delimiter = ";" if text.count(";") > text.count(",") else ","
-    return list(csv.reader(text.splitlines(), delimiter=delimiter))
+    return [list(csv.reader(text.splitlines(), delimiter=delimiter))]
+
+
+def _posts_sheet(sheets: list[list[list[str]]]) -> tuple[int, dict[str, int], list[list[str]]]:
+    """Il primo foglio con l'intestazione dei post (gli altri sono metriche giornaliere)."""
+    for rows in sheets:
+        try:
+            start, columns = _header(rows)
+        except ValueError as exc:
+            if "Colonne mancanti" in str(exc):
+                raise
+            continue
+        return start, columns, rows
+    raise ValueError("Nessun foglio con i post nell'export: manca la colonna impressioni")
 
 
 def _header(rows: list[list[str]]) -> tuple[int, dict[str, int]]:
@@ -85,8 +116,7 @@ def _post_id(link: str, published_at: date, number: int) -> str:
 
 
 def convert(source: Path) -> list[dict[str, Any]]:
-    rows = _rows(source)
-    start, columns = _header(rows)
+    start, columns, rows = _posts_sheet(_sheets(source))
     day_first = rows[start][columns["impressions"]].strip().lower() == "impressioni"
     posts = []
     for number, row in enumerate(rows[start + 1 :]):

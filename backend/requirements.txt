@@ -10,3 +10,4 @@ ruff==0.8.6
 python-multipart==0.0.32
 pypdfium2==5.15.2
 pillow==13.0.0
+xlrd==2.0.2
