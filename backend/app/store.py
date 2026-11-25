@@ -2,9 +2,10 @@ import json
 import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
+from datetime import UTC, datetime
 
 from app.config import settings
-from app.models import Prototype, Response, Stimulus, Test
+from app.models import Prototype, Report, Response, Stimulus, Test
 
 INTERRUPTED_MESSAGE = "Il server è stato riavviato durante il test"
 _ACTIVE_STATUSES = ("queued", "running")
@@ -33,6 +34,11 @@ CREATE TABLE IF NOT EXISTS responses (
     stimulus_id TEXT NOT NULL,
     response TEXT NOT NULL,
     PRIMARY KEY (test_id, persona_id, stimulus_id)
+);
+CREATE TABLE IF NOT EXISTS reports (
+    test_id TEXT PRIMARY KEY,
+    report TEXT NOT NULL,
+    created_at TEXT NOT NULL
 );
 """
 
@@ -175,3 +181,19 @@ def get_prototype(prototype_id: str) -> Prototype | None:
     with _connect() as conn:
         row = conn.execute("SELECT data FROM prototypes WHERE id = ?", (prototype_id,)).fetchone()
     return None if row is None else Prototype.model_validate_json(row["data"])
+
+
+def save_report(report: Report) -> None:
+    """Il report senza fidelity: la calibrazione si aggiunge a ogni lettura."""
+    data = report.model_copy(update={"fidelity": None}).model_dump_json(exclude_none=True)
+    with _connect() as conn:
+        conn.execute(
+            "INSERT OR REPLACE INTO reports (test_id, report, created_at) VALUES (?, ?, ?)",
+            (report.test_id, data, datetime.now(UTC).isoformat()),
+        )
+
+
+def load_report(test_id: str) -> Report | None:
+    with _connect() as conn:
+        row = conn.execute("SELECT report FROM reports WHERE test_id = ?", (test_id,)).fetchone()
+    return None if row is None else Report.model_validate_json(row["report"])

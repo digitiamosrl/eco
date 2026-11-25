@@ -13,31 +13,35 @@ from app.report.summarize import build_summarizer
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-# shortcut: cache in memoria senza scadenza, il riavvio la svuota; passare allo store se serve.
+# Solo per non costruire due volte lo stesso report: quelli finiti stanno nello store.
 _REPORTS: dict[str, asyncio.Task[Report]] = {}
 
 
+async def _build_and_save(test: Test) -> Report:
+    report = await build_report(
+        test.id, test.stimuli, store.list_responses(test.id), build_summarizer()
+    )
+    store.save_report(report)
+    return report
+
+
 async def _report_for(test: Test) -> Report:
-    """Una sola costruzione per test: richieste ripetute o simultanee riusano lo stesso task."""
-    task = _REPORTS.get(test.id)
-    if task is None:
-        task = asyncio.create_task(
-            build_report(
-                test.id,
-                test.stimuli,
-                store.list_responses(test.id),
-                build_summarizer(),
-                # La calibrazione è sui post pubblicati: per un prototipo manca e il report lo dice.
-                load_fidelity() if test.kind == "post" else None,
-            )
-        )
-        _REPORTS[test.id] = task
-    try:
-        return await asyncio.shield(task)
-    finally:
-        # Un fallimento non resta in cache: la richiesta successiva riprova.
-        if task.done() and (task.cancelled() or task.exception() is not None):
-            _REPORTS.pop(test.id, None)
+    """Il report salvato, oppure una sola costruzione per test anche con richieste simultanee."""
+    report = store.load_report(test.id)
+    if report is None:
+        task = _REPORTS.get(test.id)
+        if task is None:
+            task = asyncio.create_task(_build_and_save(test))
+            _REPORTS[test.id] = task
+        try:
+            report = await asyncio.shield(task)
+        finally:
+            # Un fallimento non resta in cache: la richiesta successiva riprova.
+            if task.done() and (task.cancelled() or task.exception() is not None):
+                _REPORTS.pop(test.id, None)
+    # La calibrazione è sui post pubblicati: per un prototipo manca e il report lo dice.
+    fidelity = load_fidelity() if test.kind == "post" else None
+    return report.model_copy(update={"fidelity": fidelity})
 
 
 async def prepare_report(test_id: str) -> None:
