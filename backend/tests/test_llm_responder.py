@@ -156,14 +156,14 @@ async def test_model_can_be_overridden_per_responder() -> None:
     assert [body["model"] for body in sent] == ["altro/modello", "modello/persona"]
 
 
-def _pdf(pages: int) -> bytes:
+def _pdf(pages: int, size: tuple[float, float] = (200, 280)) -> bytes:
     import io
 
     import pypdfium2 as pdfium
 
     document = pdfium.PdfDocument.new()
     for _ in range(pages):
-        document.new_page(200, 280)
+        document.new_page(*size)
     buffer = io.BytesIO()
     document.save(buffer)
     return buffer.getvalue()
@@ -179,6 +179,18 @@ async def test_pdf_pages_are_sent_as_images(monkeypatch, tmp_path) -> None:
     blocks = sent[0]["messages"][0]["content"][1:]
     assert len(blocks) == 4
     assert all(b["image_url"]["url"].startswith("data:image/png;base64,") for b in blocks)
+
+
+def test_huge_pdf_page_is_rendered_within_the_pixel_cap() -> None:
+    import io
+
+    from PIL import Image
+
+    from app.engine.responder import _PDF_MAX_SIDE, _pdf_pages
+
+    # Pochi byte, pagina da 14400 pt: a scala piena sarebbe 21600×21600 pixel.
+    (page,) = _pdf_pages(_pdf(1, (14400, 14400)))
+    assert max(Image.open(io.BytesIO(page)).size) <= _PDF_MAX_SIDE
 
 
 async def test_unreadable_pdf_raises_llm_error(monkeypatch, tmp_path) -> None:
