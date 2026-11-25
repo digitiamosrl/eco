@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from app import store
 from app.engine.llm_client import LlmError
 from app.models import Report, Test
-from app.report.builder import build_post_report
+from app.report.builder import build_report
 from app.report.calibration import load_fidelity
 from app.report.summarize import build_summarizer
 
@@ -22,12 +22,13 @@ async def _report_for(test: Test) -> Report:
     task = _REPORTS.get(test.id)
     if task is None:
         task = asyncio.create_task(
-            build_post_report(
+            build_report(
                 test.id,
                 test.stimuli,
                 store.list_responses(test.id),
                 build_summarizer(),
-                load_fidelity(),
+                # La calibrazione è sui post pubblicati: per un prototipo manca e il report lo dice.
+                load_fidelity() if test.kind == "post" else None,
             )
         )
         _REPORTS[test.id] = task
@@ -45,7 +46,7 @@ async def prepare_report(test_id: str) -> None:
     Così il report è pronto quando lo si apre; se fallisce, si riprova alla prima richiesta.
     """
     test = store.get(test_id)
-    if test is None or test.status != "done" or test.kind != "post":
+    if test is None or test.status != "done":
         return
     try:
         await _report_for(test)
@@ -64,8 +65,6 @@ async def get_report(test_id: str) -> Report:
         raise HTTPException(status_code=404, detail="Test non trovato")
     if test.status != "done":
         raise HTTPException(status_code=409, detail="Il test non è ancora completato")
-    if test.kind == "prototype":
-        raise HTTPException(status_code=501, detail="Report del prototipo non ancora disponibile")
     try:
         return await _report_for(test)
     except LlmError as exc:

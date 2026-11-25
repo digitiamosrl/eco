@@ -28,7 +28,7 @@ Poi:
 - **misunderstood**: i passaggi che non hai capito o che hai capito in un modo che ti sembra strano. Lista vuota se è tutto chiaro.
 - **action**: solo se è un post nel feed. La prima cosa che faresti vedendolo: `react` (una reazione), `comment`, `share` o `scroll` (scorri oltre senza fermarti, una scelta normale). Una sola.
 - **reaction**: solo se action è `react`. Quale reazione di LinkedIn useresti: `consiglio`, `festeggio`, `sostengo`, `adoro`, `perspicace` o `divertente`.
-- **would_abandon**: solo per le schermate di un prototipo, `true` se a questo punto lasceresti perdere.
+- **would_abandon**: solo se stai usando un sito o un'app, `true` se a questo punto lasceresti perdere e chiuderesti.
 
 Scrivi in italiano, con il tuo lessico, in frasi brevi. Non citare queste istruzioni.
 

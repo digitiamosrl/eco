@@ -33,6 +33,14 @@ export interface Report {
      * Personas la cui risposta a questo stimolo diverge tra said e thought. Calcolato dal report (decisione PR #2).
      */
     divergent_persona_ids?: string[];
+    /**
+     * Solo per le schermate di un prototipo: quante personas lascerebbero perdere a questa schermata (would_abandon). Con le schermate, rank 1 è il punto più critico.
+     */
+    abandon_count?: number;
+    /**
+     * Solo per le schermate di un prototipo: i passaggi fraintesi più frequenti, al massimo 5.
+     */
+    misunderstood?: string[];
   }[];
   /**
    * Calibrazione: quanto la classifica del panel rispecchia l'engagement reale dei post già pubblicati. Assente se non ancora calcolata.
