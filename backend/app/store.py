@@ -138,7 +138,10 @@ def add_response(test_id: str, response: Response) -> None:
 
 def list_responses(test_id: str) -> list[Response]:
     with _connect() as conn:
-        rows = conn.execute("SELECT response FROM responses WHERE test_id = ?", (test_id,))
+        # rowid = ordine di inserimento; senza ORDER BY SQLite segue la chiave primaria.
+        rows = conn.execute(
+            "SELECT response FROM responses WHERE test_id = ? ORDER BY rowid", (test_id,)
+        )
         return [Response.model_validate_json(row["response"]) for row in rows.fetchall()]
 
 

@@ -18,6 +18,7 @@ from app.models import (
     PostTestRequest,
     PrototypePath,
     PrototypeTestRequest,
+    Response,
     Stimulus,
     Test,
 )
@@ -154,3 +155,15 @@ def get_test(test_id: str) -> Test:
     if test is None:
         raise HTTPException(status_code=404, detail="Test non trovato")
     return test
+
+
+@router.get(
+    "/tests/{test_id}/responses",
+    response_model=list[Response],
+    response_model_exclude_none=True,
+)
+def list_test_responses(test_id: str) -> list[Response]:
+    """Le risposte salvate finora: con il test in corso il frontend le mostra man mano."""
+    if store.get(test_id) is None:
+        raise HTTPException(status_code=404, detail="Test non trovato")
+    return store.list_responses(test_id)

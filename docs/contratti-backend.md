@@ -70,6 +70,13 @@ Stesso endpoint e stesso schema dei post (`GET /tests/{id}/report`, `report.sche
 - `fidelity` è sempre assente: la calibrazione è sui post pubblicati e per i prototipi non c'è. Il frontend mostra lo stato "non disponibile".
 - I test di prototipo sui flussi a fixture (`flow_ids`) non passano dal panel: il loro report ha item senza risposte.
 
+## 7. Risposte live
+
+`GET /tests/{id}/responses` restituisce le risposte salvate fino a quel momento, in ordine di arrivo (`Response[]`, `response.schema.json`, campi assenti omessi), anche mentre il test è `running`. 404 se il test non esiste. Nessuno schema nuovo.
+
+- La schermata Test la rilegge ogni volta che `done_count` cambia e mostra media e distribuzione provvisorie per stimolo, più detto e pensato con la risposta più recente in alto (`LiveResults`).
+- Sintesi, divergenza e ranking restano nel report, che si chiede a test finito.
+
 ## 8. Compito nel test di prototipo
 
 `POST /tests` per un prototipo importato richiede `task` (stringa, massimo 300 caratteri): cosa sta cercando di fare chi usa il prototipo, per esempio «chiedere un preventivo per il gestionale». Senza `task`, o con solo spazi, risponde 422. Ogni schermata lo riceve in `Stimulus.task` (campo nuovo e facoltativo in `stimulus.schema.json`) e il prompt della persona lo usa per giudicare la schermata.

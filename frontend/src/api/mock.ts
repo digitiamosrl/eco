@@ -5,6 +5,7 @@ import { mockPersonas, mockProtoImport, mockReport, mockSingleItem, mockSingleSu
 import type { Persona } from "../types/persona";
 import type { Prototype } from "../types/prototype";
 import type { Report } from "../types/report";
+import type { Response } from "../types/response";
 import type { Stimulus, Test } from "../types/test";
 
 export const RUN_MS = 5000;
@@ -148,4 +149,23 @@ export async function getReport(id: string): Promise<Report> {
   if (stimuli.length === 1)
     return { ...mockReport, test_id: id, summary: mockSingleSummary, items: [mockSingleItem(stimuli[0].id)] };
   return { ...mockReport, test_id: id };
+}
+
+const SAID = ["Interessante, vorrei qualche dettaglio in più.", "Lo giro al team.", ""];
+const THOUGHT = ["Mi incuriosisce, ma quanto costa?", "Finalmente un esempio concreto.", "Non fa per noi."];
+
+// Every persona answers every stimulus; as many answers as the progress says have arrived.
+export async function getResponses(id: string): Promise<Response[]> {
+  const test = await getTest(id);
+  const all = test.stimuli.flatMap((s, si) =>
+    mockPersonas.map((p, pi): Response => ({
+      persona_id: p.id,
+      stimulus_id: s.id,
+      thought: THOUGHT[(si + pi) % THOUGHT.length],
+      said: SAID[(si + pi) % SAID.length],
+      score: ((si * 2 + pi) % 5) + 1,
+      objections: [],
+    })),
+  );
+  return all.slice(0, test.done_count);
 }

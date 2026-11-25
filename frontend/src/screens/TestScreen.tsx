@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { getPersonas, getTest, startPostTest, startPrototypeTest } from "../api";
+import { getPersonas, getResponses, getTest, startPostTest, startPrototypeTest } from "../api";
 import { AddVariantCard, Alert, Button, Card, FieldError, Icon, LaunchBar, Segmented, TestProgress } from "../ds";
 import type { PrototypePath } from "../lib/prototype";
 import { useLoad } from "../lib/useLoad";
 import { MAX_VARIANTS, MIN_VARIANTS, nextLabel, textError, validateVariants, type VariantDraft } from "../lib/variants";
+import type { Response } from "../types/response";
 import type { Test } from "../types/test";
+import LiveResults from "./LiveResults";
 import PostEditor from "./PostEditor";
 import PrototypeImport from "./PrototypeImport";
 
@@ -34,6 +36,8 @@ export default function TestScreen({ onShowReport }: Props) {
   const [sending, setSending] = useState(false);
   const [test, setTest] = useState<Test | null>(null);
   const [pollError, setPollError] = useState<string | null>(null);
+  const [responses, setResponses] = useState<Response[]>([]);
+  const [readAttempt, setReadAttempt] = useState(0);
   // The last prototype launch, so "Riprova" can repeat it.
   const lastProto = useRef<{ id: string; paths: PrototypePath[]; task: string } | null>(null);
   const personas = useLoad(getPersonas, []);
@@ -47,6 +51,20 @@ export default function TestScreen({ onShowReport }: Props) {
     }, POLL_MS);
     return () => clearTimeout(timer);
   }, [test]);
+
+  // The answers follow the progress: one read each time done_count changes, the last one included.
+  const testId = test?.id;
+  const doneCount = test?.done_count ?? 0;
+  const shownTest = useRef<string | undefined>(undefined);
+  shownTest.current = testId;
+  useEffect(() => {
+    if (!testId || doneCount === 0) return setResponses([]);
+    getResponses(testId).then(
+      // A slow read is kept unless the test changed; a later, longer list wins over an older one.
+      (r) => shownTest.current === testId && setResponses((prev) => (r.length >= prev.length ? r : prev)),
+      (e: unknown) => setPollError(message(e)),
+    );
+  }, [testId, doneCount, readAttempt]);
 
   const single = variants.length === 1;
 
@@ -127,6 +145,7 @@ export default function TestScreen({ onShowReport }: Props) {
                 onClick={() => {
                   setPollError(null);
                   setTest({ ...test });
+                  setReadAttempt((n) => n + 1);
                 }}
               >
                 Riprova
@@ -154,6 +173,14 @@ export default function TestScreen({ onShowReport }: Props) {
           >
             {test.error ?? "Errore imprevisto."}
           </Alert>
+        )}
+        {responses.length > 0 && (
+          <LiveResults
+            stimuli={test.stimuli}
+            responses={responses}
+            personas={personas.data ?? []}
+            status={test.status === "done" || test.status === "error" ? test.status : "running"}
+          />
         )}
         {startError && (
           <div style={{ marginTop: 20 }}>
