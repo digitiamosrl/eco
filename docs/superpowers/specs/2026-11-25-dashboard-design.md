@@ -73,7 +73,7 @@ I tipi del frontend si rigenerano con `npm run gen:types`. Gli endpoint esistent
 
 **Design system:**
 - `Sidebar` (`ds/components/navigation/Sidebar.tsx`), al posto di `AppNav`, che resta esportato finché non si toglie;
-- `TestRow` (`ds/components/test/TestRow.tsx`), la riga della dashboard;
+- `TestCard` (`ds/components/test/TestCard.tsx`), la card di un test nella griglia della dashboard;
 - tutti e due usano i token esistenti.
 
 **Schermate:**
