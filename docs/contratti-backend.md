@@ -55,7 +55,7 @@ Deciso: il segmento è il pubblico della pagina LinkedIn di Digitiamo, PMI e gra
 
 ## 7. Risposte live
 
-`GET /tests/{id}/responses` restituisce le risposte salvate fino a quel momento (`Response[]`, `response.schema.json`, campi assenti omessi), anche mentre il test è `running`. 404 se il test non esiste. Nessuno schema nuovo.
+`GET /tests/{id}/responses` restituisce le risposte salvate fino a quel momento, in ordine di arrivo (`Response[]`, `response.schema.json`, campi assenti omessi), anche mentre il test è `running`. 404 se il test non esiste. Nessuno schema nuovo.
 
 - La schermata Test la rilegge ogni volta che `done_count` cambia e mostra media e distribuzione provvisorie per stimolo, più detto e pensato con la risposta più recente in alto (`LiveResults`).
 - Sintesi, divergenza e ranking restano nel report, che si chiede a test finito.

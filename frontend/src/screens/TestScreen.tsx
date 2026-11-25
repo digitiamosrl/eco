@@ -37,6 +37,7 @@ export default function TestScreen({ onShowReport }: Props) {
   const [test, setTest] = useState<Test | null>(null);
   const [pollError, setPollError] = useState<string | null>(null);
   const [responses, setResponses] = useState<Response[]>([]);
+  const [readAttempt, setReadAttempt] = useState(0);
   // The last prototype launch, so "Riprova" can repeat it.
   const lastProto = useRef<{ id: string; paths: PrototypePath[] } | null>(null);
   const personas = useLoad(getPersonas, []);
@@ -54,14 +55,16 @@ export default function TestScreen({ onShowReport }: Props) {
   // The answers follow the progress: one read each time done_count changes, the last one included.
   const testId = test?.id;
   const doneCount = test?.done_count ?? 0;
+  const shownTest = useRef<string | undefined>(undefined);
+  shownTest.current = testId;
   useEffect(() => {
     if (!testId || doneCount === 0) return setResponses([]);
-    let current = true;
-    getResponses(testId).then((r) => current && setResponses(r), (e: unknown) => setPollError(message(e)));
-    return () => {
-      current = false;
-    };
-  }, [testId, doneCount]);
+    getResponses(testId).then(
+      // A slow read is kept unless the test changed; a later, longer list wins over an older one.
+      (r) => shownTest.current === testId && setResponses((prev) => (r.length >= prev.length ? r : prev)),
+      (e: unknown) => setPollError(message(e)),
+    );
+  }, [testId, doneCount, readAttempt]);
 
   const single = variants.length === 1;
 
@@ -142,6 +145,7 @@ export default function TestScreen({ onShowReport }: Props) {
                 onClick={() => {
                   setPollError(null);
                   setTest({ ...test });
+                  setReadAttempt((n) => n + 1);
                 }}
               >
                 Riprova
@@ -175,7 +179,7 @@ export default function TestScreen({ onShowReport }: Props) {
             stimuli={test.stimuli}
             responses={responses}
             personas={personas.data ?? []}
-            finished={test.status === "done"}
+            status={test.status === "done" || test.status === "error" ? test.status : "running"}
           />
         )}
         {startError && (

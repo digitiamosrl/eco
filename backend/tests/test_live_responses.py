@@ -32,3 +32,21 @@ def test_responses_of_running_test_are_the_ones_saved_so_far(no_background, vali
 def test_responses_of_unknown_test_return_404() -> None:
     response = client.get("/tests/non-esiste/responses")
     assert (response.status_code, response.json()) == (404, {"detail": "Test non trovato"})
+
+
+def test_responses_come_back_in_arrival_order(no_background) -> None:
+    created = client.post("/tests", json=POST_BODY).json()
+    for persona in ("p3", "p1", "p2"):  # la chiave primaria li ordinerebbe p1, p2, p3
+        store.add_response(
+            created["id"],
+            Response(
+                persona_id=persona,
+                stimulus_id="variante-a",
+                thought="t",
+                said="s",
+                score=3,
+                objections=[],
+            ),
+        )
+    responses = client.get(f"/tests/{created['id']}/responses").json()
+    assert [r["persona_id"] for r in responses] == ["p3", "p1", "p2"]
