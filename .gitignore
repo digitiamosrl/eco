@@ -31,3 +31,6 @@ backend/captures/
 
 # Uploaded images (server-generated names)
 data/uploads/
+
+# Calibration posts: their texts name people, the repository is public
+data/processed/published_posts.json
