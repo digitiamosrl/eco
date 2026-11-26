@@ -25,7 +25,14 @@ from app.engine.responder import Responder, build_responder
 from app.engine.runner import _ask  # stesso retry e stessa validazione del runner
 from app.models import Fidelity, Persona, Stimulus
 from app.report.calibration import compute_fidelity
-from app.uploads import Upload, delete_uploads, make_upload, save_uploads, upload_url
+from app.uploads import (
+    Upload,
+    attachment_kind,
+    delete_uploads,
+    make_upload,
+    save_uploads,
+    upload_url,
+)
 
 # Con meno post il tau di Kendall oscilla troppo per dire qualcosa.
 MIN_POSTS = 5
@@ -132,7 +139,7 @@ def _stimuli_with_images(
             kind="post",
             text=p.text,
             image_url=upload_url(uploads.get(p.id)),
-            attachment_kind="image" if p.id in uploads else None,
+            attachment_kind=attachment_kind(uploads.get(p.id)),
         )
         for p in posts
     }

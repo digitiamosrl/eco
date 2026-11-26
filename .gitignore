@@ -31,3 +31,6 @@ backend/captures/
 
 # Uploaded images (server-generated names)
 data/uploads/
+
+# Calibration images: may show people, never in the repository
+data/calibration_images/
