@@ -73,9 +73,20 @@ def main() -> int:
     print(f"{with_image}/{len(picked)} post con immagine. Scritto {out}")
     # Stessi post due volte, solo testo e con immagini: è il confronto che dice se contano.
     note = f"i {args.per_side} con più e i {args.per_side} con meno engagement"
+    # --out separati: senza, entrambi i run sovrascrivono calibration.json letto dai report.
+    text_out, image_out = (
+        args.images / "fidelity-testo.json",
+        args.images / "fidelity-immagini.json",
+    )
     print("Confronto, da backend/:")
-    print(f'  python -m scripts.calibrate --posts {out} --no-images --note "{note}, solo testo"')
-    print(f'  python -m scripts.calibrate --posts {out} --note "{note}, con immagini"')
+    print(
+        f"  python -m scripts.calibrate --posts {out} --out {text_out}"
+        f' --no-images --note "{note}, solo testo"'
+    )
+    print(
+        f"  python -m scripts.calibrate --posts {out} --out {image_out}"
+        f' --note "{note}, con immagini"'
+    )
     return 0
 
 
