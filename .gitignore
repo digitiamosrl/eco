@@ -34,3 +34,6 @@ data/uploads/
 
 # Calibration images: may show people, never in the repository
 data/calibration_images/
+
+# Calibration posts: their texts name people, the repository is public
+data/processed/published_posts.json
