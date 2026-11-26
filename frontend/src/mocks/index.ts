@@ -55,6 +55,8 @@ export const mockReport: Report = {
   test_id: "t1",
   simulated: true,
   summary: "La variante B convince per concretezza; la A è percepita come troppo generica.",
+  // The real calibration on main (data/processed/calibration.json).
+  fidelity: { score: -0.03, basis: "57 post Digitiamo pubblicati, nov 2025–ott 2026" },
   items: [
     {
       stimulus_id: "variante-b",
