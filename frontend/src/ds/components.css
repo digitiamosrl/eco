@@ -148,6 +148,7 @@ a:hover{color:var(--violet-press)}
 .eco-fid span span{color:var(--muted);font-weight:600}
 .eco-fid__ring{flex:none;width:34px;height:34px;border-radius:50%;border:4px dotted var(--peri)}
 .eco-fid--on{border:2px solid var(--line);box-shadow:var(--shadow-light-sm)}
+.eco-fid__meaning{display:block;margin-top:4px;font-size:13px}
 .eco-fid__num{flex:none;min-width:52px;height:34px;padding:0 10px;border-radius:var(--r-pill);background:var(--violet);color:var(--white);display:grid;place-items:center;font:800 18px/1 var(--font-title);box-shadow:var(--shadow-violet-sm)}
 .eco-notices{display:grid;grid-template-columns:1fr auto;gap:16px}
 .eco-medal{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;font:800 24px/1 var(--font-title);background:var(--violet);color:var(--white);box-shadow:var(--shadow-violet);flex:none}
