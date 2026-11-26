@@ -33,11 +33,18 @@ def select_extremes(posts: Sequence[PublishedPost], per_side: int) -> list[Publi
 
 def attach_images(posts: Sequence[PublishedPost], folder: Path) -> list[PublishedPost]:
     """`07.png` va al post della riga 7. Riga senza file: il post resta solo testo."""
-    by_row = {
-        int(path.stem): path.name
+    files = sorted(
+        path
         for path in folder.iterdir()
         if path.suffix.lower() in _SUFFIXES and path.stem.isdigit()
-    }
+    )
+    by_row: dict[int, str] = {}
+    for path in files:
+        row = int(path.stem)
+        if row in by_row:
+            # Le immagini le carica a mano qualcuno: meglio fermarsi che sceglierne una a caso.
+            raise ValueError(f"Due file per la riga {row}: {by_row[row]} e {path.name}")
+        by_row[row] = path.name
     return [post.model_copy(update={"image": by_row.get(row)}) for row, post in enumerate(posts, 1)]
 
 
@@ -62,9 +69,13 @@ def main() -> int:
     for row, post in enumerate(picked, 1):
         print(f"{row:02d}  {post.published_at}  {post.image or 'solo testo'}  {post.id}")
     with_image = sum(post.image is not None for post in picked)
-    print(
-        f"{with_image}/{len(picked)} post con immagine. Scritto {write_subset(picked, args.images)}"
-    )
+    out = write_subset(picked, args.images)
+    print(f"{with_image}/{len(picked)} post con immagine. Scritto {out}")
+    # Stessi post due volte, solo testo e con immagini: è il confronto che dice se contano.
+    note = f"i {args.per_side} con più e i {args.per_side} con meno engagement"
+    print("Confronto, da backend/:")
+    print(f'  python -m scripts.calibrate --posts {out} --no-images --note "{note}, solo testo"')
+    print(f'  python -m scripts.calibrate --posts {out} --note "{note}, con immagini"')
     return 0
 
 

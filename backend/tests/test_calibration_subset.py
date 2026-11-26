@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from scripts.calibrate import PublishedPost, _stimuli_with_images, load_posts
 from scripts.calibration_subset import attach_images, select_extremes, write_subset
 
@@ -57,3 +59,10 @@ def test_stimuli_carry_image_or_pdf_kind(tmp_path: Path) -> None:
     kinds = [stimuli[p.id].attachment_kind for p in picked]
     assert kinds == ["image", "pdf", None, None]
     assert len(uploads) == 2
+
+
+def test_attach_images_refuses_two_files_for_the_same_row(tmp_path: Path) -> None:
+    (tmp_path / "01.png").write_bytes(b"x")
+    (tmp_path / "01.jpg").write_bytes(b"x")
+    with pytest.raises(ValueError, match="riga 1"):
+        attach_images(select_extremes(POSTS, per_side=2), tmp_path)

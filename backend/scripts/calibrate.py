@@ -151,6 +151,9 @@ async def main() -> int:
     parser.add_argument("--posts", type=Path, default=DEFAULT_POSTS)
     parser.add_argument("--out", type=Path, default=Path(settings.calibration_path))
     parser.add_argument("--concurrency", type=int, default=settings.panel_concurrency)
+    # Un sottoinsieme va dichiarato nel basis: gli estremi gonfiano il tau.
+    parser.add_argument("--note", help="aggiunta al basis, es. 'solo testo'")
+    parser.add_argument("--no-images", action="store_true", help="ignora le immagini dei post")
     args = parser.parse_args()
     if not settings.openrouter_api_key:
         print("Serve OPENROUTER_API_KEY nel file .env.")
@@ -158,6 +161,8 @@ async def main() -> int:
     from app.api.personas import PERSONAS  # qui: carica il pool scelto da PERSONAS_PATH
 
     posts = load_posts(args.posts)
+    if args.no_images:
+        posts = [post.model_copy(update={"image": None}) for post in posts]
     stimuli, uploads = _stimuli_with_images(posts, args.posts.parent)
     save_uploads(uploads)
     try:
@@ -166,6 +171,8 @@ async def main() -> int:
         )
     finally:
         delete_uploads(uploads)
+    if args.note:
+        fidelity = fidelity.model_copy(update={"basis": f"{fidelity.basis}, {args.note}"})
     args.out.write_text(json.dumps(fidelity.model_dump(), ensure_ascii=False) + "\n", "utf-8")
     print(f"Fidelity {fidelity.score} ({fidelity.basis}), risposte fallite: {failed}")
     print(f"Scritto {args.out}")
